@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerCharacterController : Character
+abstract public class PlayerCharacterController : Character
 {
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
+    [SerializeField] InputActionReference jumpInputAction;
+    [SerializeField] protected InputActionReference specialMoveInputAction;
 
     private void FixedUpdate()
     {
@@ -20,5 +22,11 @@ public class PlayerCharacterController : Character
             movement = Vector2.left;
         }
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 ? MovementMode.Running : MovementMode.Walking);
+        SpecialMove();
     }
+    private void Jump()
+    {
+        //TODO: Implement Jump
+    }
+    abstract protected void SpecialMove();
 }
