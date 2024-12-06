@@ -6,10 +6,10 @@ abstract public class Character : MonoBehaviour
 {
     [SerializeField] float WalkDamping;
     [SerializeField] float RunDamping;
-    [SerializeField] Rigidbody2D rb;
     [SerializeField] Animator animator;
-    [SerializeField] Stats stats;
-    public void Move(Vector2 direction,MovementMode moveMode = default)
+    [SerializeField] protected Rigidbody2D rb;
+    [SerializeField] protected Stats stats;
+    public void Move(Vector2 direction, MovementMode moveMode = default)
     {
         direction = direction.normalized;
         rb.linearDamping = moveMode switch
