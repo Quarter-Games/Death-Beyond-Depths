@@ -4,6 +4,6 @@ public class CaptainController : PlayerCharacterController
 {
     protected override void SpecialMove()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 }
