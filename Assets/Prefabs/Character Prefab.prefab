@@ -98,7 +98,6 @@ GameObject:
   - component: {fileID: 9140468867093815967}
   - component: {fileID: 8384229414716590311}
   - component: {fileID: 5428964764214469938}
-  - component: {fileID: 5747947406746087897}
   m_Layer: 0
   m_Name: Character Prefab
   m_TagString: Untagged
@@ -172,7 +171,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 1
+  m_LinearDamping: 4
   m_AngularDamping: 0.05
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -186,27 +185,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &5747947406746087897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8406146143850328096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eb66fa5b75acf645a9db2b6de78050f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WalkDamping: 4
-  RunDamping: 2
-  rb: {fileID: 0}
-  animator: {fileID: 0}
-  stats:
-    MovementSpeed: 20
-    HP: 0
-    Damage: 0
-  movementInputAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  RunInputAction: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  jumpInputAction: {fileID: 0}
-  specialMoveInputAction: {fileID: 0}
