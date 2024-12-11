@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class HiddenArea : InteratableObject, IInteractable
 {
-    void IInteractable.Interact()
+    public void Interact()
     {
         Debug.Log("Hide");
     }
 
-    void IInteractable.UnInteract()
+    public void UnInteract()
     {
         
     }
