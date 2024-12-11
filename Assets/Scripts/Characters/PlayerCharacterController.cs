@@ -24,7 +24,8 @@ abstract public class PlayerCharacterController : Character
     private void FixedUpdate()
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
-
+        Debug.Log("input asset is " + movementInputAction);
+        Debug.Log("input vector is " + movementInput);
         var movement = new Vector2();
         if (movementInput.x > 0)
         {

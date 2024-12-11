@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SwitchCharacter : InteratableObject, IInteractable
+public class SwitchCharacter : InteractableObject, IInteractable
 {
     [SerializeField] GameObject CaptainObject;
     [SerializeField] GameObject GirlObject;

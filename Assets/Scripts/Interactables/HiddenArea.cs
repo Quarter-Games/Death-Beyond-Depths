@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HiddenArea : InteratableObject, IInteractable
+public class HiddenArea : InteractableObject, IInteractable
 {
     public void Interact()
     {

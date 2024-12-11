@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class InteratableObject : MonoBehaviour
+public abstract class InteractableObject : MonoBehaviour
 {
     protected PlayerCharacterController CachedPlayerController;
 
