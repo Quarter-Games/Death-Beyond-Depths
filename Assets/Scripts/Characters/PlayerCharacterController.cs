@@ -19,7 +19,7 @@ abstract public class PlayerCharacterController : Character
     public bool CanCrouch { get; set; } = true;
     public bool IsStanding { get; private set; } = true;
     #endregion
-    private const float MIN_FLOAT = 0.01f;
+    private const float MIN_FLOAT = 0.02f;
 
     private void FixedUpdate()
     {
@@ -70,13 +70,13 @@ abstract public class PlayerCharacterController : Character
     {
         IsHidden = true;
         Debug.Log("hiding");
-        transform.position += Vector3.forward * MIN_FLOAT;
+        transform.position += Vector3.back * MIN_FLOAT;
     }
 
     internal void StopHiding()
     {
         IsHidden = false;
-        transform.position += Vector3.back * MIN_FLOAT;
+        transform.position += Vector3.forward * MIN_FLOAT;
     }
 
     abstract protected void SpecialMove();
