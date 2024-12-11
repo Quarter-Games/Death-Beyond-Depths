@@ -22,6 +22,6 @@ public abstract class InteratableObject : MonoBehaviour
 
     public void InformManagerOfInteractability()
     {
-        InteractablesManager.Instance.AddInteractableObject(this);
+        InteractablesManager.Instance.AddInteractableObject(this as IInteractable);
     }
 }

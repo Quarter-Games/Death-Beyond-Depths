@@ -40,7 +40,7 @@ public class InteractablesManager : MonoBehaviour
 
     public void Interact()
     {
-        if(CurrentInteractableObject != null)
+        if(Interactables.Count != 0)
             CurrentInteractableObject.Interact();
     }
 }
