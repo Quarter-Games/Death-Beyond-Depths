@@ -1,14 +1,18 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 abstract public class PlayerCharacterController : Character
 {
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
     [SerializeField] InputActionReference InteractInputAction;
+    [SerializeField] PlayerInput playerInput;
     [SerializeField] protected InputActionReference CouchInputAction;
+    [SerializeField] protected CameraController cameraController;
 
+    
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
     [SerializeField] GameObject StandingCharacterObject;
@@ -36,7 +40,7 @@ abstract public class PlayerCharacterController : Character
             movement = Vector2.left;
         }
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 ? MovementMode.Running : MovementMode.Walking);
-        if(InteractInputAction.action.ReadValue<float>() != 0)
+        if (InteractInputAction.action.ReadValue<float>() != 0)
         {
             Interact();
         }
@@ -80,4 +84,6 @@ abstract public class PlayerCharacterController : Character
     }
 
     abstract protected void SpecialMove();
+    abstract public void LeftMouseClick(InputAction.CallbackContext context);
+    abstract public void RightMouseHold(InputAction.CallbackContext context);
 }
