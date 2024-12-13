@@ -19,7 +19,19 @@ public class SwitchCharacter : InteractableObject, IInteractable
 
     private void ToggleCharactersActivity()
     {
-        CaptainObject.SetActive(!CaptainObject.activeSelf);
-        GirlObject.SetActive(!GirlObject.activeSelf);
+        //CaptainObject.SetActive(!CaptainObject.activeSelf);
+        //GirlObject.SetActive(!GirlObject.activeSelf);
+        if (CaptainObject.activeSelf)
+        {
+            CaptainObject.SetActive(false);
+            CameraController.Instance.Target = GirlObject.transform;
+            GirlObject.SetActive(true);
+        }
+        else
+        {
+            GirlObject.SetActive(false);
+            CameraController.Instance.Target = GirlObject.transform;
+            CaptainObject.SetActive(true);
+        }
     }
 }
