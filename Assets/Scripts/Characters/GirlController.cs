@@ -1,27 +1,34 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GirlController : PlayerCharacterController
 {
-    [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
-    [SerializeField] GameObject StandingCharacterObject;
-    [SerializeField] GameObject CrouchingCharacterObject;
-    [SerializeField] Collider2D StandingCollider;
-    [SerializeField] Collider2D CrouchingCollider;
-
-    bool isStanding;
-
+    [SerializeField] GameObject Lantern;
+    [SerializeField] bool isLanternOn = false;
     protected override void SpecialMove()
     {
-        isStanding = StandingCharacterObject.activeSelf;
-        ToggleStandingCrouching();
-        stats.MovementSpeed *= isStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
+        throw new NotImplementedException();
+    }
+    public override void LeftMouseClick(InputAction.CallbackContext context)
+    {
+        throw new NotImplementedException();
+    }
+    public override void RightMouseHold(InputAction.CallbackContext context)
+    {
+        Debug.Log(context.phase);
+        if (context.phase == InputActionPhase.Performed && !isLanternOn)
+        {
+            isLanternOn = true;
+            Lantern.SetActive(true);
+            CameraController.Instance.ActivateInvisibilityLayer();
+        }
+        else if (context.phase == InputActionPhase.Canceled || context.phase == InputActionPhase.Performed)
+        {
+            isLanternOn = false;
+            Lantern.SetActive(false);
+            CameraController.Instance.DeactivateInvisibilityLayer();
+        }
     }
 
-    private void ToggleStandingCrouching()
-    {
-        StandingCharacterObject.SetActive(!isStanding);
-        StandingCollider.enabled = !isStanding;
-        CrouchingCharacterObject.SetActive(isStanding);
-        CrouchingCollider.enabled = isStanding;
-    }
 }

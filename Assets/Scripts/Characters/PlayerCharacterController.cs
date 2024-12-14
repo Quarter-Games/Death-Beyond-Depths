@@ -1,16 +1,35 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 abstract public class PlayerCharacterController : Character
 {
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
-    [SerializeField] protected InputActionReference specialMoveInputAction;
+    [SerializeField] InputActionReference InteractInputAction;
+    [SerializeField] PlayerInput playerInput;
+    [SerializeField] protected InputActionReference CouchInputAction;
+    [SerializeField] protected CameraController cameraController;
+
+    
+    #region Crouching
+    [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
+    [SerializeField] GameObject StandingCharacterObject;
+    [SerializeField] GameObject CrouchingCharacterObject;
+    [SerializeField] Collider2D StandingCollider;
+    [SerializeField] Collider2D CrouchingCollider;
+    public bool IsHidden { get; set; } = false;
+    public bool CanCrouch { get; set; } = true;
+    public bool IsStanding { get; private set; } = true;
+    #endregion
+    private const float MIN_FLOAT = 0.02f;
 
     private void FixedUpdate()
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
-
+        Debug.Log("input asset is " + movementInputAction);
+        Debug.Log("input vector is " + movementInput);
         var movement = new Vector2();
         if (movementInput.x > 0)
         {
@@ -21,16 +40,50 @@ abstract public class PlayerCharacterController : Character
             movement = Vector2.left;
         }
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 ? MovementMode.Running : MovementMode.Walking);
+        if (InteractInputAction.action.ReadValue<float>() != 0)
+        {
+            Interact();
+        }
     }
 
-    public void OnSpecialMovePerformed(InputAction.CallbackContext value)
+    private void Interact()
     {
-        if (!value.started)
+        InteractablesManager.Instance.Interact();
+    }
+
+    public void OnCrouchPerformed(InputAction.CallbackContext value)
+    {
+        if (!value.started || !CanCrouch)
         {
             return;
         }
-        SpecialMove();
+        IsStanding = StandingCharacterObject.activeSelf;
+        ToggleStandingCrouching();
+        stats.MovementSpeed *= IsStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
+    }
+
+    private void ToggleStandingCrouching()
+    {
+        StandingCharacterObject.SetActive(!IsStanding);
+        StandingCollider.enabled = !IsStanding;
+        CrouchingCharacterObject.SetActive(IsStanding);
+        CrouchingCollider.enabled = IsStanding;
+    }
+
+    internal void Hide()
+    {
+        IsHidden = true;
+        Debug.Log("hiding");
+        transform.position += Vector3.back * MIN_FLOAT;
+    }
+
+    internal void StopHiding()
+    {
+        IsHidden = false;
+        transform.position += Vector3.forward * MIN_FLOAT;
     }
 
     abstract protected void SpecialMove();
+    abstract public void LeftMouseClick(InputAction.CallbackContext context);
+    abstract public void RightMouseHold(InputAction.CallbackContext context);
 }
