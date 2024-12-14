@@ -24,8 +24,6 @@ abstract public class PlayerCharacterController : Character
     private void FixedUpdate()
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
-        Debug.Log("input asset is " + movementInputAction);
-        Debug.Log("input vector is " + movementInput);
         var movement = new Vector2();
         if (movementInput.x > 0)
         {
@@ -69,7 +67,6 @@ abstract public class PlayerCharacterController : Character
     internal void Hide()
     {
         IsHidden = true;
-        Debug.Log("hiding");
         transform.position += Vector3.back * MIN_FLOAT;
     }
 
