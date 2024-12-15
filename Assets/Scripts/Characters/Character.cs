@@ -6,7 +6,7 @@ abstract public class Character : MonoBehaviour
 {
     [SerializeField] float WalkDamping;
     [SerializeField] float RunDamping;
-    [SerializeField] Animator animator;
+    [SerializeField] protected Animator animator;
     [SerializeField] protected Rigidbody2D rb;
     [SerializeField] protected Stats stats;
     public void Move(Vector2 direction, MovementMode moveMode = default)

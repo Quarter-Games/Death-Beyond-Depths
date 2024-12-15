@@ -11,10 +11,7 @@ abstract public class PlayerCharacterController : Character
 
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
-    [SerializeField] GameObject StandingCharacterObject;
-    [SerializeField] GameObject CrouchingCharacterObject;
-    [SerializeField] Collider2D StandingCollider;
-    [SerializeField] Collider2D CrouchingCollider;
+    [SerializeField] CapsuleCollider2D Collider;
     public bool IsHidden { get; set; } = false;
     public bool CanCrouch { get; set; } = true;
     public bool IsStanding { get; private set; } = true;
@@ -33,7 +30,7 @@ abstract public class PlayerCharacterController : Character
         {
             movement = Vector2.left;
         }
-        Move(movement, RunInputAction.action.ReadValue<float>() > 0 ? MovementMode.Running : MovementMode.Walking);
+        Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
         if(InteractInputAction.action.ReadValue<float>() != 0)
         {
             Interact();
@@ -51,17 +48,15 @@ abstract public class PlayerCharacterController : Character
         {
             return;
         }
-        IsStanding = StandingCharacterObject.activeSelf;
-        ToggleStandingCrouching();
-        stats.MovementSpeed *= IsStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
+        IsStanding = !IsStanding;
+        ToggleCrouching();
+        stats.MovementSpeed *= !IsStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
     }
 
-    private void ToggleStandingCrouching()
+    private void ToggleCrouching()
     {
-        StandingCharacterObject.SetActive(!IsStanding);
-        StandingCollider.enabled = !IsStanding;
-        CrouchingCharacterObject.SetActive(IsStanding);
-        CrouchingCollider.enabled = IsStanding;
+        Collider.direction = Collider.direction == CapsuleDirection2D.Vertical ? CapsuleDirection2D.Horizontal : CapsuleDirection2D.Vertical;
+        animator.SetBool("IsCrouching", !IsStanding);
     }
 
     internal void Hide()
