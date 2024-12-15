@@ -35,6 +35,10 @@ abstract public class PlayerCharacterController : Character
         {
             Interact();
         }
+        if(CouchInputAction.action.triggered)
+        {
+            Debug.Log("Crouch");
+        }
     }
 
     private void Interact()
