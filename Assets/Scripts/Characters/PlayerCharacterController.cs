@@ -7,7 +7,13 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
     [SerializeField] InputActionReference InteractInputAction;
+    [SerializeField] InputActionReference MeleeAttackInputAction;
     [SerializeField] protected InputActionReference CouchInputAction;
+    [SerializeField] PlayerMeleeAttack MeleeAttackObject;
+
+    public bool IsMeleeAttacking => MeleeAttackObject.gameObject.activeSelf;
+    private bool IsRangeAttacking = false; // TODO probably need to move this to captain's class
+    private float timer;
 
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
@@ -17,6 +23,17 @@ abstract public class PlayerCharacterController : Character
     public bool IsStanding { get; private set; } = true;
     #endregion
     private const float MIN_FLOAT = 0.02f;
+
+    private void OnEnable()
+    {
+        MeleeAttackInputAction.action.performed += OnMeleeAttackPerformed;
+        timer = Time.time;
+    }
+
+    private void OnDisable()
+    {
+        MeleeAttackInputAction.action.performed -= OnMeleeAttackPerformed;
+    }
 
     private void FixedUpdate()
     {
@@ -35,10 +52,19 @@ abstract public class PlayerCharacterController : Character
         {
             Interact();
         }
-        if(CouchInputAction.action.triggered)
+    }
+
+    private void OnMeleeAttackPerformed(InputAction.CallbackContext context)
+    {
+        if (IsRangeAttacking || IsMeleeAttacking)
+            return;
+        if (MeleeAttackObject.Stats.CooldownTime > Time.time - timer)
         {
-            Debug.Log("Crouch");
+            Debug.Log("On cooldown");
+            return;
         }
+        timer = Time.time;
+        MeleeAttackObject.gameObject.SetActive(true);
     }
 
     private void Interact()
