@@ -16,7 +16,7 @@ public class HiddenArea : InteractableObject, IInteractable
     {
         base.OnTriggerEnter2D(collision);
         if (CachedPlayerController == null) return;
-        if (CachedPlayerController.IsStanding)
+        if (!CachedPlayerController.IsStanding)
         {
             CachedPlayerController.Hide();
         }
