@@ -12,7 +12,6 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference RightClickInputAction;
     [SerializeField] protected InputActionReference CouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
-    public static bool IsRaightClickHold = false;
 
     public bool IsMeleeAttacking = false;
     public bool IsRangeAttacking = false; // TODO probably need to move this to captain's class
@@ -26,28 +25,25 @@ abstract public class PlayerCharacterController : Character
     #endregion
     private const float MIN_FLOAT = 0.02f;
 
-    protected override void OnEnable()
+    private void OnEnable()
     {
-        CouchInputAction.action.performed += OnCrouchPerformed;
-        LeftClickInputAction.action.performed += LeftMouseClick;
-        RightClickInputAction.action.performed += RightMouseHold;
-        InteractInputAction.action.started += Interact;
+        LeftClickInputAction.action.performed += context => LeftMouseClick(context);
+        RightClickInputAction.action.performed += context => RightMouseHold(context);
+        CouchInputAction.action.performed += context => OnCrouchPerformed(context);
 
     }
 
-    protected override void OnDisable()
+    private void OnDisable()
     {
-        CouchInputAction.action.performed -= OnCrouchPerformed;
-        LeftClickInputAction.action.performed -= LeftMouseClick;
-        RightClickInputAction.action.performed -= RightMouseHold;
-        InteractInputAction.action.started -= Interact;
+        CouchInputAction.action.performed -= context => OnCrouchPerformed(context);
+        LeftClickInputAction.action.performed -= context => LeftMouseClick(context);
+        RightClickInputAction.action.performed -= context => RightMouseHold(context);
     }
 
     private void FixedUpdate()
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
         var movement = new Vector2();
-
         if (movementInput.x > 0)
         {
             movement = Vector2.right;
@@ -57,7 +53,10 @@ abstract public class PlayerCharacterController : Character
             movement = Vector2.left;
         }
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
-
+        if (InteractInputAction.action.ReadValue<float>() != 0)
+        {
+            Interact();
+        }
     }
 
     private void OnMeleeAttackPerformed(InputAction.CallbackContext context)
@@ -75,18 +74,14 @@ abstract public class PlayerCharacterController : Character
         if (isMelee) IsMeleeAttacking = false;
         else IsRangeAttacking = false;
     }
-    private void Interact(InputAction.CallbackContext value)
+    private void Interact()
     {
-        if (!value.started)
-        {
-            return;
-        }
         InteractablesManager.Instance.Interact();
     }
 
     public void OnCrouchPerformed(InputAction.CallbackContext value)
     {
-        if (!value.performed || !CanCrouch)
+        if (!value.started || !CanCrouch)
         {
             return;
         }

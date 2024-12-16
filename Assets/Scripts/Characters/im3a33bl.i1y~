@@ -1,0 +1,10 @@
+﻿using UnityEngine;
+
+[CreateAssetMenu(fileName = "RangeAttack", menuName = "Scriptable Objects/Range Attack")]
+public class RangeAttck : ScriptableObject
+{
+    public float AttackTime;
+    public float AttackSize; //TODO is this necessary?
+    public int Damage;
+    public float CooldownTime;
+}
