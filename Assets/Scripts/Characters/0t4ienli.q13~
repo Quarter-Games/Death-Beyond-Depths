@@ -12,7 +12,6 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference RightClickInputAction;
     [SerializeField] protected InputActionReference CouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
-    public static bool IsRaightClickHold = false;
 
     public bool IsMeleeAttacking = false;
     public bool IsRangeAttacking = false; // TODO probably need to move this to captain's class
@@ -47,7 +46,6 @@ abstract public class PlayerCharacterController : Character
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
         var movement = new Vector2();
-
         if (movementInput.x > 0)
         {
             movement = Vector2.right;
@@ -57,7 +55,10 @@ abstract public class PlayerCharacterController : Character
             movement = Vector2.left;
         }
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
-
+        //if (InteractInputAction.action.ReadValue<float>() != 0)
+        //{
+        //    Interact();
+        //}
     }
 
     private void OnMeleeAttackPerformed(InputAction.CallbackContext context)

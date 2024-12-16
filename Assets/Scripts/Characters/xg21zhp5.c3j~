@@ -32,6 +32,7 @@ abstract public class PlayerCharacterController : Character
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.started += Interact;
+        movementInputAction.action.started += context => Debug.Log("walk");
 
     }
 
@@ -41,6 +42,7 @@ abstract public class PlayerCharacterController : Character
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
+        movementInputAction.action.started -= context => Debug.Log("walk");
     }
 
     private void FixedUpdate()

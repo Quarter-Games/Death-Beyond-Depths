@@ -7,6 +7,7 @@ public class CaptainController : PlayerCharacterController
     [Header("Shooting")]
     [SerializeField] InputActionReference PointerMovementAction;
     [SerializeField] float ShootCooldown = 2;
+    [SerializeField] private bool isAiming = false;
     [SerializeField] Projectile ProjectilePrefab;
     [SerializeField] Transform ProjectileSpawnPosition;
     [SerializeField] Vector3 mousePos;
@@ -23,8 +24,8 @@ public class CaptainController : PlayerCharacterController
 
     public override void LeftMouseClick(InputAction.CallbackContext context)
     {
-        if (IsRaightClickHold && CanShoot()) Shoot(context);
-        else if (!IsRaightClickHold) base.LeftMouseClick(context);
+        if (isAiming && CanShoot()) Shoot(context);
+        else if (!isAiming) base.LeftMouseClick(context);
     }
     public void UpdateMousePosition(InputAction.CallbackContext context)
     {
@@ -53,17 +54,17 @@ public class CaptainController : PlayerCharacterController
 
     public override void RightMouseHold(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsRaightClickHold) StartAim();
-        else if (context.canceled || context.performed) EndAim();
+        if (context.duration > 0.05f) EndAim(); 
+        else StartAim();
     }
 
     public void StartAim()
     {
-        IsRaightClickHold = true;
+        isAiming = true;
     }
     public void EndAim()
     {
-        IsRaightClickHold = false;
+        isAiming = false;
     }
     protected override void SpecialMove()
     {

@@ -14,11 +14,6 @@ public class GirlController : PlayerCharacterController
     {
         base.LeftMouseClick(context);
     }
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        Lantern.SetActive(false);
-    }
     public override void RightMouseHold(InputAction.CallbackContext context)
     {
         Debug.Log(context.phase);

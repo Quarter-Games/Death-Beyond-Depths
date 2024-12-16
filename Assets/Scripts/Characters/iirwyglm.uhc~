@@ -5,26 +5,14 @@ using UnityEngine.InputSystem;
 public class CaptainController : PlayerCharacterController
 {
     [Header("Shooting")]
-    [SerializeField] InputActionReference PointerMovementAction;
     [SerializeField] float ShootCooldown = 2;
+    [SerializeField] private bool isAiming = false;
     [SerializeField] Projectile ProjectilePrefab;
     [SerializeField] Transform ProjectileSpawnPosition;
     [SerializeField] Vector3 mousePos;
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        PointerMovementAction.action.performed += context => UpdateMousePosition(context);
-    }
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        PointerMovementAction.action.performed -= context => UpdateMousePosition(context);
-    }
-
     public override void LeftMouseClick(InputAction.CallbackContext context)
     {
-        if (IsRaightClickHold && CanShoot()) Shoot(context);
-        else if (!IsRaightClickHold) base.LeftMouseClick(context);
+        if (isAiming && CanShoot()) Shoot(context);
     }
     public void UpdateMousePosition(InputAction.CallbackContext context)
     {
@@ -40,30 +28,30 @@ public class CaptainController : PlayerCharacterController
 
         var proj = Instantiate(ProjectilePrefab, ProjectileSpawnPosition.position, Quaternion.identity);
         var pos = camera.WorldToScreenPoint(ProjectileSpawnPosition.position);
-
+        
         proj.Init(((Vector2)(mousePos - pos)).normalized);
         IsRangeAttacking = true;
-        StartCoroutine(WaitForCoolDown(ShootCooldown, false));
+        StartCoroutine(WaitForCoolDown(2, false));
     }
 
     private bool CanShoot()
     {
-        return !IsRangeAttacking && !IsMeleeAttacking;
+        return !IsRangeAttacking || !IsMeleeAttacking;
     }
 
     public override void RightMouseHold(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsRaightClickHold) StartAim();
+        if (context.performed && !isAiming) StartAim();
         else if (context.canceled || context.performed) EndAim();
     }
 
     public void StartAim()
     {
-        IsRaightClickHold = true;
+        isAiming = true;
     }
     public void EndAim()
     {
-        IsRaightClickHold = false;
+        isAiming = false;
     }
     protected override void SpecialMove()
     {
