@@ -15,29 +15,19 @@ public class CameraController : MonoBehaviour
     [Tooltip("How fast does camera follows the player \n 0 - don't, 1 - immediatlly")]
     [Range(0, 1)]
     [SerializeField] float CameraSpeed;
-    [SerializeField] LayerMask DefaultLayer;
-    [SerializeField] LayerMask InvisibilityLayer;
 
     [SerializeField]
     [Tooltip("This is a size of camera for screen with 1:1 ratio")]
     [Min(0)] float Size = 10;
     public Transform Target;
     public static event Action<CameraController> CameraCreated;
-    public static CameraController Instance;
     private void OnValidate()
     {
-        cam.orthographicSize = Size / cam.aspect;
+        Awake();
     }
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
         cam.orthographicSize = Size / cam.aspect;
-
     }
     private void Start()
     {
@@ -52,13 +42,5 @@ public class CameraController : MonoBehaviour
         var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
         var y = Mathf.Min(Mathf.Max(Target.transform.position.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
         transform.position = Vector3.Lerp(transform.position, new Vector3(x, y, transform.position.z), CameraSpeed);
-    }
-    public void ActivateInvisibilityLayer()
-    {
-        cam.cullingMask = InvisibilityLayer;
-    }
-    public void DeactivateInvisibilityLayer()
-    {
-        cam.cullingMask = DefaultLayer;
     }
 }
