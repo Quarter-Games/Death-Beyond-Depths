@@ -24,14 +24,12 @@ public class SwitchCharacter : InteractableObject, IInteractable
         if (CaptainObject.activeSelf)
         {
             CaptainObject.SetActive(false);
-            CameraController.Instance.Target = GirlObject.transform;
             GirlObject.SetActive(true);
         }
         else
         {
-            GirlObject.SetActive(false);
-            CameraController.Instance.Target = GirlObject.transform;
             CaptainObject.SetActive(true);
+            GirlObject.SetActive(false);
         }
     }
 }
