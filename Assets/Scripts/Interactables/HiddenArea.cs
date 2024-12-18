@@ -9,13 +9,14 @@ public class HiddenArea : InteractableObject, IInteractable
 
     public void UnInteract()
     {
-        
+
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
-        if (CachedPlayerController.IsStanding)
+        if (CachedPlayerController == null) return;
+        if (!CachedPlayerController.IsStanding)
         {
             CachedPlayerController.Hide();
         }
@@ -28,6 +29,7 @@ public class HiddenArea : InteractableObject, IInteractable
     protected override void OnTriggerExit2D(Collider2D collision)
     {
         base.OnTriggerExit2D(collision);
+        if (CachedPlayerController == null) return;
         if (CachedPlayerController.IsHidden)
         {
             CachedPlayerController.StopHiding();

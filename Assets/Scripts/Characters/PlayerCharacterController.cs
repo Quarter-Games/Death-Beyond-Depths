@@ -1,36 +1,53 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 
 abstract public class PlayerCharacterController : Character
 {
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
     [SerializeField] InputActionReference InteractInputAction;
-    [SerializeField] PlayerInput playerInput;
+    [SerializeField] InputActionReference LeftClickInputAction;
+    [SerializeField] InputActionReference RightClickInputAction;
     [SerializeField] protected InputActionReference CouchInputAction;
-    [SerializeField] protected CameraController cameraController;
+    [SerializeField] PlayerMeleeAttack MeleeAttackObject;
+    public static bool IsRaightClickHold = false;
 
-    
+    public bool IsMeleeAttacking = false;
+    public bool IsRangeAttacking = false; // TODO probably need to move this to captain's class
+
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
-    [SerializeField] GameObject StandingCharacterObject;
-    [SerializeField] GameObject CrouchingCharacterObject;
-    [SerializeField] Collider2D StandingCollider;
-    [SerializeField] Collider2D CrouchingCollider;
+    [SerializeField] CapsuleCollider2D Collider;
     public bool IsHidden { get; set; } = false;
     public bool CanCrouch { get; set; } = true;
     public bool IsStanding { get; private set; } = true;
     #endregion
     private const float MIN_FLOAT = 0.02f;
 
+    protected override void OnEnable()
+    {
+        CouchInputAction.action.performed += OnCrouchPerformed;
+        LeftClickInputAction.action.performed += LeftMouseClick;
+        RightClickInputAction.action.performed += RightMouseHold;
+        InteractInputAction.action.started += Interact;
+
+    }
+
+    protected override void OnDisable()
+    {
+        CouchInputAction.action.performed -= OnCrouchPerformed;
+        LeftClickInputAction.action.performed -= LeftMouseClick;
+        RightClickInputAction.action.performed -= RightMouseHold;
+        InteractInputAction.action.started -= Interact;
+    }
+
     private void FixedUpdate()
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
-        Debug.Log("input asset is " + movementInputAction);
-        Debug.Log("input vector is " + movementInput);
         var movement = new Vector2();
+
         if (movementInput.x > 0)
         {
             movement = Vector2.right;
@@ -39,41 +56,54 @@ abstract public class PlayerCharacterController : Character
         {
             movement = Vector2.left;
         }
-        Move(movement, RunInputAction.action.ReadValue<float>() > 0 ? MovementMode.Running : MovementMode.Walking);
-        if (InteractInputAction.action.ReadValue<float>() != 0)
-        {
-            Interact();
-        }
+        Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
+
     }
 
-    private void Interact()
+    private void OnMeleeAttackPerformed(InputAction.CallbackContext context)
     {
+        if (IsRangeAttacking || IsMeleeAttacking)
+            return;
+        StartCoroutine(WaitForCoolDown(MeleeAttackObject.Stats.CooldownTime, true));
+        IsMeleeAttacking = true;
+        MeleeAttackObject.gameObject.SetActive(true);
+    }
+    protected IEnumerator WaitForCoolDown(float time, bool isMelee)
+    {
+        var startTimeTime = Time.time;
+        yield return new WaitUntil(() => Time.time - startTimeTime > time);
+        if (isMelee) IsMeleeAttacking = false;
+        else IsRangeAttacking = false;
+    }
+    private void Interact(InputAction.CallbackContext value)
+    {
+        if (!value.started)
+        {
+            return;
+        }
         InteractablesManager.Instance.Interact();
     }
 
     public void OnCrouchPerformed(InputAction.CallbackContext value)
     {
-        if (!value.started || !CanCrouch)
+        if (!value.performed || !CanCrouch)
         {
             return;
         }
-        IsStanding = StandingCharacterObject.activeSelf;
-        ToggleStandingCrouching();
-        stats.MovementSpeed *= IsStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
+        IsStanding = !IsStanding;
+        ToggleCrouching();
+        stats.MovementSpeed *= !IsStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
     }
 
-    private void ToggleStandingCrouching()
+    private void ToggleCrouching()
     {
-        StandingCharacterObject.SetActive(!IsStanding);
-        StandingCollider.enabled = !IsStanding;
-        CrouchingCharacterObject.SetActive(IsStanding);
-        CrouchingCollider.enabled = IsStanding;
+        Collider.direction = Collider.direction == CapsuleDirection2D.Vertical ? CapsuleDirection2D.Horizontal : CapsuleDirection2D.Vertical;
+        animator.SetBool("IsCrouching", !IsStanding);
     }
 
     internal void Hide()
     {
         IsHidden = true;
-        Debug.Log("hiding");
         transform.position += Vector3.back * MIN_FLOAT;
     }
 
@@ -82,8 +112,11 @@ abstract public class PlayerCharacterController : Character
         IsHidden = false;
         transform.position += Vector3.forward * MIN_FLOAT;
     }
+    public virtual void LeftMouseClick(InputAction.CallbackContext context)
+    {
+        OnMeleeAttackPerformed(context);
+    }
+    public abstract void RightMouseHold(InputAction.CallbackContext context);
 
     abstract protected void SpecialMove();
-    abstract public void LeftMouseClick(InputAction.CallbackContext context);
-    abstract public void RightMouseHold(InputAction.CallbackContext context);
 }

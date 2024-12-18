@@ -1,3 +1,4 @@
+
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,27 +6,31 @@ using UnityEngine.InputSystem;
 public class GirlController : PlayerCharacterController
 {
     [SerializeField] GameObject Lantern;
-    [SerializeField] bool isLanternOn = false;
     protected override void SpecialMove()
     {
         throw new NotImplementedException();
     }
     public override void LeftMouseClick(InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        base.LeftMouseClick(context);
+    }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        Lantern.SetActive(false);
     }
     public override void RightMouseHold(InputAction.CallbackContext context)
     {
         Debug.Log(context.phase);
-        if (context.phase == InputActionPhase.Performed && !isLanternOn)
+        if (context.phase == InputActionPhase.Performed && !IsRaightClickHold)
         {
-            isLanternOn = true;
+            IsRaightClickHold = true;
             Lantern.SetActive(true);
             CameraController.Instance.ActivateInvisibilityLayer();
         }
         else if (context.phase == InputActionPhase.Canceled || context.phase == InputActionPhase.Performed)
         {
-            isLanternOn = false;
+            IsRaightClickHold = false;
             Lantern.SetActive(false);
             CameraController.Instance.DeactivateInvisibilityLayer();
         }
