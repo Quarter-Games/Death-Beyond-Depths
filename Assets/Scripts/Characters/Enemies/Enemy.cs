@@ -84,10 +84,11 @@ public abstract class Enemy : Character
         HasUpdatedWayPoint = false;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (IsPlayerInVisionCone())
         {
+            Debug.Log("Player spotted!");
             if (PlayerCoroutine == null)
                 PlayerCoroutine = StartCoroutine(FollowAndAttackPlayer());
         }
@@ -116,7 +117,6 @@ public abstract class Enemy : Character
             return false;
         directionToPlayer.Normalize();
         float angleToPlayer = Vector3.Angle(transform.right, directionToPlayer);
-        Debug.Log("Player spotted!");
         ChasingPlayer = angleToPlayer <= Angle / 2f;
         return ChasingPlayer;
     }
@@ -227,5 +227,6 @@ public abstract class Enemy : Character
             Gizmos.DrawSphere(WayPoints[i].position, 0.2f);
             Gizmos.DrawLine(WayPoints[i].position, WayPoints[++i].position);
         }
+        Gizmos.DrawSphere(WayPoints[i].position, 0.2f);
     }
 }
