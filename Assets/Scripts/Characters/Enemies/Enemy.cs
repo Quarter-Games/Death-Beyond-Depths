@@ -114,7 +114,11 @@ public abstract class Enemy : Character
         Vector3 directionToPlayer = Player.transform.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
         if (distanceToPlayer > Radius)
+        {
+            Debug.Log("Player out of range");
+            ChasingPlayer = false;
             return false;
+        }
         directionToPlayer.Normalize();
         float angleToPlayer = Vector3.Angle(transform.right, directionToPlayer);
         ChasingPlayer = angleToPlayer <= Angle / 2f;
