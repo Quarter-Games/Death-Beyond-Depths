@@ -33,7 +33,8 @@ public abstract class Enemy : Character
     private Coroutine PlayerCoroutine;
     private bool IsAttacking;
 
-    public bool CanPatrol => WayPoints.Count > 0 && !ChasingPlayer;
+    protected bool IsDead => stats.HP <= 0;
+    public bool CanPatrol => WayPoints.Count > 0 && !ChasingPlayer && !IsDead;
 
     private void OnValidate()
     {
@@ -62,6 +63,8 @@ public abstract class Enemy : Character
 
     private void ReviveAndResetEnemy()
     {
+        NavAgent.isStopped = true;
+        StopAllCoroutines();
         StartCoroutine(Revive());
     }
 
@@ -70,6 +73,7 @@ public abstract class Enemy : Character
         yield return new WaitForSeconds(ReviveTimeInSeconds);
         stats.HP = InitialHP;
         gameObject.SetActive(true);
+        NavAgent.isStopped = false;
         if (CanPatrol)
         {
             NavAgent.SetDestination(WayPoints[0].position);
@@ -86,6 +90,8 @@ public abstract class Enemy : Character
 
     protected virtual void Update()
     {
+        if (IsDead)
+            return;
         if (IsPlayerInVisionCone())
         {
             Debug.Log("Player spotted!");
@@ -132,14 +138,17 @@ public abstract class Enemy : Character
 
         ChasingPlayer = true;
         NavAgent.isStopped = true;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(DelayAfterSpotInSeconds);
         NavAgent.isStopped = false;
-        while (IsPlayerInVisionCone())
+
+        while (IsPlayerInRoom() && ChasingPlayer)
         {
+            if (Player == null) yield break;
+
             NavAgent.SetDestination(Player.transform.position);
 
             float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
-            if (distanceToPlayer <= AttackRange)
+            if (distanceToPlayer <= AttackRange && !IsAttacking)
             {
                 AttackPlayer();
                 yield return new WaitForSeconds(AttackSpeedInSeconds);
@@ -157,6 +166,11 @@ public abstract class Enemy : Character
         }
     }
 
+    private bool IsPlayerInRoom()
+    {
+        return Player != null;
+        //TODO player in room mechanic
+    }
 
     private void AttackPlayer()
     {
