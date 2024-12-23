@@ -1,0 +1,27 @@
+using System;
+using UnityEngine;
+
+public class InventoryItemObserver : MonoBehaviour
+{
+
+    [SerializeField] InventoryItem _item;
+    public void StartObserve(InventoryItem item)
+    {
+        if (_item != null)
+            StopObserve();
+        if (item == null)
+            return;
+        _item = item;
+        item.AfterAmountChange += OnAmountChange;
+    }
+    public void StopObserve()
+    {
+        if (_item == null)
+            return;
+        _item.AfterAmountChange -= OnAmountChange;
+    }
+    private void OnAmountChange(InventoryItem item)
+    {
+        throw new NotImplementedException();
+    }
+}
