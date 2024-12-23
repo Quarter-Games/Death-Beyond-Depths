@@ -11,13 +11,13 @@ public class VisionCone2DEditor : Editor
 
         // Get the cone's transform
         Transform transform = cone.transform;
-        Handles.color = Color.blue;
+        Handles.color = Color.green;
         // Draw a handle to adjust the radius
         Vector3 radiusHandlePosition = transform.position + (Vector3.right * cone.Radius);
         EditorGUI.BeginChangeCheck();
         Vector3 newRadiusHandlePosition = Handles.FreeMoveHandle(
             radiusHandlePosition,
-            0.1f,
+            0.2f,
             Vector3.zero,
             Handles.SphereHandleCap
         );
@@ -33,7 +33,7 @@ public class VisionCone2DEditor : Editor
         EditorGUI.BeginChangeCheck();
         Vector3 newStartAngleHandlePosition = Handles.FreeMoveHandle(
             startAngleHandlePosition,
-            0.1f,
+            0.2f,
             Vector3.zero,
             Handles.SphereHandleCap
         );
@@ -42,11 +42,11 @@ public class VisionCone2DEditor : Editor
             Undo.RecordObject(cone, "Change Vision Cone Angle");
             Vector3 adjustedDirection = (newStartAngleHandlePosition - transform.position).normalized;
             float newAngle = Vector3.SignedAngle(Vector3.right, adjustedDirection, Vector3.forward) * 2f;
-            cone.Angle = Mathf.Clamp(newAngle, 0f, 360f);
+            cone.Angle = Mathf.Clamp(Mathf.Abs(newAngle), 0f, 360f);
         }
 
         // Draw the vision cone arc again for real-time feedback
-        Handles.color = new Color(1f, 1f, 0f, 0.2f);
+        Handles.color = new Color(1f, 1f, 0f, 0.4f);
         Handles.DrawSolidArc(transform.position, Vector3.forward, startAngleDirection, cone.Angle, cone.Radius);
 
         // Force Scene view to repaint
