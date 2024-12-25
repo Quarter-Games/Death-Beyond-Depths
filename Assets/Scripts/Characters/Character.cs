@@ -11,6 +11,8 @@ abstract public class Character : MonoBehaviour
     [SerializeField] protected Rigidbody2D rb;
     [SerializeField] public Stats stats;
 
+    public Room CurrentRoom { get; set; }
+
     protected virtual void OnEnable()
     {
         stats.OnDeath += Die;

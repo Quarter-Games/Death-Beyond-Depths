@@ -15,11 +15,10 @@ public abstract class Enemy : Character
     [SerializeField] EnemyMeleeAttack MeleeAttackObject;
     [Header("NavAgent Stats")]
     [SerializeField] NavMeshAgent NavAgent;
-    [SerializeField] List<Transform> WayPoints;
-    [Tooltip("Object will stop at this distance from way point")]
-    [SerializeField, Range(0, 1)] float DistanceFromWayPoint = 0;
     [SerializeField] float AttackRange;
+    [SerializeField] float PatrolSpeed = 0.8f;
     [SerializeField, Min(0)] float WaitingTime;
+    [SerializeField] List<Transform> WayPoints;
 
     private int InitialHP;
     private int Counter;
@@ -28,11 +27,13 @@ public abstract class Enemy : Character
     private bool HasUpdatedWayPoint = false;
     private bool IsGoingBackwards = false;
     private float Distance;
-
+    private Vector3 defaultScale;
     private Coroutine PatrolCoroutine;
     private Coroutine PlayerCoroutine;
     private bool IsAttacking;
+    private bool hasSpottedPlayerOnce = false;
 
+    public bool IsFacingLeft { get; private set; }
     protected bool IsDead => stats.HP <= 0;
     public bool CanPatrol => WayPoints.Count > 0 && !ChasingPlayer && !IsDead;
 
@@ -57,8 +58,11 @@ public abstract class Enemy : Character
     {
         InitialHP = stats.HP;
         NavAgent.updateRotation = false;
-        NavAgent.stoppingDistance = AttackRange;
-        
+        if (CanPatrol)
+            NavAgent.stoppingDistance = 0;
+        else
+            NavAgent.stoppingDistance = AttackRange;
+        defaultScale = transform.localScale;
     }
 
     private void ReviveAndResetEnemy()
@@ -92,13 +96,14 @@ public abstract class Enemy : Character
     {
         if (IsDead)
             return;
-        if (IsPlayerInVisionCone())
+        HandleEnemyFlip();
+        if (!hasSpottedPlayerOnce && IsPlayerInVisionCone())
         {
             Debug.Log("Player spotted!");
             if (PlayerCoroutine == null)
                 PlayerCoroutine = StartCoroutine(FollowAndAttackPlayer());
         }
-        else
+        else if (!ChasingPlayer)
         {
             if (PlayerCoroutine != null)
             {
@@ -113,22 +118,71 @@ public abstract class Enemy : Character
         }
     }
 
+    private void HandleEnemyFlip()
+    {
+        if (ChasingPlayer && Player != null)
+        {
+            Vector3 directionToPlayer = Player.transform.position - transform.position;
+            IsFacingLeft = directionToPlayer.x < 0;
+        }
+        else
+        {
+            Vector3 velocity = NavAgent.velocity;
+            if (velocity.x > 0.1f) // Moving right
+            {
+                IsFacingLeft = false;
+            }
+            else if (velocity.x < -0.1f) // Moving left
+            {
+                IsFacingLeft = true;
+            }
+        }
+
+        Flip();
+        //TODO add flip animations
+    }
+
+    private void Flip()
+    {
+        transform.localScale = new Vector3(
+            IsFacingLeft ? -Mathf.Abs(defaultScale.x) : Mathf.Abs(defaultScale.x),
+            defaultScale.y,
+            defaultScale.z
+        );
+    }
+
     private bool IsPlayerInVisionCone()
     {
         if (Player == null)
             return false;
+
         Vector3 directionToPlayer = Player.transform.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
         if (distanceToPlayer > Radius)
         {
-            Debug.Log("Player out of range");
             ChasingPlayer = false;
             return false;
         }
         directionToPlayer.Normalize();
-        float angleToPlayer = Vector3.Angle(transform.right, directionToPlayer);
-        ChasingPlayer = angleToPlayer <= Angle / 2f;
-        return ChasingPlayer;
+        // If the player is already detected, skip direction checks.
+        if (ChasingPlayer)
+        {
+            NavAgent.stoppingDistance = AttackRange;
+            return true;
+        }
+        else if (Player.IsHidden)
+        {
+            return false;
+        }
+        bool isFacingPlayer = !(!IsFacingLeft && directionToPlayer.x < 0) || (IsFacingLeft && directionToPlayer.x > 0);
+        if (isFacingPlayer)
+        {
+            NavAgent.stoppingDistance = AttackRange;
+            ChasingPlayer = true;
+            HasUpdatedWayPoint = false;
+            return true;
+        }
+        return false;
     }
 
     private IEnumerator FollowAndAttackPlayer()
@@ -137,14 +191,19 @@ public abstract class Enemy : Character
             yield break;
 
         ChasingPlayer = true;
-        NavAgent.isStopped = true;
-        yield return new WaitForSeconds(DelayAfterSpotInSeconds);
-        NavAgent.isStopped = false;
+        if (!hasSpottedPlayerOnce)
+        {
+            NavAgent.isStopped = true;
+            yield return new WaitForSeconds(DelayAfterSpotInSeconds);
+            hasSpottedPlayerOnce = true;
+            NavAgent.isStopped = false;
+        }
+        NavAgent.speed = stats.MovementSpeed;
 
         while (IsPlayerInRoom() && ChasingPlayer)
         {
             if (Player == null) yield break;
-
+            PatrolCoroutine = null;
             NavAgent.SetDestination(Player.transform.position);
 
             float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
@@ -162,34 +221,42 @@ public abstract class Enemy : Character
         ChasingPlayer = false;
         if (CanPatrol && PatrolCoroutine == null)
         {
-            PatrolCoroutine = StartCoroutine(WaitAtPosition());
+            PlayerCoroutine = null;
+            //PatrolCoroutine = StartCoroutine(WaitAtPosition());
+            Patrol();
         }
     }
 
     private bool IsPlayerInRoom()
     {
-        return Player != null;
-        //TODO player in room mechanic
+        bool isInRoom = Player != null && Player.CurrentRoom == CurrentRoom;
+        if (!isInRoom)
+        {
+            hasSpottedPlayerOnce = false;
+        }
+        return isInRoom;
     }
 
     private void AttackPlayer()
     {
         IsAttacking = true;
-        StartCoroutine(WaitForCoolDown(MeleeAttackObject.AttackStats.CooldownTime));
+        StartCoroutine(WaitForAttackCoolDown(MeleeAttackObject.AttackStats.CooldownTime));
         MeleeAttackObject.gameObject.SetActive(true);
     
     }
-    protected IEnumerator WaitForCoolDown(float time)
+    protected IEnumerator WaitForAttackCoolDown(float time)
     {
-        var startTimeTime = Time.time;
-        yield return new WaitUntil(() => Time.time - startTimeTime > time);
+        yield return new WaitForSeconds(time);
         IsAttacking = false;
+        NavAgent.isStopped = false;
     }
 
     private void Patrol()
     {
         if (WayPoints == null || WayPoints.Count <= 1 || ChasingPlayer)
             return;
+        NavAgent.stoppingDistance = 0;
+        NavAgent.speed = PatrolSpeed;
         StopAtDistanceFromWayPoint();
         if (!ReachedGoal)
         {
@@ -203,7 +270,7 @@ public abstract class Enemy : Character
 
     private void StopAtDistanceFromWayPoint()
     {
-        Distance = Vector2.Distance(transform.position, WayPoints[Counter].position);
+        Distance = MathF.Abs(transform.position.x - WayPoints[Counter].position.x);
         if (Distance <= NavAgent.stoppingDistance)
             ReachedGoal = true;
     }

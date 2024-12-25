@@ -47,8 +47,14 @@ public class VisionCone2DEditor : Editor
 
         // Draw the vision cone arc again for real-time feedback
         Handles.color = new Color(1f, 1f, 0f, 0.4f);
-        Handles.DrawSolidArc(transform.position, Vector3.forward, startAngleDirection, cone.Angle, cone.Radius);
-
+        if(cone.IsFacingLeft)
+        {
+            Handles.DrawSolidArc(transform.position, Vector3.back, startAngleDirection, cone.Angle, cone.Radius);
+        }
+        else
+        {
+            Handles.DrawSolidArc(transform.position, Vector3.forward, startAngleDirection, cone.Angle, cone.Radius);
+        }
         // Force Scene view to repaint
         SceneView.RepaintAll();
     }
