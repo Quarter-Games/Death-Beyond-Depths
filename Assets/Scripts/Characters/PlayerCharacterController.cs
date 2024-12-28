@@ -10,9 +10,17 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference InteractInputAction;
     [SerializeField] InputActionReference LeftClickInputAction;
     [SerializeField] InputActionReference RightClickInputAction;
-    [SerializeField] protected InputActionReference CouchInputAction;
+    [SerializeField] InputActionReference BackStepInputAction;
+    [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
+    [SerializeField] private InputActionMap InputActionMap;
     public static bool IsRaightClickHold = false;
+
+    [Header("Backstep")]
+    [SerializeField] float BackStepDurationInSeconds = 0.75f;
+    [SerializeField] float BackStepCooldownInSeconds = 1f;
+    [SerializeField] float BackStepSpeed;
+    private Coroutine BackStepCoroutine;
 
     public bool IsMeleeAttacking = false;
     public bool IsRangeAttacking = false; // TODO probably need to move this to captain's class
@@ -28,19 +36,20 @@ abstract public class PlayerCharacterController : Character
 
     protected override void OnEnable()
     {
-        CouchInputAction.action.performed += OnCrouchPerformed;
+        CrouchInputAction.action.performed += OnCrouchPerformed;
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.started += Interact;
-
+        BackStepInputAction.action.started += BackStep;
     }
 
     protected override void OnDisable()
     {
-        CouchInputAction.action.performed -= OnCrouchPerformed;
+        CrouchInputAction.action.performed -= OnCrouchPerformed;
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
+        BackStepInputAction.action.started -= BackStep;
     }
 
     private void FixedUpdate()
@@ -116,6 +125,37 @@ abstract public class PlayerCharacterController : Character
     {
         OnMeleeAttackPerformed(context);
     }
+
+    private void BackStep(InputAction.CallbackContext context)
+    {
+        if (BackStepCoroutine != null) return;
+        BackStepCoroutine = StartCoroutine(stats.BecomeInvincibleForSeconds(BackStepDurationInSeconds));
+        StartCoroutine(BackStepCooldown());
+    }
+
+    private IEnumerator BackStepCooldown()
+    {
+        DisableInput();
+        yield return new WaitForSeconds(BackStepCooldownInSeconds);
+        EnableInput();
+        BackStepCoroutine = null;
+    }
+
+    private static void DisableInput()
+    {
+        foreach (var action in InputSystem.actions)
+        {
+            action.Disable();
+        }
+    }
+    private static void EnableInput()
+    {
+        foreach (var action in InputSystem.actions)
+        {
+            action.Enable();
+        }
+    }
+
     public abstract void RightMouseHold(InputAction.CallbackContext context);
 
     abstract protected void SpecialMove();

@@ -142,7 +142,7 @@ public abstract class Enemy : Character
         //TODO add flip animations
     }
 
-    private void Flip()
+    protected override void Flip()
     {
         transform.localScale = new Vector3(
             IsFacingLeft ? -Mathf.Abs(defaultScale.x) : Mathf.Abs(defaultScale.x),

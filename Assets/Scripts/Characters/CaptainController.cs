@@ -77,4 +77,9 @@ public class CaptainController : PlayerCharacterController
         worldPos.z = transform.position.z;
         return worldPos;
     }
+
+    protected override void Flip()
+    {
+        throw new NotImplementedException();
+    }
 }
