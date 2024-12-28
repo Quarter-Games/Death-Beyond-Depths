@@ -19,11 +19,14 @@ abstract public class PlayerCharacterController : Character
     [Header("Backstep")]
     [SerializeField] float BackStepDurationInSeconds = 0.75f;
     [SerializeField] float BackStepCooldownInSeconds = 1f;
-    [SerializeField] float BackStepSpeed;
+    [SerializeField] float BackStepSpeed = 3f;
     private Coroutine BackStepCoroutine;
 
+    bool IsFacingRight = true;
+
     public bool IsMeleeAttacking = false;
-    public bool IsRangeAttacking = false; // TODO probably need to move this to captain's class
+    public bool IsRangeAttacking = false;
+    private bool backStepAnimationComplete = false;
 
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
@@ -60,10 +63,14 @@ abstract public class PlayerCharacterController : Character
         if (movementInput.x > 0)
         {
             movement = Vector2.right;
+            IsFacingRight = true;
+            Flip();
         }
         else if (movementInput.x < 0)
         {
             movement = Vector2.left;
+            IsFacingRight = false;
+            Flip();
         }
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
 
@@ -126,18 +133,44 @@ abstract public class PlayerCharacterController : Character
         OnMeleeAttackPerformed(context);
     }
 
+    protected override void Flip()
+    {
+        transform.localScale = new Vector3(
+            IsFacingRight ? Mathf.Abs(transform.localScale.x) : -Mathf.Abs(transform.localScale.x),
+            transform.localScale.y,
+            transform.localScale.z
+        );
+    }
+
     private void BackStep(InputAction.CallbackContext context)
     {
-        if (BackStepCoroutine != null) return;
+        if (BackStepCoroutine != null || !IsStanding) return;
+        rb.linearVelocityX = 0f;
+        Vector2 direction = IsFacingRight ? Vector2.left : Vector2.right;
+        rb.AddForce(BackStepSpeed * direction, ForceMode2D.Impulse);
+        StartCoroutine(BackStepAction());
+    }
+    private IEnumerator BackStepAction()
+    {
+        backStepAnimationComplete = false; 
+        DisableInput();
         BackStepCoroutine = StartCoroutine(stats.BecomeInvincibleForSeconds(BackStepDurationInSeconds));
         StartCoroutine(BackStepCooldown());
+        animator.SetTrigger("Backstepping");
+        yield return new WaitUntil(() => backStepAnimationComplete);
+        EnableInput();
+    }
+
+    //animation callback
+    private void OnBackStepAnimationComplete()
+    {
+        Debug.Log("finished animation");
+        backStepAnimationComplete = true;
     }
 
     private IEnumerator BackStepCooldown()
     {
-        DisableInput();
         yield return new WaitForSeconds(BackStepCooldownInSeconds);
-        EnableInput();
         BackStepCoroutine = null;
     }
 
