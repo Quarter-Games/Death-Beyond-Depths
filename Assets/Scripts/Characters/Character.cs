@@ -9,7 +9,9 @@ abstract public class Character : MonoBehaviour
     [SerializeField] float RunDamping;
     [SerializeField] protected Animator animator;
     [SerializeField] protected Rigidbody2D rb;
-    [SerializeField] protected Stats stats;
+    [SerializeField] public Stats stats;
+
+    public Room CurrentRoom { get; set; }
 
     protected virtual void OnEnable()
     {
@@ -50,8 +52,7 @@ public class Stats
     public float MovementSpeed;
     public int HP;
     public int Damage;
-
-    private bool IsInvincible = false;
+    public bool IsInvincible = false;
 
     public event Action OnHPChanged;
     public event Action OnDeath;
@@ -62,6 +63,7 @@ public class Stats
         if (damage <= 0 || IsInvincible)
             return;
         HP -= damage;
+        if (HP < 0) HP = 0;
         OnHPChanged?.Invoke();
         if (HP <= 0)
         {
