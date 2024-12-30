@@ -180,7 +180,7 @@ PrefabInstance:
     - target: {fileID: 2739084509743376145, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1103343385, guid: 9980f80eba55660409a6dabcc5a188d6, type: 3}
+      objectReference: {fileID: 21300000, guid: aee196dcda295bc438618fa2445be406, type: 3}
     - target: {fileID: 5747947406746087897, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
       propertyPath: RunDamping
       value: 2.73
@@ -202,6 +202,18 @@ PrefabInstance:
       value: Captain Prefab
       objectReference: {fileID: 0}
     - target: {fileID: 8686184088841360409, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686184088841360409, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686184088841360409, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686184088841360409, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.11
       objectReference: {fileID: 0}
@@ -209,9 +221,13 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.01
       objectReference: {fileID: 0}
+    - target: {fileID: 8686184088841360409, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9140468867093815967, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.25
+      value: -12.54
       objectReference: {fileID: 0}
     - target: {fileID: 9140468867093815967, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -265,15 +281,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8406146143850328096, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 273015493553177600}
-    - targetCorrespondingSourceObject: {fileID: 1256312637715333786, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6215981809865077290}
-    - targetCorrespondingSourceObject: {fileID: 1256312637715333786, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3524959021776752917}
-    - targetCorrespondingSourceObject: {fileID: 1256312637715333786, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7919101895628810043}
   m_SourcePrefab: {fileID: 100100000, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
 --- !u!70 &1450323678512823738 stripped
 CapsuleCollider2D:
@@ -305,23 +312,34 @@ MonoBehaviour:
     MovementSpeed: 20
     HP: 2
     Damage: 0
+    IsInvincible: 0
   movementInputAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   RunInputAction: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   InteractInputAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   LeftClickInputAction: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   RightClickInputAction: {fileID: -4090225696740746782, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  CouchInputAction: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  BackStepInputAction: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  CrouchInputAction: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   MeleeAttackObject: {fileID: 7449119719441839438}
+  InputActionMap:
+    m_Name: Input
+    m_Id: d7a142be-fe25-4e64-b1bb-8f3fbd4532a4
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
+  BackStepDurationInSeconds: 0.75
+  BackStepCooldownInSeconds: 1
+  BackStepSpeed: 8
   IsMeleeAttacking: 0
   IsRangeAttacking: 0
   CrouchSpeedModifier: 0.534
   Collider: {fileID: 1450323678512823738}
   PointerMovementAction: {fileID: -1654692200621890270, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   ShootCooldown: 2
-  isAiming: 0
   ProjectilePrefab: {fileID: 1826731735552388287, guid: cd57338e4f1be3c45a992d1bfb0433a5, type: 3}
   ProjectileSpawnPosition: {fileID: 210571651562652454}
   mousePos: {x: 0, y: 0, z: 0}
+  ShootingItem: {fileID: 11400000, guid: a372d628909945b43a62e9990269475d, type: 2}
 --- !u!95 &273015493553177600
 Animator:
   serializedVersion: 7
@@ -359,71 +377,3 @@ Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 5428964764214469938, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
   m_PrefabInstance: {fileID: 6951958622453134685}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8148419344155752391 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1256312637715333786, guid: 0c4b07541bc9fe1409c330e567f7b8bf, type: 3}
-  m_PrefabInstance: {fileID: 6951958622453134685}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &6215981809865077290
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148419344155752391}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.59, y: 2.92, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &3524959021776752917
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148419344155752391}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.59, y: 2.92, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &7919101895628810043
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148419344155752391}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.59, y: 2.92, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}

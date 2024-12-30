@@ -68,6 +68,8 @@ public abstract class Enemy : Character
     private void ReviveAndResetEnemy()
     {
         NavAgent.isStopped = true;
+        ChasingPlayer = false;
+        hasSpottedPlayerOnce = false;
         StopAllCoroutines();
         StartCoroutine(Revive());
     }
@@ -142,7 +144,7 @@ public abstract class Enemy : Character
         //TODO add flip animations
     }
 
-    private void Flip()
+    protected override void Flip()
     {
         transform.localScale = new Vector3(
             IsFacingLeft ? -Mathf.Abs(defaultScale.x) : Mathf.Abs(defaultScale.x),
@@ -305,6 +307,7 @@ public abstract class Enemy : Character
 
     private void OnDrawGizmos()
     {
+        if (WayPoints.Count == 0) return;
         int i = 0;
         Gizmos.color = Color.yellow;
         for (; i < WayPoints.Count - 1;)

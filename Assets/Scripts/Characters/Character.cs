@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 abstract public class Character : MonoBehaviour
@@ -22,6 +23,8 @@ abstract public class Character : MonoBehaviour
     {
         stats.OnDeath -= Die;
     }
+
+    protected abstract void Flip();
 
     public void Move(Vector2 direction, MovementMode moveMode = default)
     {
@@ -73,7 +76,9 @@ public class Stats
     public IEnumerator BecomeInvincibleForSeconds(float Seconds)
     {
         IsInvincible = true;
+        Debug.Log("invincible for " + Seconds + " seconds");
         yield return new WaitForSeconds(Seconds);
+        Debug.Log("no longer invincible");
         IsInvincible = false;
     }
 }

@@ -10,12 +10,23 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference InteractInputAction;
     [SerializeField] InputActionReference LeftClickInputAction;
     [SerializeField] InputActionReference RightClickInputAction;
-    [SerializeField] protected InputActionReference CouchInputAction;
+    [SerializeField] InputActionReference BackStepInputAction;
+    [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
+    [SerializeField] private InputActionMap InputActionMap;
     public static bool IsRaightClickHold = false;
 
+    [Header("Backstep")]
+    [SerializeField] float BackStepDurationInSeconds = 0.75f;
+    [SerializeField] float BackStepCooldownInSeconds = 1f;
+    [SerializeField] float BackStepSpeed = 3f;
+    private Coroutine BackStepCoroutine;
+
+    bool IsFacingRight = true;
+
     public bool IsMeleeAttacking = false;
-    public bool IsRangeAttacking = false; // TODO probably need to move this to captain's class
+    public bool IsRangeAttacking = false;
+    private bool backStepAnimationComplete = false;
 
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
@@ -28,19 +39,20 @@ abstract public class PlayerCharacterController : Character
 
     protected override void OnEnable()
     {
-        CouchInputAction.action.performed += OnCrouchPerformed;
+        CrouchInputAction.action.performed += OnCrouchPerformed;
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.started += Interact;
-
+        BackStepInputAction.action.started += BackStep;
     }
 
     protected override void OnDisable()
     {
-        CouchInputAction.action.performed -= OnCrouchPerformed;
+        CrouchInputAction.action.performed -= OnCrouchPerformed;
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
+        BackStepInputAction.action.started -= BackStep;
     }
 
     private void FixedUpdate()
@@ -51,10 +63,14 @@ abstract public class PlayerCharacterController : Character
         if (movementInput.x > 0)
         {
             movement = Vector2.right;
+            IsFacingRight = true;
+            Flip();
         }
         else if (movementInput.x < 0)
         {
             movement = Vector2.left;
+            IsFacingRight = false;
+            Flip();
         }
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
 
@@ -116,6 +132,62 @@ abstract public class PlayerCharacterController : Character
     {
         OnMeleeAttackPerformed(context);
     }
+
+    protected override void Flip()
+    {
+        transform.localScale = new Vector3(
+            IsFacingRight ? -Mathf.Abs(transform.localScale.x) : Mathf.Abs(transform.localScale.x),
+            transform.localScale.y,
+            transform.localScale.z
+        );
+    }
+
+    private void BackStep(InputAction.CallbackContext context)
+    {
+        if (BackStepCoroutine != null || !IsStanding) return;
+        rb.linearVelocityX = 0f;
+        Vector2 direction = IsFacingRight ? Vector2.left : Vector2.right;
+        rb.AddForce(BackStepSpeed * direction, ForceMode2D.Impulse);
+        StartCoroutine(BackStepAction());
+    }
+    private IEnumerator BackStepAction()
+    {
+        backStepAnimationComplete = false; 
+        DisableInput();
+        BackStepCoroutine = StartCoroutine(stats.BecomeInvincibleForSeconds(BackStepDurationInSeconds));
+        StartCoroutine(BackStepCooldown());
+        animator.SetTrigger("Backstepping");
+        yield return new WaitUntil(() => backStepAnimationComplete);
+        EnableInput();
+    }
+
+    //animation callback
+    private void OnBackStepAnimationComplete()
+    {
+        backStepAnimationComplete = true;
+    }
+
+    private IEnumerator BackStepCooldown()
+    {
+        yield return new WaitForSeconds(BackStepCooldownInSeconds);
+        BackStepCoroutine = null;
+    }
+
+    private static void DisableInput()
+    {
+        foreach (var action in InputSystem.actions)
+        {
+            action.Disable();
+        }
+    }
+    private static void EnableInput()
+    {
+        foreach (var action in InputSystem.actions)
+        {
+            action.Enable();
+        }
+    }
+
     public abstract void RightMouseHold(InputAction.CallbackContext context);
 
     abstract protected void SpecialMove();
