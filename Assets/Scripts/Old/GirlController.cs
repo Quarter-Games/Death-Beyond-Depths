@@ -36,4 +36,8 @@ public class GirlController : PlayerCharacterController
         }
     }
 
+    protected override void Flip()
+    {
+        throw new NotImplementedException();
+    }
 }
