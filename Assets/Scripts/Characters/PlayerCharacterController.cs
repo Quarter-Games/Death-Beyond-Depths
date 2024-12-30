@@ -136,7 +136,7 @@ abstract public class PlayerCharacterController : Character
     protected override void Flip()
     {
         transform.localScale = new Vector3(
-            IsFacingRight ? Mathf.Abs(transform.localScale.x) : -Mathf.Abs(transform.localScale.x),
+            IsFacingRight ? -Mathf.Abs(transform.localScale.x) : Mathf.Abs(transform.localScale.x),
             transform.localScale.y,
             transform.localScale.z
         );
