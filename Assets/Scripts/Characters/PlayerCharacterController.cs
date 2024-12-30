@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -15,6 +16,9 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
     [SerializeField] private InputActionMap InputActionMap;
     public static bool IsRaightClickHold = false;
+
+    [Header("Climbing")]
+    [SerializeField] float ClimbingSpeed = 1f;
 
     [Header("Backstep")]
     [SerializeField] float BackStepDurationInSeconds = 0.75f;
@@ -152,7 +156,7 @@ abstract public class PlayerCharacterController : Character
     }
     private IEnumerator BackStepAction()
     {
-        backStepAnimationComplete = false; 
+        backStepAnimationComplete = false;
         DisableInput();
         BackStepCoroutine = StartCoroutine(stats.BecomeInvincibleForSeconds(BackStepDurationInSeconds));
         StartCoroutine(BackStepCooldown());
@@ -191,4 +195,18 @@ abstract public class PlayerCharacterController : Character
     public abstract void RightMouseHold(InputAction.CallbackContext context);
 
     abstract protected void SpecialMove();
+    public void StartClimbing(ClimablePoint startPoint)
+    {
+        rb.simulated = false;
+        Collider.enabled = false;
+        float time = Vector3.Distance(startPoint.SnippingPoint.position, startPoint.LinkedPoint.SnippingPoint.position) / ClimbingSpeed;
+        DisableInput();
+        transform.DOMove(startPoint.LinkedPoint.SnippingPoint.position, time).SetEase(Ease.Linear).OnComplete(() => StopClimbing());
+    }
+    public void StopClimbing()
+    {
+        rb.simulated = true;
+        Collider.enabled = true;
+        EnableInput();
+    }
 }
