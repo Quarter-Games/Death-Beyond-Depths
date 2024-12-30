@@ -164,7 +164,6 @@ abstract public class PlayerCharacterController : Character
     //animation callback
     private void OnBackStepAnimationComplete()
     {
-        Debug.Log("finished animation");
         backStepAnimationComplete = true;
     }
 
