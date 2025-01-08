@@ -28,6 +28,8 @@ abstract public class PlayerCharacterController : Character
     public bool IsRangeAttacking = false;
     private bool backStepAnimationComplete = false;
 
+    public static event Action<bool> OnFlip;
+
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
     [SerializeField] CapsuleCollider2D Collider;
@@ -135,11 +137,16 @@ abstract public class PlayerCharacterController : Character
 
     protected override void Flip()
     {
+        float tempXScale = transform.localScale.x;
         transform.localScale = new Vector3(
             IsFacingRight ? -Mathf.Abs(transform.localScale.x) : Mathf.Abs(transform.localScale.x),
             transform.localScale.y,
             transform.localScale.z
         );
+        if (tempXScale != transform.localScale.x)
+        {
+            OnFlip?.Invoke(IsFacingRight);
+        }
     }
 
     private void BackStep(InputAction.CallbackContext context)
