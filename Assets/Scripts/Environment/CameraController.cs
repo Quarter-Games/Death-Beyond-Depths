@@ -44,6 +44,7 @@ public class CameraController : MonoBehaviour
     bool IsYLocked = false;
     Collider2D ActiveXBorder;
     Collider2D ActiveYBorder;
+    Collider2D CameraCollider;
     float LockedXPosition;
     float LockedYPosition;
     
@@ -80,32 +81,28 @@ public class CameraController : MonoBehaviour
     {
         CameraCreated?.Invoke(this);
         FinalTargetPosition.z = transform.position.z;
+        CameraCollider = GetComponent<Collider2D>();
     }
 
     void Update()
     {
-        //HandleCameraBoundries();
         FollowTarget();
     }
 
     public void FollowTarget()
     {
-        Vector3 targetPosition = Target.position;
+        Vector3 targetPosition = transform.position;
         if(IsXLocked)
         {
             targetPosition.x = LockedXPosition;
-            Debug.Log("x locked");
         } 
         if(IsYLocked)
         {
             targetPosition.y = LockedYPosition;
-            Debug.Log("y locked");
         }
-        var x = Mathf.Min(Mathf.Max(targetPosition.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
-        var y = Mathf.Min(Mathf.Max(targetPosition.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
-        //transform.position = Vector3.Lerp(transform.position, FinalTargetPosition, CameraSpeed);
-        //Vector3.Lerp(transform.position, new Vector3(x, y, transform.position.z), CameraSpeed);
-        transform.position = Vector3.Lerp(transform.position, new Vector3(x, y, transform.position.z), CameraSpeed);
+        var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
+        var y = Mathf.Min(Mathf.Max(Target.position.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
+        transform.position = Vector3.Lerp(targetPosition, new Vector3(x, y, transform.position.z), CameraSpeed);
 
     }
     public void ActivateInvisibilityLayer()
@@ -138,54 +135,20 @@ public class CameraController : MonoBehaviour
         TurningCoroutine = null;
     }
 
-    private void HandleCameraBoundries()
-    {
-        RaycastHit2D Right = Physics2D.Raycast(Target.position, Vector2.right, horizontalDistance, TargerLayer.value);
-        RaycastHit2D Left = Physics2D.Raycast(Target.position, Vector2.left, horizontalDistance, TargerLayer.value);
-        RaycastHit2D Up = Physics2D.Raycast(Target.position, Vector2.up, verticalDistance, TargerLayer.value);
-        RaycastHit2D Down = Physics2D.Raycast(Target.position, Vector2.down, verticalDistance, TargerLayer.value);
-
-        if (Right.collider != null && Left.collider != null)
-        {
-            FinalTargetPosition.x = (Right.point.x + Left.point.x) / 2;
-        }
-        else if (Right.collider != null)
-        {
-            FinalTargetPosition.x = Right.point.x - horizontalDistance;
-        }
-        else if (Left.collider != null)
-        {
-            FinalTargetPosition.x = Left.point.x + horizontalDistance;
-        }
-
-        if (Up.collider != null && Down.collider != null)
-        {
-            FinalTargetPosition.y = (Up.point.y + Down.point.y) / 2;
-        }
-        else if (Up.collider != null)
-        {
-            FinalTargetPosition.y = Up.point.y - verticalDistance;
-        }
-        else if (Down.collider != null)
-        {
-            FinalTargetPosition.y = Down.point.y + verticalDistance;
-        }
-    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag(CAMERA_BOUNDARY_TAG)) return;
         if(!IsXLocked &&
-            (MathF.Abs(collision.bounds.min.x - transform.position.x) < BorderPaddingX) ||
-            MathF.Abs(collision.bounds.max.x - transform.position.x) < BorderPaddingX)
+            (MathF.Abs(collision.bounds.min.x - CameraCollider.bounds.min.x) < BorderPaddingX) ||
+            MathF.Abs(collision.bounds.max.x - CameraCollider.bounds.max.x) < BorderPaddingX)
         {
             IsXLocked = true;
             LockedXPosition = transform.position.x;
             ActiveXBorder = collision;
-            Debug.Log(IsXLocked);
         }
         if (!IsYLocked &&
-            (MathF.Abs(collision.bounds.min.y - transform.position.y) < BorderPaddingY) ||
-            MathF.Abs(collision.bounds.max.y - transform.position.y) < BorderPaddingY)
+            (MathF.Abs(collision.bounds.min.y - CameraCollider.bounds.min.y) < BorderPaddingY) ||
+            MathF.Abs(collision.bounds.max.y - CameraCollider.bounds.max.y) < BorderPaddingY)
         {
             IsYLocked = true;
             LockedYPosition = transform.position.y;
