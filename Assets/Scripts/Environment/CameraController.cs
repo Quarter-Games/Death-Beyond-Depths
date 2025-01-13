@@ -37,7 +37,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] float PlayerLockSeconds = 0.05f;
     [SerializeField] float TurnAroundDelaySeconds = 0.5f;
     [SerializeField] float TurnAroundSpeed;
-
+    
+    [Space(10)]
     [SerializeField] private float BorderPaddingY;
     [SerializeField] private float BorderPaddingX;
     bool IsXLocked = false;
