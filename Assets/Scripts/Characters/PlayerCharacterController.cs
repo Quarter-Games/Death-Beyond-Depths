@@ -187,12 +187,20 @@ abstract public class PlayerCharacterController : Character
             action.Disable();
         }
     }
+
     private static void EnableInput()
     {
         foreach (var action in InputSystem.actions)
         {
             action.Enable();
         }
+    }
+
+    public static IEnumerator DisableThenEnableInputSeconds(float seconds)
+    {
+        DisableInput();
+        yield return new WaitForSeconds(seconds);
+        EnableInput();
     }
 
     public abstract void RightMouseHold(InputAction.CallbackContext context);

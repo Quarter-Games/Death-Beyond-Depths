@@ -29,14 +29,27 @@ public class CameraController : MonoBehaviour
     [SerializeField] private LayerMask TargerLayer;
     [SerializeField] private float horizontalDistance = 1;
     [SerializeField] private float verticalDistance = 1;
+
     public static event Action<CameraController> CameraCreated;
     public static CameraController Instance;
 
     [Header("Camera Turn Around")]
+    [SerializeField] float PlayerLockSeconds = 0.05f;
     [SerializeField] float TurnAroundDelaySeconds = 0.5f;
     [SerializeField] float TurnAroundSpeed;
 
+    [SerializeField] private float BorderPaddingY;
+    [SerializeField] private float BorderPaddingX;
+    bool IsXLocked = false;
+    bool IsYLocked = false;
+    Collider2D ActiveXBorder;
+    Collider2D ActiveYBorder;
+    float LockedXPosition;
+    float LockedYPosition;
+    
     Coroutine TurningCoroutine;
+
+    private const string CAMERA_BOUNDARY_TAG = "CameraBoundary";
 
     private void OnValidate()
     {
@@ -77,8 +90,19 @@ public class CameraController : MonoBehaviour
 
     public void FollowTarget()
     {
-        var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
-        var y = Mathf.Min(Mathf.Max(Target.transform.position.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
+        Vector3 targetPosition = Target.position;
+        if(IsXLocked)
+        {
+            targetPosition.x = LockedXPosition;
+            Debug.Log("x locked");
+        } 
+        if(IsYLocked)
+        {
+            targetPosition.y = LockedYPosition;
+            Debug.Log("y locked");
+        }
+        var x = Mathf.Min(Mathf.Max(targetPosition.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
+        var y = Mathf.Min(Mathf.Max(targetPosition.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
         //transform.position = Vector3.Lerp(transform.position, FinalTargetPosition, CameraSpeed);
         //Vector3.Lerp(transform.position, new Vector3(x, y, transform.position.z), CameraSpeed);
         transform.position = Vector3.Lerp(transform.position, new Vector3(x, y, transform.position.z), CameraSpeed);
@@ -100,13 +124,8 @@ public class CameraController : MonoBehaviour
     }
     private IEnumerator CameraTurnCoroutine(bool isFacingRight)
     {
+        StartCoroutine(PlayerCharacterController.DisableThenEnableInputSeconds(PlayerLockSeconds));
         yield return new WaitForSeconds(TurnAroundDelaySeconds);
-        //XOffset *= -1;
-        //if (isFacingRight )
-        //{
-        //    XOffset = MathF.Abs(XOffset);
-        //}
-        //TurningCoroutine = null;
         float targetXOffset = isFacingRight ? MathF.Abs(XOffset) : -MathF.Abs(XOffset);
 
         DOTween.To(
@@ -150,6 +169,43 @@ public class CameraController : MonoBehaviour
         else if (Down.collider != null)
         {
             FinalTargetPosition.y = Down.point.y + verticalDistance;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.CompareTag(CAMERA_BOUNDARY_TAG)) return;
+        if(!IsXLocked &&
+            (MathF.Abs(collision.bounds.min.x - transform.position.x) < BorderPaddingX) ||
+            MathF.Abs(collision.bounds.max.x - transform.position.x) < BorderPaddingX)
+        {
+            IsXLocked = true;
+            LockedXPosition = transform.position.x;
+            ActiveXBorder = collision;
+            Debug.Log(IsXLocked);
+        }
+        if (!IsYLocked &&
+            (MathF.Abs(collision.bounds.min.y - transform.position.y) < BorderPaddingY) ||
+            MathF.Abs(collision.bounds.max.y - transform.position.y) < BorderPaddingY)
+        {
+            IsYLocked = true;
+            LockedYPosition = transform.position.y;
+            ActiveYBorder = collision;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!collision.CompareTag(CAMERA_BOUNDARY_TAG)) return;
+        if(IsXLocked && ActiveXBorder == collision)
+        {
+            IsXLocked = false;
+            ActiveXBorder = null;
+        }
+
+        if (IsYLocked && ActiveYBorder == collision)
+        {
+            IsYLocked = false;
+            ActiveYBorder = null;
         }
     }
 }
