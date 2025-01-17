@@ -23,13 +23,13 @@ Material:
   m_Name: CelShading_Crate
   m_Shader: {fileID: -6465566751694194690, guid: 20f572a7f4bbc5d4f923dd411c9f429b, type: 3}
   m_Parent: {fileID: 2100000, guid: cbb5c7fb0ad910e4e8f60eeff875101f, type: 2}
-  m_ModifiedSerializedProperties: 0
+  m_ModifiedSerializedProperties: 16
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -46,8 +46,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0.15483345, g: 0.11227306, b: 0.2735849, a: 0}
+    - _Color: {r: 0.335849, g: 0.17676273, b: 0.1337059, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
