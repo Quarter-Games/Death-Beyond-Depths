@@ -2,79 +2,76 @@ using UnityEngine;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
+using System;
+using System.Collections;
 
 public class FogOfWarController : MonoBehaviour
 {
     [SerializeField] Material FogMaterial;
-    [SerializeField] Animator Animator;
     [SerializeField] float FadeSpeed;
     [SerializeField] float FadedValue;
+    [Header("Sprite Mask")]
+    [SerializeField] Transform SpriteMaskTransform;
+    [SerializeField] float SpriteMaskMoveSpeed = 5f;
+    [SerializeField] float OutPositionX;
+    [SerializeField] float InPositionX;
 
     float DefaultFogCoverage;
     bool DefaultSide;
-    bool IsOnTheRight = false;
-    
+    bool IsPlayerFacingRight = false;
     private const string FOG_COVERAGE_LEFT = "_FogCoverageLeft";
     private const string FOG_COVERAGE_RIGHT = "_FogCoverageRight";
     private const string SPRITE_MASK_MOVE_LEFT = "MovingLeft";
     private const string SPRITE_MASK_MOVE_RIGHT = "MovingRight";
     private const string IS_FOG_ON_LEFT = "_IsOnLeft";
 
+    private void OnEnable()
+    {
+        PlayerCharacterController.OnFlip += DissolveAndMoveFog;
+    }
+
     private void OnDisable()
     {
+        PlayerCharacterController.OnFlip -= DissolveAndMoveFog;
         FogMaterial.SetFloat(FOG_COVERAGE_LEFT, DefaultFogCoverage);
+        FogMaterial.SetFloat(FOG_COVERAGE_RIGHT, DefaultFogCoverage / 2);
         FogMaterial.SetInt(IS_FOG_ON_LEFT, DefaultSide ? 1 : 0);
     }
+
 
     private void Start()
     {
         DefaultFogCoverage = FogMaterial.GetFloat(FOG_COVERAGE_LEFT);
-        IsOnTheRight = FogMaterial.GetInt(IS_FOG_ON_LEFT) == 1 ? true : false;
-        DefaultSide = IsOnTheRight;
+        IsPlayerFacingRight = FogMaterial.GetInt(IS_FOG_ON_LEFT) == 1 ? true : false;
+        DefaultSide = IsPlayerFacingRight;
     }
 
     [ContextMenu("Fade")]
-    public void DissolveAndMoveFog()
+    public void DissolveAndMoveFog(bool isFacingRight)
     {
-        DissolveFog().OnComplete(() =>
-        {
-            MoveFog();
-        });
+        IsPlayerFacingRight = isFacingRight;
+        Sequence fogSequence = DOTween.Sequence();
+        fogSequence.Append(DissolveFog());
+        MoveSpriteMask();
     }
 
     private TweenerCore<float, float, FloatOptions> DissolveFog()
     {
-        string leftOrRight;
-        if (IsOnTheRight)
-        {
-            Animator.SetBool(SPRITE_MASK_MOVE_RIGHT, false);
-            Animator.SetBool(SPRITE_MASK_MOVE_LEFT, true);
-            leftOrRight = FOG_COVERAGE_RIGHT;
-        }
-        else
-        {
-            Animator.SetBool(SPRITE_MASK_MOVE_LEFT, false);
-            Animator.SetBool(SPRITE_MASK_MOVE_RIGHT, true);
-            leftOrRight = FOG_COVERAGE_LEFT;
-        }
-        FogMaterial.SetInt(IS_FOG_ON_LEFT, IsOnTheRight ? 1 : 0);
+        string fogCoverageKey = IsPlayerFacingRight ? FOG_COVERAGE_RIGHT : FOG_COVERAGE_LEFT;
+        FogMaterial.SetFloat(IsPlayerFacingRight ? FOG_COVERAGE_LEFT : FOG_COVERAGE_RIGHT, DefaultFogCoverage);
+        FogMaterial.SetInt(IS_FOG_ON_LEFT, IsPlayerFacingRight ? 1 : 0);
+        
         return DOTween.To(
-                        () => FogMaterial.GetFloat(FOG_COVERAGE_LEFT),
-                        value => FogMaterial.SetFloat(leftOrRight, value),
-                        FadedValue,
-                        FadeSpeed
-                    );
+            () => FogMaterial.GetFloat(fogCoverageKey),
+            value => FogMaterial.SetFloat(fogCoverageKey, value),
+            FadedValue,
+            FadeSpeed
+        );
     }
 
-    private void MoveFog()
+    private void MoveSpriteMask()
     {
-        IsOnTheRight = !IsOnTheRight;
-        //FogMaterial.SetFloat(FOG_COVERAGE,
-    }
-
-    private void EndAnimations()
-    {
-        Animator.SetBool(SPRITE_MASK_MOVE_LEFT, false);
-        Animator.SetBool(SPRITE_MASK_MOVE_RIGHT, false);
+        Vector3 inPosition = new Vector3(IsPlayerFacingRight ? InPositionX : -InPositionX, SpriteMaskTransform.position.y, SpriteMaskTransform.position.z);
+        SpriteMaskTransform.position = new Vector3(IsPlayerFacingRight ? InPositionX : OutPositionX, SpriteMaskTransform.position.y, SpriteMaskTransform.position.z);
     }
 }
