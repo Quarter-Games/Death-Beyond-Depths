@@ -112,13 +112,20 @@ abstract public class PlayerCharacterController : Character
         }
         IsStanding = !IsStanding;
         ToggleCrouching();
+        
         stats.MovementSpeed *= !IsStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
     }
-
+    public void TweenCrouchValue()
+    {
+        float endValue = !IsStanding ? 2 : 0;
+        float crouch = animator.GetFloat("Crouch");
+        DOTween.To(() => animator.GetFloat("Crouch"), x => animator.SetFloat("Crouch", x), endValue, 0.1f);
+    }
     private void ToggleCrouching()
     {
         Collider.direction = Collider.direction == CapsuleDirection2D.Vertical ? CapsuleDirection2D.Horizontal : CapsuleDirection2D.Vertical;
-        animator.SetBool("IsCrouching", !IsStanding);
+        TweenCrouchValue();
+
     }
 
     internal void Hide()

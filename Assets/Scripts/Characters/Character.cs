@@ -11,6 +11,7 @@ abstract public class Character : MonoBehaviour
     [SerializeField] protected Animator animator;
     [SerializeField] protected Rigidbody2D rb;
     [SerializeField] public Stats stats;
+    private float animSpeed;
 
     public Room CurrentRoom { get; set; }
 
@@ -28,6 +29,11 @@ abstract public class Character : MonoBehaviour
 
     public void Move(Vector2 direction, MovementMode moveMode = default)
     {
+        bool isIdle = false;
+        if (direction == Vector2.zero)
+        {
+            isIdle = true;
+        }
         direction = direction.normalized;
         rb.linearDamping = moveMode switch
         {
@@ -35,8 +41,19 @@ abstract public class Character : MonoBehaviour
             MovementMode.Running => RunDamping,
             _ => WalkDamping
         };
+        if (isIdle) animSpeed = 0;
+        else animSpeed = moveMode == MovementMode.Walking ? 1f : 2;
+        TweenAnimatorSpeedValue();
         rb.AddForce(direction * stats.MovementSpeed);
     }
+
+    private void TweenAnimatorSpeedValue()
+    {
+        float speed = animator.GetFloat("Speed");
+        DOTween.To(() => animator.GetFloat("Speed"), x => animator.SetFloat("Speed", x), animSpeed, 0.1f);
+
+    }
+
     public enum MovementMode
     {
         Walking,
