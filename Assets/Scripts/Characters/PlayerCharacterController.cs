@@ -1,8 +1,11 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.U2D.IK;
 
 abstract public class PlayerCharacterController : Character
 {
@@ -24,6 +27,10 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] float BackStepDurationInSeconds = 0.75f;
     [SerializeField] float BackStepCooldownInSeconds = 1f;
     [SerializeField] float BackStepSpeed = 3f;
+    [Header("IK")]
+    [SerializeField] Transform LeftLegTarget;
+    [SerializeField] Transform RightLegTarget;
+    [SerializeField] float IKDisplacementMinHeight = 0.1f;
     private Coroutine BackStepCoroutine;
 
     bool IsFacingRight = true;
@@ -36,7 +43,7 @@ abstract public class PlayerCharacterController : Character
 
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
-    [SerializeField] CapsuleCollider2D Collider;
+    [SerializeField] Collider2D Collider;
     public bool IsHidden { get; set; } = false;
     public bool CanCrouch { get; set; } = true;
     public bool IsStanding { get; private set; } = true;
@@ -78,7 +85,19 @@ abstract public class PlayerCharacterController : Character
             IsFacingRight = false;
             Flip();
         }
+        FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
+    }
+    public void FootPlacement()
+    {
+        float leftLegHeight = LeftLegTarget.position.y;
+        float rightLegHeight = RightLegTarget.position.y;
+        float minHeight = Mathf.Min(leftLegHeight, rightLegHeight);
+
+        Bounds bounds = Collider.bounds;
+        float currentWorldFloor = transform.position.y - bounds.extents.y + Collider.offset.y;
+        float displacement = currentWorldFloor - minHeight;
+        Collider.offset = new Vector2(Collider.offset.x, Collider.offset.y - displacement - IKDisplacementMinHeight);
 
     }
 
@@ -114,7 +133,7 @@ abstract public class PlayerCharacterController : Character
         }
         IsStanding = !IsStanding;
         ToggleCrouching();
-        
+
         stats.MovementSpeed *= !IsStanding ? CrouchSpeedModifier : (1 / CrouchSpeedModifier);
     }
     public void TweenCrouchValue()
@@ -125,7 +144,7 @@ abstract public class PlayerCharacterController : Character
     }
     private void ToggleCrouching()
     {
-        Collider.direction = Collider.direction == CapsuleDirection2D.Vertical ? CapsuleDirection2D.Horizontal : CapsuleDirection2D.Vertical;
+        //Collider.direction = Collider.direction == CapsuleDirection2D.Vertical ? CapsuleDirection2D.Horizontal : CapsuleDirection2D.Vertical;
         TweenCrouchValue();
 
     }
