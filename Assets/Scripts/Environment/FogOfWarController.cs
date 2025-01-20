@@ -58,7 +58,7 @@ public class FogOfWarController : MonoBehaviour
     private TweenerCore<float, float, FloatOptions> DissolveFog()
     {
         string fogCoverageKey = IsPlayerFacingRight ? FOG_COVERAGE_RIGHT : FOG_COVERAGE_LEFT;
-        FogMaterial.SetFloat(IsPlayerFacingRight ? FOG_COVERAGE_LEFT : FOG_COVERAGE_RIGHT, DefaultFogCoverage);
+        FogMaterial.SetFloat(IsPlayerFacingRight ? FOG_COVERAGE_LEFT : FOG_COVERAGE_RIGHT, IsPlayerFacingRight ? DefaultFogCoverage : DefaultFogCoverage / 2);
         FogMaterial.SetInt(IS_FOG_ON_LEFT, IsPlayerFacingRight ? 1 : 0);
         
         return DOTween.To(
