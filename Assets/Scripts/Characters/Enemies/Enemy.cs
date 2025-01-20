@@ -34,7 +34,7 @@ public abstract class Enemy : Character
     private bool hasSpottedPlayerOnce = false;
 
     public bool IsFacingLeft { get; private set; }
-    protected bool IsDead => stats.HP <= 0;
+    public bool IsDead => stats.HP <= 0;
     public bool CanPatrol => WayPoints.Count > 0 && !ChasingPlayer && !IsDead;
 
     private void OnValidate()

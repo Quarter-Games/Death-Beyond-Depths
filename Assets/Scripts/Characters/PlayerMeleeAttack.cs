@@ -22,7 +22,9 @@ public class PlayerMeleeAttack : MonoBehaviour
     {
         if(collision.TryGetComponent(out CachedEnemy))
         {
+            if (CachedEnemy.IsDead) return;
             CachedEnemy.TakeDamage(Stats.Damage);
+            Debug.Log("Hit enemy");
             StartCoroutine(HitStop.TimeSlow(3, 0.01f));
         }
     }

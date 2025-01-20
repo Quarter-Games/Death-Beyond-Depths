@@ -1,9 +1,15 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class RoomManager : MonoBehaviour
 {
     [SerializeField] List<List<GameObject>> RoomList;
+    [SerializeField] Volume PostProcessingEffects;
+    [SerializeField] float BlurDuration;
+
+    private bool IsPlayerSpawning = false;
 
     public static RoomManager Instance { get; private set; }
 
@@ -25,5 +31,20 @@ public class RoomManager : MonoBehaviour
     public void AssignPlayerToRoom(Room room, PlayerCharacterController Player)
     {
         Player.CurrentRoom = room;
+        if (IsPlayerSpawning)
+        {
+            StartCoroutine(ApplyBlurEffect());
+        }
+        else
+        {
+            IsPlayerSpawning = true;
+        }
+    }
+
+    private IEnumerator ApplyBlurEffect()
+    {
+        PostProcessingEffects.weight = 1;
+        yield return new WaitForSeconds(BlurDuration);
+        PostProcessingEffects.weight = 0;
     }
 }
