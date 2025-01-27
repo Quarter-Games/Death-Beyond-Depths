@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Idle State", menuName = "DBD/States/IdleState")]
-public class IdleState : CharacterState
+public class IdleEnemyState : CharacterState
 {
     public override void StateEnteredCallback()
     {

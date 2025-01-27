@@ -131,7 +131,7 @@ public class CameraController : MonoBehaviour
             value => XOffset = value,
             targetXOffset,
             TurnAroundSpeed
-        ).SetEase(Ease.InOutQuint);//.SetEase(Ease.OutQuint);
+        ).SetEase(Ease.InOutQuint);
 
         TurningCoroutine = null;
     }
