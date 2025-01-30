@@ -5,7 +5,11 @@ using UnityEngine;
 public class PlayerMeleeAttack : MonoBehaviour
 {
     public MeleeAttacks Stats;
-    Enemy CachedEnemy;
+
+    [SerializeField] float HitStopPower = 2;
+    [SerializeField] float HitStopTime = 0.01f;
+
+    EnemyAI CachedEnemy;
 
     private void OnEnable()
     {
@@ -24,8 +28,7 @@ public class PlayerMeleeAttack : MonoBehaviour
         {
             if (CachedEnemy.IsDead) return;
             CachedEnemy.TakeDamage(Stats.Damage);
-            Debug.Log("Hit enemy");
-            StartCoroutine(HitStop.TimeSlow(3, 0.01f));
+            StartCoroutine(HitStop.TimeSlow(HitStopPower, HitStopTime));
         }
     }
 }

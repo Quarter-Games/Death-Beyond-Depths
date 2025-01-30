@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class AttackState : EnemyState
 {
-    private float AttackCooldown = 1f; // Time between attacks
     private float TimeSinceLastAttack = 0f;
 
     public AttackState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
@@ -11,9 +10,9 @@ public class AttackState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("Enemy is attacking the player!");
+        Debug.Log("Entered melee attack state");
         AttackPlayer();
-        TimeSinceLastAttack = AttackCooldown;
+        TimeSinceLastAttack = Enemy.MeleeAttackCooldown;
         NavMeshAgent.isStopped = true;
     }
 
@@ -23,7 +22,7 @@ public class AttackState : EnemyState
         TimeSinceLastAttack += Time.deltaTime;
 
         // Perform attack if cooldown is over
-        if (TimeSinceLastAttack >= AttackCooldown)
+        if (TimeSinceLastAttack >= Enemy.MeleeAttackCooldown)
         {
             TimeSinceLastAttack = 0f;
             AttackPlayer();

@@ -22,9 +22,12 @@ public class IdleWanderState : EnemyState
     public override void OnEnter()
     {
         //TODO - enter idle animation state
+        Debug.Log("Entered idle state");
         NavMeshAgent.isStopped = true;
         NavMeshAgent.updatePosition = true;
         NavMeshAgent.ResetPath();
+        NavMeshAgent.speed = Enemy.PatrolMoveSpeed;
+        NavMeshAgent.destination = NavMeshAgent.transform.position;
     }
 
     public override void OnExit()
