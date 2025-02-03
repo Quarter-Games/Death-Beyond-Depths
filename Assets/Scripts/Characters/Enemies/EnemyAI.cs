@@ -103,6 +103,21 @@ public class EnemyAI : Character
         {
             StateMachine.ChangeState(DeadState);
         }
+        FlipIfNeeded();
+    }
+
+    private void FlipIfNeeded()
+    {
+        if (NavMeshAgent.velocity.x > 0 && IsFacingLeft)
+        {
+            IsFacingLeft = false;
+            Flip();
+        }
+        else if (NavMeshAgent.velocity.x < 0 && !IsFacingLeft)
+        {
+            IsFacingLeft = true;
+            Flip();
+        }
     }
 
     private bool CanHeal()
@@ -179,6 +194,16 @@ public class EnemyAI : Character
         Gizmos.color = Color.yellow;
         Gizmos.DrawRay(transform.position, leftBoundary * SightRadius);
         Gizmos.DrawRay(transform.position, rightBoundary * SightRadius);
+
+        if (PatrolPoints.Count == 0) return;
+        int i = 0;
+        Gizmos.color = Color.yellow;
+        for (; i < PatrolPoints.Count - 1;)
+        {
+            Gizmos.DrawSphere(PatrolPoints[i].position, 0.2f);
+            Gizmos.DrawLine(PatrolPoints[i].position, PatrolPoints[++i].position);
+        }
+        Gizmos.DrawSphere(PatrolPoints[i].position, 0.2f);
     }
 
 }
