@@ -163,19 +163,17 @@ public class EnemyAI : Character
 
     public bool PlayerInSight()
     {
-        if (Player == null)
+        if (Player == null || Player.IsHidden)
             return false;
-        if (Player.IsHidden)
-            return false;
-        Vector3 directionToPlayer = Player.transform.position - transform.position;
-        float distanceToPlayer = directionToPlayer.magnitude;
+        Vector3 directionToPlayer = (Player.transform.position - transform.position).normalized;
+        float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
         if (distanceToPlayer > SightRadius)
         {
             return false;
         }
-        directionToPlayer.Normalize();
-        float angleToPlayer = Vector3.Angle(transform.right, directionToPlayer);
-        if(angleToPlayer <= Angle / 2f)
+        Vector3 facingDirection = IsFacingLeft ? -transform.right : transform.right;
+        float angleToPlayer = Vector3.Angle(facingDirection, directionToPlayer);
+        if (angleToPlayer <= Angle / 2f)
         {
             LastKnownPlayerPosition = Player.transform;
             return true;
