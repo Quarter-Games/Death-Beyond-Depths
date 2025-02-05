@@ -14,14 +14,14 @@ public class AlertState : EnemyState
         //TODO alert animation
         Debug.Log("Entered alert state");
         TimeSpentInAlert = 0f;
-        NavMeshAgent.isStopped = true;
+        NavMeshAgent.isStopped = false;
         NavMeshAgent.speed = Enemy.AlertMoveSpeed;
     }
 
     public override void OnFrameUpdate()
     {
         base.OnFrameUpdate();
-        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition.position);
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
         // Check if the player is in sight
         if (Enemy.PlayerInSight())
         {

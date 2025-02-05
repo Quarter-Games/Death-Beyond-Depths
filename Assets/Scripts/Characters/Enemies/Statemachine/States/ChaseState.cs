@@ -23,7 +23,7 @@ public class ChaseState : EnemyState
             return;
         }
         // Check if the player is within attack ranges
-        float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.LastKnownPlayerPosition.position);
+        float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.LastKnownPlayerPosition);
         if(distanceToPlayer <= Enemy.MeleeAttackRange)
         {
             StateMachine.ChangeState(Enemy.AttackState);
@@ -34,7 +34,7 @@ public class ChaseState : EnemyState
             StateMachine.ChangeState(Enemy.ChargeAttackState);
             return;
         }
-        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition.position);
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
     }
 
     public override void OnExit()

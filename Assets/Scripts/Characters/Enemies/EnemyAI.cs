@@ -29,7 +29,7 @@ public class EnemyAI : Character, IHearing
     [SerializeField] public float ChaseMoveSpeed = 5f;
     [SerializeField] public float ChargeMoveSpeed = 6f;
 
-    public Transform LastKnownPlayerPosition { get; set; }
+    public Vector3 LastKnownPlayerPosition { get; set; }
     public IdleWanderState IdleState { get; private set; }
     public AlertState AlertState { get; private set; }
     public ChaseState ChaseState { get; private set; }
@@ -170,7 +170,7 @@ public class EnemyAI : Character, IHearing
         float angleToPlayer = Vector3.Angle(facingDirection, directionToPlayer);
         if (angleToPlayer <= Angle / 2f)
         {
-            LastKnownPlayerPosition = Player.transform;
+            LastKnownPlayerPosition = Player.transform.position;
             return true;
         }
         return false;
@@ -201,12 +201,12 @@ public class EnemyAI : Character, IHearing
 
     public void OnHeardSound(Vector3 soundOrigin)
     {
-        Debug.Log("Davy heard that!");
         if (StateMachine.CurrentState != IdleState && StateMachine.CurrentState != AlertState)
         {
             return;
         }
-        LastKnownPlayerPosition.position = soundOrigin;
+        Debug.Log("Davy heard that!");
+        LastKnownPlayerPosition = soundOrigin;
         StateMachine.ChangeState(AlertState);
     }
 }

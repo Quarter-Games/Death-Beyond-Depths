@@ -21,7 +21,6 @@ public class SoundBubble : MonoBehaviour
             return;
         }
         Instance = this;
-        Debug.Log($"Enemy Layer Mask Value: {enemyLayer.value}");
     }
 
     public void EmitSound(Transform origin, float radius = 5f)
@@ -45,7 +44,6 @@ public class SoundBubble : MonoBehaviour
                 }
                 if ((enemyLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
                 {
-                    Debug.Log($"Enemy detected: {hit.collider.gameObject.name}");
                     affectedEnemies.Add(hit.transform);
                     raycastResults.Add(new RaycastInfo(originPos, hit.point, Color.green));
                 }
@@ -62,7 +60,6 @@ public class SoundBubble : MonoBehaviour
 
         foreach (Transform enemy in affectedEnemies)
         {
-            Debug.Log($"Enemy Heard: {enemy.name}");
             enemy.GetComponent<IHearing>()?.OnHeardSound(origin.position);
         }
     }
