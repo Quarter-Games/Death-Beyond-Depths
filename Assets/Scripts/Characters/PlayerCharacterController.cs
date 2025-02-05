@@ -85,6 +85,10 @@ abstract public class PlayerCharacterController : Character
             IsFacingRight = false;
             Flip();
         }
+        if(movementInput.x != 0)
+        {
+            SoundBubble.Instance.EmitSound(transform, 15);
+        }
         FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
     }

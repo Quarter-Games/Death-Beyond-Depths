@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : Character
+public class EnemyAI : Character, IHearing
 {
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
@@ -45,20 +45,15 @@ public class EnemyAI : Character
     private Vector3 DefaultScale;
     private int InitialHP;
 
-    protected override void OnEnable()
-    {
-        
-    }
+    protected override void OnEnable() {}
 
-    protected override void OnDisable()
-    {
-        
-    }
+    protected override void OnDisable(){}
 
     private void Awake()
     {
         InitializeNavMeshAgent();
         InitializeStateMachine();
+        Debug.Log(gameObject.layer);
     }
 
     private void InitializeStateMachine()
@@ -204,4 +199,14 @@ public class EnemyAI : Character
         Gizmos.DrawSphere(PatrolPoints[i].position, 0.2f);
     }
 
+    public void OnHeardSound(Vector3 soundOrigin)
+    {
+        Debug.Log("Davy heard that!");
+        if (StateMachine.CurrentState != IdleState && StateMachine.CurrentState != AlertState)
+        {
+            return;
+        }
+        LastKnownPlayerPosition.position = soundOrigin;
+        StateMachine.ChangeState(AlertState);
+    }
 }
