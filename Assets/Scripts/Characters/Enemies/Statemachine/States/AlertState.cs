@@ -5,6 +5,7 @@ public class AlertState : EnemyState
 {
     private float AlertDuration = 5f;
     private float TimeSpentInAlert = 0f;
+    const string ALERT_ANIMATION = "IsSeeking";
 
     public AlertState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
@@ -16,6 +17,7 @@ public class AlertState : EnemyState
         TimeSpentInAlert = 0f;
         NavMeshAgent.isStopped = false;
         NavMeshAgent.speed = Enemy.AlertMoveSpeed;
+        Enemy.Animator.SetBool(ALERT_ANIMATION, true);
     }
 
     public override void OnFrameUpdate()
@@ -39,6 +41,7 @@ public class AlertState : EnemyState
     public override void OnExit()
     {
         base.OnExit();
+        Enemy.Animator.SetBool(ALERT_ANIMATION, false);
     }
 
     private void CheckHidingSpot()

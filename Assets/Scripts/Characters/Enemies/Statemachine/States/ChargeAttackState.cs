@@ -56,6 +56,7 @@ public class ChargeAttackState : EnemyState
     {
         IsCharging = true;
         ChargeComplete = false;
+        Debug.Log(Enemy.Animator);
         Enemy.Animator.SetBool(CHARGE_ANIMATION, true);
         NavMeshAgent.isStopped = false;
         NavMeshAgent.SetDestination(LastKnownPlayerPosition);

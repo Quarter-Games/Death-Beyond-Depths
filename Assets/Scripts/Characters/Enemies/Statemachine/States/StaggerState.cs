@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class StaggerState : EnemyState
 {
     private float TimeSpentInStagger = 0f;
+    const string STAGGER_ANIMATION = "IsGettingHit";
 
     public StaggerState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent)
     {
@@ -19,6 +20,7 @@ public class StaggerState : EnemyState
     {
         base.OnEnter();
         NavMeshAgent.isStopped = true;
+        Enemy.Animator.SetTrigger(STAGGER_ANIMATION);
     }
 
     public override void OnExit()

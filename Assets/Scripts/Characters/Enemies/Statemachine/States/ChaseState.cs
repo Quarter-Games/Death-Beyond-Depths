@@ -3,6 +3,8 @@ using UnityEngine.AI;
 
 public class ChaseState : EnemyState
 {
+    const string CHASE_ANIMATION = "IsChasing";
+
     public ChaseState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
     public override void OnEnter()
@@ -11,6 +13,7 @@ public class ChaseState : EnemyState
         Debug.Log("Entered chase state");
         NavMeshAgent.isStopped = false;
         NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
+        Enemy.Animator.SetBool(CHASE_ANIMATION, true);
     }
 
     public override void OnFrameUpdate()
@@ -41,6 +44,7 @@ public class ChaseState : EnemyState
     {
         base.OnExit();
         NavMeshAgent.isStopped = true;
+        Enemy.Animator.SetBool(CHASE_ANIMATION, false);
     }
 }
 

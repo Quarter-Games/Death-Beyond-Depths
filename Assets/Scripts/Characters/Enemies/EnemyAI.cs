@@ -12,8 +12,6 @@ public class EnemyAI : Character, IHearing
     [SerializeField] NavMeshAgent NavMeshAgent;
     [SerializeField] List<Transform> PatrolPoints;
     [SerializeField] public PlayerCharacterController Player;
-    [SerializeField] public Collider2D ChaseAttackCollider;
-    [SerializeField] public Collider2D MeleeAttackCollider;
     [SerializeField] public float StaggerTime = 0.5f;
     [SerializeField] public float ReviveTime = 10f;
     [Header("Attack Stats")]
