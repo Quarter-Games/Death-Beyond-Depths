@@ -17,7 +17,7 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference BackStepInputAction;
     [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
-    [SerializeField] private InputActionMap InputActionMap;
+    //[SerializeField] private InputActionMap InputActionMap;
     public static bool IsRaightClickHold = false;
 
     [Header("Climbing")]
@@ -31,6 +31,10 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] Transform LeftLegTarget;
     [SerializeField] Transform RightLegTarget;
     [SerializeField] float IKDisplacementMinHeight = 0.1f;
+    [Header("Audio")]
+    [SerializeField] SoundData WalkSound;
+    [SerializeField] SoundData CrouchWalkSound;
+
     private Coroutine BackStepCoroutine;
 
     bool IsFacingRight = true;
@@ -87,7 +91,7 @@ abstract public class PlayerCharacterController : Character
         }
         if(movementInput.x != 0)
         {
-            SoundBubble.Instance.EmitSound(transform, 15);
+            SoundBubble.Instance.EmitSound(transform, IsStanding ? WalkSound.SoundTravelDistance : CrouchWalkSound.SoundTravelDistance);
         }
         FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);

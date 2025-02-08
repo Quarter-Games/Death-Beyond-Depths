@@ -9353,115 +9353,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7079107431954098233, guid: b68fb293cc37b4f479d1110ffabf74f7, type: 3}
   m_PrefabInstance: {fileID: 288548082}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2119170823
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2119170827}
-  - component: {fileID: 2119170826}
-  - component: {fileID: 2119170825}
-  - component: {fileID: 2119170824}
-  m_Layer: 0
-  m_Name: Quad
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!64 &2119170824
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119170823}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &2119170825
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119170823}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 1c442182a167d3e4a9482fcf488b0c37, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &2119170826
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119170823}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &2119170827
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119170823}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.6, y: -0.3, z: -1}
-  m_LocalScale: {x: 10.21, y: 10.21, z: 10.21}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2129059031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9548,6 +9439,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -754375743889678503, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
+      propertyPath: WalkSound
+      value: 
+      objectReference: {fileID: 11400000, guid: e9ea31da637be8b4f9c88a6302f79d82, type: 2}
+    - target: {fileID: -754375743889678503, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: ShootingItem
       value: 
       objectReference: {fileID: 11400000, guid: a372d628909945b43a62e9990269475d, type: 2}
@@ -9555,6 +9450,10 @@ PrefabInstance:
       propertyPath: BackStepSpeed
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: -754375743889678503, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
+      propertyPath: CrouchWalkSound
+      value: 
+      objectReference: {fileID: 11400000, guid: def30ed4d4309084e961a052418a4f10, type: 2}
     - target: {fileID: -754375743889678503, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: CrouchInputAction
       value: 
@@ -9749,7 +9648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.98267955
+      value: 0.9826798
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.x
@@ -9761,7 +9660,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.18531312
+      value: -0.18531203
       objectReference: {fileID: 0}
     - target: {fileID: 4148100151638686387, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9793,7 +9692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4608578976975584371, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.013488742
+      value: 0.013487637
       objectReference: {fileID: 0}
     - target: {fileID: 5097125280169978991, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9978,7 +9877,7 @@ PrefabInstance:
       objectReference: {fileID: 2034719974}
     - target: {fileID: 123810753720176737, guid: 9a585d3c91f3b72438b5bd90f4a608c6, type: 3}
       propertyPath: SoundRadius
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 123810753720176737, guid: 9a585d3c91f3b72438b5bd90f4a608c6, type: 3}
       propertyPath: 'PatrolPoints.Array.data[0]'
@@ -10391,4 +10290,3 @@ SceneRoots:
   - {fileID: 786434253}
   - {fileID: 99340900}
   - {fileID: 1586126204206880323}
-  - {fileID: 2119170827}

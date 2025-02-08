@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMeleeAttack : MonoBehaviour
@@ -9,11 +11,16 @@ public class PlayerMeleeAttack : MonoBehaviour
     [SerializeField] float HitStopPower = 2;
     [SerializeField] float HitStopTime = 0.01f;
 
-    EnemyAI CachedEnemy;
+    List<EnemyAI> EnemyList;
+    EnemyAI CurrentEnemy;
 
     private void OnEnable()
     {
         StartCoroutine(DestroyAfterSeconds(Stats.AttackTime));
+        foreach (EnemyAI enemy in EnemyList)
+        {
+            enemy.stats.IsInvincible = false; //should be something else rather than invincibilty to avoid bugs
+        }
     }
 
     private IEnumerator DestroyAfterSeconds(float attackTime)
@@ -24,11 +31,13 @@ public class PlayerMeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.TryGetComponent(out CachedEnemy))
+        if(collision.TryGetComponent(out CurrentEnemy))
         {
-            if (CachedEnemy.IsDead) return;
-            CachedEnemy.TakeDamage(Stats.Damage);
+            if (CurrentEnemy.IsDead) return;
+            CurrentEnemy.TakeDamage(Stats.Damage);
             StartCoroutine(HitStop.TimeSlow(HitStopPower, HitStopTime));
+            CurrentEnemy.stats.IsInvincible = true; //to avoid multi-hits when reentering collider
+            EnemyList.Add(CurrentEnemy);
         }
     }
 }
