@@ -1,15 +1,31 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMeleeAttack : MonoBehaviour
 {
     public MeleeAttacks Stats;
-    Enemy CachedEnemy;
+
+    [SerializeField] float HitStopPower = 2;
+    [SerializeField] float HitStopTime = 0.01f;
+
+    List<EnemyAI> EnemyList;
+    EnemyAI CurrentEnemy;
 
     private void OnEnable()
     {
         StartCoroutine(DestroyAfterSeconds(Stats.AttackTime));
+        EnemyList = new List<EnemyAI>();
+    }
+
+    private void OnDisable()
+    {
+        foreach (EnemyAI enemy in EnemyList)
+        {
+            CurrentEnemy.IsAttacked = false;
+        }
     }
 
     private IEnumerator DestroyAfterSeconds(float attackTime)
@@ -20,12 +36,13 @@ public class PlayerMeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.TryGetComponent(out CachedEnemy))
+        if(collision.TryGetComponent(out CurrentEnemy) && !CurrentEnemy.IsAttacked)
         {
-            if (CachedEnemy.IsDead) return;
-            CachedEnemy.TakeDamage(Stats.Damage);
-            Debug.Log("Hit enemy");
-            StartCoroutine(HitStop.TimeSlow(3, 0.01f));
+            if (CurrentEnemy.IsDead) return;
+            CurrentEnemy.TakeDamage(Stats.Damage);
+            StartCoroutine(HitStop.TimeSlow(HitStopPower, HitStopTime));
+            CurrentEnemy.IsAttacked = true; //to avoid multi-hits when reentering collider
+            EnemyList.Add(CurrentEnemy);
         }
     }
 }

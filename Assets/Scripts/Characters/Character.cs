@@ -13,6 +13,8 @@ abstract public class Character : MonoBehaviour
     [SerializeField] public Stats stats;
     private float animSpeed;
 
+    public bool IsAttacked {  get; set; }
+
     public Room CurrentRoom { get; set; }
 
     protected virtual void OnEnable()

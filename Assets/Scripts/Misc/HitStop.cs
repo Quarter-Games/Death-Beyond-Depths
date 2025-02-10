@@ -8,9 +8,8 @@ public class HitStop : MonoBehaviour
     public static IEnumerator TimeSlow(float power, float timeInSeconds)
     {
         if (IsTimeSlowed || power <= 0) yield return null;
-        Debug.Log("Time slow!");
         Time.timeScale = 1 / power;
-        IsTimeSlowed= true;
+        IsTimeSlowed = true;
         yield return new WaitForSecondsRealtime(timeInSeconds);
         Time.timeScale = 1;
         IsTimeSlowed = false;
