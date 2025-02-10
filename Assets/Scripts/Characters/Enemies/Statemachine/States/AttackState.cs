@@ -15,6 +15,7 @@ public class AttackState : EnemyState
         AttackPlayer();
         TimeSinceLastAttack = Enemy.MeleeAttackCooldown;
         NavMeshAgent.isStopped = true;
+        NavMeshAgent.SetDestination(Enemy.transform.position);
     }
 
     public override void OnFrameUpdate()
