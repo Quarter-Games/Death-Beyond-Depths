@@ -20,7 +20,10 @@ public class StaggerState : EnemyState
     {
         base.OnEnter();
         NavMeshAgent.isStopped = true;
+        NavMeshAgent.SetDestination(Enemy.transform.position);
         Enemy.Animator.SetTrigger(STAGGER_ANIMATION);
+        Debug.Log("Entered staggered state");
+        TimeSpentInStagger = 0;
     }
 
     public override void OnExit()
