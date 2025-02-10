@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundBubble : MonoBehaviour
+public class SoundDataManager : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacleLayer;
     [SerializeField] private LayerMask enemyLayer;
@@ -11,7 +11,7 @@ public class SoundBubble : MonoBehaviour
     private Transform lastOrigin;
     private float lastRadius;
 
-    public static SoundBubble Instance { get; private set; }
+    public static SoundDataManager Instance { get; private set; }
 
     private void Awake()
     {
@@ -40,6 +40,7 @@ public class SoundBubble : MonoBehaviour
                 if ((obstacleLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
                 {
                     raycastResults.Add(new RaycastInfo(originPos, hit.point, Color.red));
+                    Debug.Log(hit.collider.gameObject);
                     continue;
                 }
                 if ((enemyLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
