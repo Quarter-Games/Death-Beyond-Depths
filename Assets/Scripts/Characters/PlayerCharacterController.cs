@@ -72,9 +72,18 @@ abstract public class PlayerCharacterController : Character
         BackStepInputAction.action.started -= BackStep;
     }
 
-    private void Start()
+    protected void SetRotationTo(Vector2 direction)
     {
-        IsFacingRight = transform.localScale.x > 0;
+        if (direction.x > 0)
+        {
+            IsFacingRight = true;
+            Flip();
+        }
+        else if (direction.x < 0)
+        {
+            IsFacingRight = false;
+            Flip();
+        }
     }
     private void FixedUpdate()
     {
@@ -84,16 +93,22 @@ abstract public class PlayerCharacterController : Character
         if (movementInput.x > 0)
         {
             movement = Vector2.right;
-            IsFacingRight = true;
-            Flip();
+            if (!IsRaightClickHold)
+            {
+                IsFacingRight = true;
+                Flip();
+            }
         }
         else if (movementInput.x < 0)
         {
             movement = Vector2.left;
-            IsFacingRight = false;
-            Flip();
+            if (!IsRaightClickHold)
+            {
+                IsFacingRight = false;
+                Flip();
+            }
         }
-        if(movementInput.x != 0)
+        if (movementInput.x != 0)
         {
             SoundDataManager.Instance.EmitSound(transform, IsStanding ? WalkSound.SoundTravelDistance : CrouchWalkSound.SoundTravelDistance);
         }
@@ -194,9 +209,6 @@ abstract public class PlayerCharacterController : Character
     private void BackStep(InputAction.CallbackContext context)
     {
         if (BackStepCoroutine != null || !IsStanding) return;
-        rb.linearVelocityX = 0f;
-        Vector2 direction = IsFacingRight ? Vector2.left : Vector2.right;
-        rb.AddForce(BackStepSpeed * direction, ForceMode2D.Impulse);
         StartCoroutine(BackStepAction());
     }
     private IEnumerator BackStepAction()
@@ -205,13 +217,20 @@ abstract public class PlayerCharacterController : Character
         DisableInput();
         BackStepCoroutine = StartCoroutine(stats.BecomeInvincibleForSeconds(BackStepDurationInSeconds));
         StartCoroutine(BackStepCooldown());
-        animator.SetTrigger("Backstepping");
+        animator.SetTrigger("Backstep");
         yield return new WaitUntil(() => backStepAnimationComplete);
         EnableInput();
     }
 
+    public void BackStepForce()
+    {
+        rb.linearVelocityX = 0f;
+        Vector2 direction = IsFacingRight ? Vector2.left : Vector2.right;
+        rb.AddForce(BackStepSpeed * direction, ForceMode2D.Impulse);
+    }
+
     //animation callback
-    private void OnBackStepAnimationComplete()
+    public void OnBackStepAnimationComplete()
     {
         backStepAnimationComplete = true;
     }
