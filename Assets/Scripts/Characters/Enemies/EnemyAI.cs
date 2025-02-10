@@ -33,6 +33,7 @@ public class EnemyAI : Character, IHearing
     public ChaseState ChaseState { get; private set; }
     public AttackState AttackState { get; private set; }
     public ChargeAttackState ChargeAttackState { get; private set; }
+    public AttackDoorState AttackDoorState { get; private set; }
     public StaggerState StaggerState { get; private set; }
     public DeadState DeadState { get; private set; }
     public Animator Animator { get; private set; }
@@ -64,6 +65,7 @@ public class EnemyAI : Character, IHearing
         ChargeAttackState = new ChargeAttackState(StateMachine, this, NavMeshAgent);
         StaggerState = new StaggerState(StateMachine, this, NavMeshAgent);
         DeadState = new DeadState(StateMachine, this, NavMeshAgent);
+        AttackDoorState = new AttackDoorState(StateMachine, this, NavMeshAgent);
     }
 
     private void InitializeNavMeshAgent()
@@ -159,9 +161,11 @@ public class EnemyAI : Character, IHearing
     {
         if (collision.gameObject.TryGetComponent(out Door door))
         {
-            if(IsAwareOfPlayer)
-            { 
-                
+            if(IsAwareOfPlayer) // TODO - check if player is behind the door
+            {
+                AttackDoorState.Door = door;
+                StateMachine.ChangeState(AttackDoorState);
+                return;
             }
         }
         if (collision.gameObject.TryGetComponent(out HiddenArea area))

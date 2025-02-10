@@ -7,6 +7,10 @@ public class Door : InteractableObject, IInteractable
     [Tooltip("Does it have lock on it")]
     public bool isLocked;
     public bool IsOpen;
+    [SerializeField, Min(1)] int HP = 10;
+
+    public bool IsBroken => HP > 0;
+
     private void Awake()
     {
         if (isLocked) return;
