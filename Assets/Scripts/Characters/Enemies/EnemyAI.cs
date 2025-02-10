@@ -37,6 +37,7 @@ public class EnemyAI : Character, IHearing
     public DeadState DeadState { get; private set; }
     public Animator Animator { get; private set; }
     public bool IsDead => stats.HP <= 0;
+    public bool IsAwareOfPlayer => StateMachine.CurrentState == ChaseState || StateMachine.CurrentState == ChargeAttackState || StateMachine.CurrentState == AttackState;
 
     EnemyStatemachine StateMachine;
     private bool IsFacingLeft = false;
@@ -156,6 +157,13 @@ public class EnemyAI : Character, IHearing
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.TryGetComponent(out Door door))
+        {
+            if(IsAwareOfPlayer)
+            { 
+                
+            }
+        }
         if (collision.gameObject.TryGetComponent(out HiddenArea area))
         {
             if(StateMachine.CurrentState != AlertState) return;
