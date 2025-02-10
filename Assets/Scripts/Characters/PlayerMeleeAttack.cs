@@ -14,18 +14,23 @@ public class PlayerMeleeAttack : MonoBehaviour
     List<EnemyAI> EnemyList;
     EnemyAI CurrentEnemy;
 
+    private void Start()
+    {
+        EnemyList = new List<EnemyAI>();
+    }
     private void OnEnable()
     {
         StartCoroutine(DestroyAfterSeconds(Stats.AttackTime));
-        EnemyList = new List<EnemyAI>();
+        //EnemyList = new List<EnemyAI>();
     }
 
     private void OnDisable()
     {
         foreach (EnemyAI enemy in EnemyList)
         {
-            CurrentEnemy.IsAttacked = false;
+            enemy.IsAttacked = false;
         }
+        EnemyList.Clear();
     }
 
     private IEnumerator DestroyAfterSeconds(float attackTime)
