@@ -12,4 +12,11 @@ public class EnemyAttack : MonoBehaviour
             CachedPlayer.stats.TakeDamage(AttackStats.Damage);
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out CachedPlayer))
+        {
+            CachedPlayer.stats.TakeDamage(AttackStats.Damage);
+        }
+    }
 }

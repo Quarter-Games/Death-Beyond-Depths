@@ -15,6 +15,7 @@ public class EnemyAI : Character, IHearing
     [SerializeField] public float StaggerTime = 0.5f;
     [SerializeField] public float ReviveTime = 10f;
     [Header("Attack Stats")]
+    [SerializeField] public CapsuleCollider2D ChargeAttackCollider;
     [SerializeField] public float ChargeAttackRange = 4;
     [SerializeField] public float MeleeAttackRange = 2;
     [SerializeField] public float MeleeAttackCooldown = 0.4f;
