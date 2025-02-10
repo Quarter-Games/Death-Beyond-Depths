@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class RoomManager : MonoBehaviour
 {
-    [SerializeField] List<List<GameObject>> RoomList;
+    [SerializeField] List<GameObject> RoomList;
     [SerializeField] Volume PostProcessingEffects;
     [SerializeField] float BlurDuration;
 
