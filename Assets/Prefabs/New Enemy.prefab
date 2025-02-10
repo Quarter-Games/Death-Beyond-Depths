@@ -55,7 +55,7 @@ MonoBehaviour:
   rb: {fileID: 3411871009682715977}
   stats:
     MovementSpeed: 1
-    HP: 100
+    HP: 9
     Damage: 0
     IsInvincible: 0
   Angle: 360
@@ -128,7 +128,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 5
 --- !u!70 &7170955124264677326
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -328,6 +328,10 @@ PrefabInstance:
     - target: {fileID: 31226013634019593, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.9506264
+      objectReference: {fileID: 0}
+    - target: {fileID: 31226013634019593, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 88.456
       objectReference: {fileID: 0}
     - target: {fileID: 498938346200800923, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -536,6 +540,10 @@ PrefabInstance:
     - target: {fileID: 4946168128286205237, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.9210754
+      objectReference: {fileID: 0}
+    - target: {fileID: 4946168128286205237, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 175.279
       objectReference: {fileID: 0}
     - target: {fileID: 5193107154185259672, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
       propertyPath: m_StaticEditorFlags
