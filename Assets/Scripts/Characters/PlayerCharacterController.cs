@@ -72,6 +72,10 @@ abstract public class PlayerCharacterController : Character
         BackStepInputAction.action.started -= BackStep;
     }
 
+    private void Start()
+    {
+        IsFacingRight = transform.localScale.x > 0;
+    }
     private void FixedUpdate()
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
