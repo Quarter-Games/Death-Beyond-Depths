@@ -3467,8 +3467,16 @@ PrefabInstance:
       value: -0.67
       objectReference: {fileID: 0}
     - target: {fileID: 2322872116161255830, guid: f203312954094504ba4e63f84157e26a, type: 3}
+      propertyPath: TurnAroundSpeed
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2322872116161255830, guid: f203312954094504ba4e63f84157e26a, type: 3}
       propertyPath: DefaultLayer.m_Bits
       value: 1143
+      objectReference: {fileID: 0}
+    - target: {fileID: 2322872116161255830, guid: f203312954094504ba4e63f84157e26a, type: 3}
+      propertyPath: TurnAroundDelaySeconds
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 4352614659773481546, guid: f203312954094504ba4e63f84157e26a, type: 3}
       propertyPath: m_IsActive
@@ -9040,6 +9048,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2034719974}
     - target: {fileID: 123810753720176737, guid: 9a585d3c91f3b72438b5bd90f4a608c6, type: 3}
+      propertyPath: stats.HP
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 123810753720176737, guid: 9a585d3c91f3b72438b5bd90f4a608c6, type: 3}
       propertyPath: SightRadius
       value: 5
       objectReference: {fileID: 0}
@@ -14264,7 +14276,7 @@ Camera:
   far clip plane: 1000
   field of view: 64
   orthographic: 0
-  orthographic size: 3.313732
+  orthographic size: 2.7675
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
