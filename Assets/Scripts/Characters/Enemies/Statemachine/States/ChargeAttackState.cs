@@ -32,6 +32,7 @@ public class ChargeAttackState : EnemyState
         {
             TimeSinceLastAttack = 0f;
             AttackPlayer();
+            return;
         }
         if (IsCharging || !ChargeComplete) //in the middle of attack, don't change state
         {
@@ -44,7 +45,7 @@ public class ChargeAttackState : EnemyState
         }
         else if (distanceToPlayer <= Enemy.ChargeAttackRange)
         {
-            StateMachine.ChangeState(Enemy.ChargeAttackState);
+            return;
         }
         else
         {
@@ -56,8 +57,7 @@ public class ChargeAttackState : EnemyState
     {
         IsCharging = true;
         ChargeComplete = false;
-        Debug.Log(Enemy.Animator);
-        Enemy.Animator.SetBool(CHARGE_ANIMATION, true);
+        //Enemy.Animator.SetBool(CHARGE_ANIMATION, true);
         NavMeshAgent.isStopped = false;
         NavMeshAgent.SetDestination(LastKnownPlayerPosition);
         Enemy.StartCoroutine(EndCharge());
@@ -66,12 +66,13 @@ public class ChargeAttackState : EnemyState
     private System.Collections.IEnumerator EndCharge()
     {
         // Wait for the animation to end (adjust timing as needed)
-        yield return new WaitForSeconds(Enemy.Animator.GetCurrentAnimatorStateInfo(0).length);
+        //yield return new WaitForSeconds(Enemy.Animator.GetCurrentAnimatorStateInfo(0).length);
+        yield return new WaitForSeconds(1);
         IsCharging = false;
         ChargeComplete = true;
         NavMeshAgent.isStopped = true;
         NavMeshAgent.destination = NavMeshAgent.transform.position;
-        Enemy.Animator.SetBool(CHARGE_ANIMATION, false);
+        //Enemy.Animator.SetBool(CHARGE_ANIMATION, false);
     }
 
     public override void OnExit()

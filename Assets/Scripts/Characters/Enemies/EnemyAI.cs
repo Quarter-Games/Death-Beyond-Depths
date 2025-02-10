@@ -51,7 +51,6 @@ public class EnemyAI : Character, IHearing
     {
         InitializeNavMeshAgent();
         InitializeStateMachine();
-        Debug.Log(gameObject.layer);
     }
 
     private void InitializeStateMachine()
@@ -126,6 +125,7 @@ public class EnemyAI : Character, IHearing
     public void TakeDamage(int damage)
     {
         stats.TakeDamage(damage);
+        if (stats.IsInvincible) return;
         StateMachine.ChangeState(StaggerState);
     }
 
@@ -151,6 +151,20 @@ public class EnemyAI : Character, IHearing
             {
                 //TODO reverse directions for both enemies
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out HiddenArea area))
+        {
+            if(StateMachine.CurrentState != AlertState) return;
+            if (UnityEngine.Random.Range(0, 100) == 0)
+            {
+                area.UnHidePlayer();
+                return;
+            }
+            if (!area.IsPlayerHiddenInside) return;
         }
     }
 

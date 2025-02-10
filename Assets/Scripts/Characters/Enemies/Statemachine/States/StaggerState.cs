@@ -28,6 +28,7 @@ public class StaggerState : EnemyState
         base.OnExit();
         NavMeshAgent.isStopped = false;
         NavMeshAgent.destination = NavMeshAgent.transform.position;
+        Enemy.Animator.ResetTrigger(STAGGER_ANIMATION);
     }
 
     public override void OnFrameUpdate()

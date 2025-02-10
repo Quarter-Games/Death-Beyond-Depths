@@ -17,9 +17,14 @@ public class PlayerMeleeAttack : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(DestroyAfterSeconds(Stats.AttackTime));
+        EnemyList = new List<EnemyAI>();
+    }
+
+    private void OnDisable()
+    {
         foreach (EnemyAI enemy in EnemyList)
         {
-            enemy.stats.IsInvincible = false; //should be something else rather than invincibilty to avoid bugs
+            CurrentEnemy.IsAttacked = false;
         }
     }
 
@@ -31,12 +36,12 @@ public class PlayerMeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.TryGetComponent(out CurrentEnemy))
+        if(collision.TryGetComponent(out CurrentEnemy) && !CurrentEnemy.IsAttacked)
         {
             if (CurrentEnemy.IsDead) return;
             CurrentEnemy.TakeDamage(Stats.Damage);
             StartCoroutine(HitStop.TimeSlow(HitStopPower, HitStopTime));
-            CurrentEnemy.stats.IsInvincible = true; //to avoid multi-hits when reentering collider
+            CurrentEnemy.IsAttacked = true; //to avoid multi-hits when reentering collider
             EnemyList.Add(CurrentEnemy);
         }
     }

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4389906201877954480}
   - component: {fileID: 3411871009682715977}
   - component: {fileID: 7170955124264677326}
-  - component: {fileID: 6204265568969748510}
   m_Layer: 9
   m_Name: New Enemy
   m_TagString: Untagged
@@ -52,23 +51,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WalkDamping: 0
   RunDamping: 0
-  animator: {fileID: 6204265568969748510}
+  animator: {fileID: 5124179600903730503}
   rb: {fileID: 3411871009682715977}
   stats:
     MovementSpeed: 1
     HP: 10
     Damage: 0
     IsInvincible: 0
-  Angle: 45
-  SightRadius: 5
+  Angle: 180
+  SightRadius: 16.08
   SoundRadius: 7
   NavMeshAgent: {fileID: 4389906201877954480}
   PatrolPoints:
   - {fileID: 0}
   - {fileID: 0}
   Player: {fileID: 0}
-  ChaseAttackCollider: {fileID: 0}
-  MeleeAttackCollider: {fileID: 0}
   StaggerTime: 0.5
   ReviveTime: 10
   ChargeAttackRange: 4
@@ -167,28 +164,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.0024414062}
   m_Size: {x: 1, y: 2.0212734}
   m_Direction: 0
---- !u!95 &6204265568969748510
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 904336444358794338}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b0701b7b0f37fcd43b38ea47b2e9b9a1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1048015976169044958
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,10 +470,75 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1897553091134398395, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1867845193184725105}
+    - targetCorrespondingSourceObject: {fileID: 1897553091134398395, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5711015600887810200}
   m_SourcePrefab: {fileID: 100100000, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+--- !u!1 &1614866751289868383 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1897553091134398395, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+  m_PrefabInstance: {fileID: 881683782392504292}
+  m_PrefabAsset: {fileID: 0}
+--- !u!58 &1867845193184725105
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614866751289868383}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -2.35, y: -1.05}
+  m_Radius: 5.5
+--- !u!114 &5711015600887810200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614866751289868383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4ad8fac9e57df942aead5d4738c52a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackStats: {fileID: 11400000, guid: 6acfdb7bb1a9617458b76b14985d58ed, type: 2}
 --- !u!4 &3766126734735667642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4071156160281914974, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+  m_PrefabInstance: {fileID: 881683782392504292}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5124179600903730503 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5413573627365894819, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
   m_PrefabInstance: {fileID: 881683782392504292}
   m_PrefabAsset: {fileID: 0}

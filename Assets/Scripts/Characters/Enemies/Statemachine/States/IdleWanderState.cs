@@ -9,8 +9,8 @@ public class IdleWanderState : EnemyState
     List<Transform> WayPoints;
     private int Counter = 0;
     private bool ReachedGoal = false;
+    Coroutine WaitCoroutine;
     const string WANDER_ANIMATION = "IsWalking";
-
 
     public IdleWanderState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent, List<Transform> WanderPoints = null) : base(stateMachine, enemy, agent)
     {
@@ -37,7 +37,6 @@ public class IdleWanderState : EnemyState
     private IEnumerator StartWanderAnimation()
     {
         yield return new WaitForEndOfFrame();
-        Debug.Log("test");
         Enemy.Animator.SetBool(WANDER_ANIMATION, true);
     }
 
@@ -46,6 +45,7 @@ public class IdleWanderState : EnemyState
         base.OnExit();
         NavMeshAgent.isStopped = true;
         Enemy.Animator.SetBool(WANDER_ANIMATION, false);
+        if (WaitCoroutine != null) Enemy.StopCoroutine(WaitCoroutine);
     }
 
     public override void OnFrameUpdate()
@@ -71,9 +71,19 @@ public class IdleWanderState : EnemyState
         if (Distance <= NavMeshAgent.stoppingDistance)
         {
             ReachedGoal = true;
-            Counter = (Counter + 1) % WayPoints.Count; // Loop back to the start when reaching the end
-            ReachedGoal = false;
+            if (WaitCoroutine != null) return;
+            WaitCoroutine = Enemy.StartCoroutine(WaitAtWayPoint());
         }
+    }
+
+    private IEnumerator WaitAtWayPoint()
+    {
+        Enemy.Animator.SetBool(WANDER_ANIMATION, false);
+        yield return new WaitForSeconds(2);
+        Enemy.Animator.SetBool(WANDER_ANIMATION, true);
+        Counter = (Counter + 1) % WayPoints.Count; // Loop back to the start when reaching the end
+        ReachedGoal = false;
+        WaitCoroutine = null;
     }
 
     public override void OnPhysicsUpdate()

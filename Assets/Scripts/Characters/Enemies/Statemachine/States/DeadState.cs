@@ -17,14 +17,18 @@ public class DeadState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
+        Debug.Log("Entered dead state");
         NavMeshAgent.isStopped = true;
         NavMeshAgent.destination = NavMeshAgent.transform.position;
+        Enemy.stats.IsInvincible = true;
+        TimeSpentDead = 0;
     }
 
     public override void OnExit()
     {
         base.OnExit();
         Enemy.Heal();
+        Enemy.stats.IsInvincible = false;
     }
 
     public override void OnFrameUpdate()
