@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RadialBlurMat
-  m_Shader: {fileID: -6465566751694194690, guid: c9601d56b1ed39a4cb3f8d9220dfd167, type: 3}
+  m_Name: FadeLine
+  m_Shader: {fileID: -6465566751694194690, guid: cdcb562da7b525340a20cc09e4411f61, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -42,12 +42,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
+    - _Fade: 1
+    - _Height: -0.15
+    - _Offset_Y: 0.075
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _Strength: 1.5
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
     m_Colors:
