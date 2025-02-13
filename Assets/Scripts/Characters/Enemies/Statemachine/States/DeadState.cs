@@ -15,6 +15,7 @@ public class DeadState : EnemyState
         base.AnimationTriggerEvent();
         IsStateLocked = false;
         StateMachine.ChangeState(Enemy.IdleState);
+        NavMeshAgent.destination = NavMeshAgent.transform.position;
     }
 
     public override void OnEnter()
