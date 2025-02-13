@@ -5,6 +5,7 @@ public class AlertState : EnemyState
 {
     private float AlertDuration = 5f;
     private float TimeSpentInAlert = 0f;
+    const string ALERT_ANIMATION = "IsSeeking";
 
     public AlertState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
@@ -12,14 +13,17 @@ public class AlertState : EnemyState
     {
         base.OnEnter();
         //TODO alert animation
-        Debug.Log("Enemy is now alert!");
+        Debug.Log("Entered alert state");
         TimeSpentInAlert = 0f;
-        NavMeshAgent.isStopped = true;
+        NavMeshAgent.isStopped = false;
+        NavMeshAgent.speed = Enemy.AlertMoveSpeed;
+        Enemy.Animator.SetBool(ALERT_ANIMATION, true);
     }
 
     public override void OnFrameUpdate()
     {
         base.OnFrameUpdate();
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
         // Check if the player is in sight
         if (Enemy.PlayerInSight())
         {
@@ -37,5 +41,11 @@ public class AlertState : EnemyState
     public override void OnExit()
     {
         base.OnExit();
+        Enemy.Animator.SetBool(ALERT_ANIMATION, false);
+    }
+
+    private void CheckHidingSpot()
+    {
+
     }
 }

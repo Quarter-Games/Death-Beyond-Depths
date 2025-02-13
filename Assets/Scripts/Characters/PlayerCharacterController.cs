@@ -17,7 +17,7 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference BackStepInputAction;
     [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
-    [SerializeField] private InputActionMap InputActionMap;
+    //[SerializeField] private InputActionMap InputActionMap;
     public static bool IsRaightClickHold = false;
 
     [Header("Climbing")]
@@ -31,6 +31,10 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] Transform LeftLegTarget;
     [SerializeField] Transform RightLegTarget;
     [SerializeField] float IKDisplacementMinHeight = 0.1f;
+    [Header("Audio")]
+    [SerializeField] SoundData WalkSound;
+    [SerializeField] SoundData CrouchWalkSound;
+
     private Coroutine BackStepCoroutine;
 
     bool IsFacingRight = true;
@@ -68,6 +72,19 @@ abstract public class PlayerCharacterController : Character
         BackStepInputAction.action.started -= BackStep;
     }
 
+    protected void SetRotationTo(Vector2 direction)
+    {
+        if (direction.x > 0)
+        {
+            IsFacingRight = true;
+            Flip();
+        }
+        else if (direction.x < 0)
+        {
+            IsFacingRight = false;
+            Flip();
+        }
+    }
     private void FixedUpdate()
     {
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
@@ -76,14 +93,24 @@ abstract public class PlayerCharacterController : Character
         if (movementInput.x > 0)
         {
             movement = Vector2.right;
-            IsFacingRight = true;
-            Flip();
+            if (!IsRaightClickHold)
+            {
+                IsFacingRight = true;
+                Flip();
+            }
         }
         else if (movementInput.x < 0)
         {
             movement = Vector2.left;
-            IsFacingRight = false;
-            Flip();
+            if (!IsRaightClickHold)
+            {
+                IsFacingRight = false;
+                Flip();
+            }
+        }
+        if (movementInput.x != 0)
+        {
+            SoundDataManager.Instance.EmitSound(transform, IsStanding ? WalkSound.SoundTravelDistance : CrouchWalkSound.SoundTravelDistance);
         }
         FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
@@ -182,9 +209,6 @@ abstract public class PlayerCharacterController : Character
     private void BackStep(InputAction.CallbackContext context)
     {
         if (BackStepCoroutine != null || !IsStanding) return;
-        rb.linearVelocityX = 0f;
-        Vector2 direction = IsFacingRight ? Vector2.left : Vector2.right;
-        rb.AddForce(BackStepSpeed * direction, ForceMode2D.Impulse);
         StartCoroutine(BackStepAction());
     }
     private IEnumerator BackStepAction()
@@ -193,13 +217,20 @@ abstract public class PlayerCharacterController : Character
         DisableInput();
         BackStepCoroutine = StartCoroutine(stats.BecomeInvincibleForSeconds(BackStepDurationInSeconds));
         StartCoroutine(BackStepCooldown());
-        animator.SetTrigger("Backstepping");
+        animator.SetTrigger("Backstep");
         yield return new WaitUntil(() => backStepAnimationComplete);
         EnableInput();
     }
 
+    public void BackStepForce()
+    {
+        rb.linearVelocityX = 0f;
+        Vector2 direction = IsFacingRight ? Vector2.left : Vector2.right;
+        rb.AddForce(BackStepSpeed * direction, ForceMode2D.Impulse);
+    }
+
     //animation callback
-    private void OnBackStepAnimationComplete()
+    public void OnBackStepAnimationComplete()
     {
         backStepAnimationComplete = true;
     }

@@ -3,41 +3,48 @@ using UnityEngine.AI;
 
 public class ChaseState : EnemyState
 {
-    private float AttackRange = 1.5f;
+    const string CHASE_ANIMATION = "IsChasing";
 
     public ChaseState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("Enemy is now chasing the player!");
+        Debug.Log("Entered chase state");
         NavMeshAgent.isStopped = false;
+        NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
+        Enemy.Animator.SetBool(CHASE_ANIMATION, true);
     }
 
     public override void OnFrameUpdate()
     {
         base.OnFrameUpdate();
-        // Check if the player is within attack range
-        float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.Player.transform.position);
-        if (distanceToPlayer <= AttackRange)
+        bool isPlayerInSight = Enemy.PlayerInSight();
+        if (!isPlayerInSight)
+        {
+            StateMachine.ChangeState(Enemy.AlertState);
+            return;
+        }
+        // Check if the player is within attack ranges
+        float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.LastKnownPlayerPosition);
+        if(distanceToPlayer <= Enemy.MeleeAttackRange)
         {
             StateMachine.ChangeState(Enemy.AttackState);
             return;
         }
-        if (Enemy.PlayerInSight())
+        else if (distanceToPlayer <= Enemy.ChargeAttackRange)
         {
-            NavMeshAgent.SetDestination(Enemy.Player.transform.position);
+            StateMachine.ChangeState(Enemy.ChargeAttackState);
+            return;
         }
-        else
-        {
-            StateMachine.ChangeState(Enemy.AlertState);
-        }
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
     }
 
     public override void OnExit()
     {
         base.OnExit();
         NavMeshAgent.isStopped = true;
+        Enemy.Animator.SetBool(CHASE_ANIMATION, false);
     }
 }
 

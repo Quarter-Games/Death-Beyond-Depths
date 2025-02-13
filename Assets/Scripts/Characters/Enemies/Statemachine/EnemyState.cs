@@ -6,6 +6,7 @@ public class EnemyState
     protected EnemyStatemachine StateMachine;
     protected EnemyAI Enemy;
     protected NavMeshAgent NavMeshAgent;
+    public bool IsStateLocked = false;
 
     public EnemyState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent)
     {
