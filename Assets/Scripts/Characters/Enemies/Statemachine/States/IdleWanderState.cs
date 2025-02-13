@@ -25,7 +25,6 @@ public class IdleWanderState : EnemyState
     public override void OnEnter()
     {
         //TODO - enter idle animation state
-        Debug.Log("Entered idle state");
         NavMeshAgent.isStopped = true;
         NavMeshAgent.updatePosition = true;
         NavMeshAgent.ResetPath();
@@ -55,7 +54,6 @@ public class IdleWanderState : EnemyState
         base.OnFrameUpdate();
         if (Enemy.PlayerInSight())
         {
-            Debug.Log("Player detected! Transitioning to AlertState.");
             StateMachine.ChangeState(Enemy.AlertState);
             return;
         }

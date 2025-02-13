@@ -12,8 +12,6 @@ public class AttackState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("Entered melee attack state");
-        //AttackPlayer();
         TimeSinceLastAttack = Enemy.MeleeAttackCooldown;
         NavMeshAgent.isStopped = true;
         NavMeshAgent.SetDestination(Enemy.transform.position);
