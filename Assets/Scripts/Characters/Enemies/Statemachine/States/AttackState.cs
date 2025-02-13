@@ -5,6 +5,7 @@ public class AttackState : EnemyState
 {
     private float TimeSinceLastAttack = 0f;
     const string ATTACK_ANIMATION = "IsAttacking";
+    const string ATTACK_RNG = "AttackRNG";
 
     public AttackState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
@@ -40,6 +41,7 @@ public class AttackState : EnemyState
     {
         // TODO: Implement attack logic, e.g., reduce player health
         Debug.Log("Attacking the player!");
+        Enemy.Animator.SetFloat(ATTACK_RNG, Random.Range(0, 1f));
         Enemy.Animator.SetTrigger(ATTACK_ANIMATION);
     }
 

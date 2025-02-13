@@ -46,6 +46,8 @@ public class IdleWanderState : EnemyState
         NavMeshAgent.isStopped = true;
         Enemy.Animator.SetBool(WANDER_ANIMATION, false);
         if (WaitCoroutine != null) Enemy.StopCoroutine(WaitCoroutine);
+        ReachedGoal = false;
+        WaitCoroutine = null;
     }
 
     public override void OnFrameUpdate()

@@ -13,6 +13,8 @@ public class DeadState : EnemyState
     public override void AnimationTriggerEvent()
     {
         base.AnimationTriggerEvent();
+        IsStateLocked = false;
+        StateMachine.ChangeState(Enemy.IdleState);
     }
 
     public override void OnEnter()
@@ -24,6 +26,7 @@ public class DeadState : EnemyState
         Enemy.stats.IsInvincible = true;
         TimeSpentDead = 0;
         Enemy.Animator.SetBool(DEATH_ANIMATION, true);
+        IsStateLocked = true;
     }
 
     public override void OnExit()
@@ -40,7 +43,8 @@ public class DeadState : EnemyState
         TimeSpentDead += Time.deltaTime;
         if (TimeSpentDead >= Enemy.ReviveTime)
         {
-            StateMachine.ChangeState(Enemy.IdleState);
+            OnExit();
+            //StateMachine.ChangeState(Enemy.IdleState);
         }
     }
 

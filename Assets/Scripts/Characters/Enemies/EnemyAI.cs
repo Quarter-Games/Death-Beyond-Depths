@@ -201,6 +201,11 @@ public class EnemyAI : Character, IHearing
         return false;
     }
 
+    public void TriggerCurrentAnimationEvent()
+    {
+        StateMachine.CurrentState.AnimationTriggerEvent();
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
