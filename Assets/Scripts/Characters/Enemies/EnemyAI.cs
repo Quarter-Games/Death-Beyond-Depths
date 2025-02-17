@@ -219,7 +219,7 @@ public class EnemyAI : Character, IHearing
         Gizmos.DrawRay(transform.position, leftBoundary * SightRadius);
         Gizmos.DrawRay(transform.position, rightBoundary * SightRadius);
 
-        if (PatrolPoints.Count == 0) return;
+        if (PatrolPoints == null || PatrolPoints.Count == 0) return;
         int i = 0;
         Gizmos.color = Color.yellow;
         for (; i < PatrolPoints.Count - 1;)

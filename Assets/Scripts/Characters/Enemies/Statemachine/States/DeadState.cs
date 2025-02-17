@@ -6,6 +6,8 @@ public class DeadState : EnemyState
     private float TimeSpentDead = 0f;
     const string DEATH_ANIMATION = "IsDead";
 
+    private bool isDead = false;
+
     public DeadState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent)
     {
     }
@@ -14,8 +16,8 @@ public class DeadState : EnemyState
     {
         base.AnimationTriggerEvent();
         IsStateLocked = false;
-        StateMachine.ChangeState(Enemy.IdleState);
         NavMeshAgent.destination = NavMeshAgent.transform.position;
+        StateMachine.ChangeState(Enemy.IdleState);
     }
 
     public override void OnEnter()
@@ -26,6 +28,7 @@ public class DeadState : EnemyState
         Enemy.stats.IsInvincible = true;
         TimeSpentDead = 0;
         Enemy.Animator.SetBool(DEATH_ANIMATION, true);
+        isDead = true;
         IsStateLocked = true;
     }
 
@@ -34,17 +37,18 @@ public class DeadState : EnemyState
         base.OnExit();
         Enemy.Heal();
         Enemy.stats.IsInvincible = false;
-        Enemy.Animator.SetBool(DEATH_ANIMATION, false);
+        //Enemy.Animator.SetBool(DEATH_ANIMATION, false);
     }
 
     public override void OnFrameUpdate()
     {
         base.OnFrameUpdate();
         TimeSpentDead += Time.deltaTime;
-        if (TimeSpentDead >= Enemy.ReviveTime)
+        if (isDead && TimeSpentDead >= Enemy.ReviveTime)
         {
-            OnExit();
-            //StateMachine.ChangeState(Enemy.IdleState);
+            isDead = false;
+            TimeSpentDead = 0;
+            Enemy.Animator.SetBool(DEATH_ANIMATION, false);
         }
     }
 
