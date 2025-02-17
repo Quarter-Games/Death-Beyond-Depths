@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.U2D.Animation;
 using UnityEngine.U2D.IK;
 
 public class CaptainController : PlayerCharacterController
@@ -15,6 +16,8 @@ public class CaptainController : PlayerCharacterController
     [SerializeField] Vector3 mousePos;
     [SerializeField] ParticleSystem OnShootParticles;
     [SerializeField] InventoryItem ShootingItem;
+    [SerializeField] SpriteResolver LeftPalm;
+    [SerializeField] Transform ElbowPosition;
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -45,19 +48,22 @@ public class CaptainController : PlayerCharacterController
     public void Shoot()
     {
         if (ShootingItem.Amount <= 0) return;
-        //TODO: Calculate projectile rotation
         //TODO: Stop Using Camera.main
         var camera = Camera.main;
 
         var proj = Instantiate(ProjectilePrefab, ProjectileSpawnPosition.position, Quaternion.identity);
-        var pos = camera.WorldToScreenPoint(ProjectileSpawnPosition.position);
+        var pos = ProjectileSpawnPosition.position;
 
-        var direction = ((Vector2)(mousePos - pos)).normalized;
+        var direction = ((Vector2)(pos - ElbowPosition.position)).normalized;
+        var rotation = Quaternion.LookRotation(Vector3.forward, direction);
+        rotation *= Quaternion.Euler(0, 0, -90); // Rotate 90 degrees to the right
+
         proj.Init(direction);
         IsRangeAttacking = true;
         StartCoroutine(WaitForCoolDown(ShootCooldown, false));
         ShootingItem.Amount--;
-        var trans = Instantiate(OnShootParticles, ProjectileSpawnPosition.position, Quaternion.Euler(direction));
+
+        var trans = Instantiate(OnShootParticles, ProjectileSpawnPosition.position, rotation);
         trans.Play();
     }
 
@@ -78,12 +84,16 @@ public class CaptainController : PlayerCharacterController
     }
     public void StartAim()
     {
+        Debug.Log("<color=green>Gun is Equiped</color>");
         animator.SetTrigger("Enable Gun");
+        LeftPalm.SetCategoryAndLabel("L PALM", "Gun");
     }
     public void EndAim()
     {
+        Debug.Log("<color=red>Gun is Unequiped</color>");
         IsRaightClickHold = false;
         animator.SetTrigger("Remove Gun");
+        LeftPalm.SetCategoryAndLabel("L PALM", "Empty");
     }
     public void LateUpdate()
     {
