@@ -15,7 +15,6 @@ public class ChargeAttackState : EnemyState
     {
         //TODO - Scream animation
         base.OnEnter();
-        Debug.Log("Entered charge attack state");
         LastKnownPlayerPosition = Enemy.Player.transform.position;
         AttackPlayer();
         TimeSinceLastAttack = Enemy.ChargeAttackCooldown;

@@ -13,17 +13,18 @@ public class AlertState : EnemyState
     {
         base.OnEnter();
         //TODO alert animation
-        Debug.Log("Entered alert state");
         TimeSpentInAlert = 0f;
         NavMeshAgent.isStopped = false;
         NavMeshAgent.speed = Enemy.AlertMoveSpeed;
         Enemy.Animator.SetBool(ALERT_ANIMATION, true);
+        //Debug.Log("Last known player position: " + Enemy.LastKnownPlayerPosition);
+        //Debug.Log("ACTUAL player position: " + Enemy.Player.transform.position);
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
     }
 
     public override void OnFrameUpdate()
     {
         base.OnFrameUpdate();
-        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
         // Check if the player is in sight
         if (Enemy.PlayerInSight())
         {
@@ -35,6 +36,10 @@ public class AlertState : EnemyState
         if (TimeSpentInAlert >= AlertDuration)
         {
             StateMachine.ChangeState(Enemy.IdleState);
+        }
+        if(NavMeshAgent.velocity.x == 0f)
+        {
+            Enemy.Animator.SetBool(ALERT_ANIMATION, false);
         }
     }
 

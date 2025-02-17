@@ -15,7 +15,6 @@ public class AttackDoorState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("Entered door attack state");
         NavMeshAgent.SetDestination(Enemy.transform.position);
         TimeSinceLastAttack = Enemy.MeleeAttackCooldown;
     }

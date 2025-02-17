@@ -10,7 +10,6 @@ public class ChaseState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("Entered chase state");
         NavMeshAgent.isStopped = false;
         NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
         Enemy.Animator.SetBool(CHASE_ANIMATION, true);

@@ -40,7 +40,6 @@ public class SoundDataManager : MonoBehaviour
                 if ((obstacleLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
                 {
                     raycastResults.Add(new RaycastInfo(originPos, hit.point, Color.red));
-                    Debug.Log(hit.collider.gameObject);
                     continue;
                 }
                 if ((enemyLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
