@@ -43,7 +43,7 @@ public class RoomManager : MonoBehaviour
 
     private IEnumerator ApplyBlurEffect()
     {
-        if (PostProcessingEffects == null) return;
+        if (PostProcessingEffects == null) yield break;
         PostProcessingEffects.weight = 1;
         yield return new WaitForSeconds(BlurDuration);
         PostProcessingEffects.weight = 0;
