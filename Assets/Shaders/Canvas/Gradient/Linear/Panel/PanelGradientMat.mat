@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RadialBlurMat
-  m_Shader: {fileID: -6465566751694194690, guid: c9601d56b1ed39a4cb3f8d9220dfd167, type: 3}
+  m_Name: PanelGradientMat
+  m_Shader: {fileID: -6465566751694194690, guid: ded4d0706f7f5b44685e95db8ac83a00, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -41,13 +41,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Amount: 1.2
     - _ColorMask: 15
+    - _Invert: 1
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _Strength: 1.7
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
     m_Colors:
