@@ -33,7 +33,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1607379829532125117}
   - {fileID: 3766126734735667642}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -69,6 +68,7 @@ MonoBehaviour:
   Player: {fileID: 0}
   StaggerTime: 0.5
   ReviveTime: 10
+  ChaseTimeWithoutSight: 2
   ChargeAttackCollider: {fileID: 5687007014801890182}
   ChargeAttackRange: 4
   MeleeAttackRange: 2
@@ -190,14 +190,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048015976169044958}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.31, z: 0}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6417233769505342094}
   - {fileID: 1132346424086481168}
-  m_Father: {fileID: 7319612082299137047}
+  m_Father: {fileID: 3766126734735667642}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1899285490483963145
 GameObject:
@@ -679,7 +679,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4071156160281914974, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1607379829532125117}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3985744222703459360, guid: 63d94d5e9a46713479cbfee63f0a1e19, type: 3}
       insertIndex: -1
