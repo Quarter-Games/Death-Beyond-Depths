@@ -23,18 +23,18 @@ public class SoundDataManager : MonoBehaviour
         Instance = this;
     }
 
-    public void EmitSound(Transform origin, float radius = 5f)
+    public void EmitSound(Transform origin, float baseRadius = 5f)
     {
         lastOrigin = origin;
-        lastRadius = radius;
+        lastRadius = baseRadius;
         raycastResults.Clear();
-        List<Transform> affectedEnemies = new List<Transform>();
-
+        List<EnemyAI> affectedEnemies = new List<EnemyAI>();
         for (int i = 0; i < rayCount; i++)
         {
             Vector2 randomDir = Random.insideUnitCircle.normalized;
             Vector2 originPos = origin.position;
-            RaycastHit2D hit = Physics2D.Raycast(originPos, randomDir, radius, obstacleLayer | enemyLayer);
+            RaycastHit2D hit = Physics2D.Raycast(originPos, randomDir, baseRadius, obstacleLayer | enemyLayer);
+            Vector2 rayEndPoint = originPos + randomDir * baseRadius;
             if (hit.collider != null)
             {
                 if ((obstacleLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
@@ -44,25 +44,34 @@ public class SoundDataManager : MonoBehaviour
                 }
                 if ((enemyLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
                 {
-                    affectedEnemies.Add(hit.transform);
-                    raycastResults.Add(new RaycastInfo(originPos, hit.point, Color.green));
+                    EnemyAI enemy = hit.collider.GetComponent<EnemyAI>();
+                    if (enemy != null)
+                    {
+                        affectedEnemies.Add(enemy);
+                        raycastResults.Add(new RaycastInfo(originPos, hit.point, Color.green));
+                    }
                 }
-                else
-                {
-                    raycastResults.Add(new RaycastInfo(originPos, hit.point, Color.yellow));
-                }
+                rayEndPoint = hit.point;
             }
             else
             {
-                raycastResults.Add(new RaycastInfo(originPos, originPos + randomDir * radius, Color.yellow));
+                raycastResults.Add(new RaycastInfo(originPos, rayEndPoint, Color.yellow));
+            }
+            foreach (EnemyAI enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
+            {
+                if (Vector2.Distance(rayEndPoint, enemy.transform.position) <= enemy.SoundRadius)
+                {
+                    if (affectedEnemies.Contains(enemy)) continue;
+                    affectedEnemies.Add(enemy);
+                }
             }
         }
-
-        foreach (Transform enemy in affectedEnemies)
+        foreach (EnemyAI enemy in affectedEnemies)
         {
-            enemy.GetComponent<IHearing>()?.OnHeardSound(origin.position);
+            enemy.OnHeardSound(origin.position);
         }
     }
+
 
     private void OnDrawGizmos()
     {
