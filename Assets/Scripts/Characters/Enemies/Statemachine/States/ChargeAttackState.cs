@@ -21,7 +21,7 @@ public class ChargeAttackState : EnemyState
         NavMeshAgent.isStopped = true;
         NavMeshAgent.SetDestination(LastKnownPlayerPosition);
         NavMeshAgent.speed = Enemy.ChargeMoveSpeed;
-        Enemy.ChargeAttackCollider?.gameObject.SetActive(true);
+        //Enemy.ChargeAttackCollider?.gameObject.SetActive(true);
     }
 
     public override void OnFrameUpdate()
@@ -72,12 +72,13 @@ public class ChargeAttackState : EnemyState
         ChargeComplete = true;
         NavMeshAgent.isStopped = true;
         NavMeshAgent.destination = NavMeshAgent.transform.position;
-        Enemy.ChargeAttackCollider?.gameObject.SetActive(false);
+        //Enemy.ChargeAttackCollider?.gameObject.SetActive(false);
     }
 
     public override void OnExit()
     {
         base.OnExit();
+        Enemy.Animator.ResetTrigger(CHARGE_ANIMATION);
         Enemy.ChargeAttackCollider?.gameObject.SetActive(false);
     }
 }
