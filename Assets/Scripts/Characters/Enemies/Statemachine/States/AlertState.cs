@@ -37,7 +37,7 @@ public class AlertState : EnemyState
             StateMachine.ChangeState(Enemy.IdleState);
         }
         NavMeshAgent.isStopped = false;
-        if (NavMeshAgent.velocity.x == 0f && Enemy.Animator.GetBool(ALERT_ANIMATION))
+        if (Mathf.Abs(NavMeshAgent.velocity.x) <= 0.1f && Enemy.Animator.GetBool(ALERT_ANIMATION))
         {
             Enemy.Animator.SetBool(ALERT_ANIMATION, false);
         }
