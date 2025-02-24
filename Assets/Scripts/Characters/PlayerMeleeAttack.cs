@@ -10,6 +10,7 @@ public class PlayerMeleeAttack : MonoBehaviour
 
     [SerializeField] float HitStopPower = 2;
     [SerializeField] float HitStopTime = 0.01f;
+    [SerializeField] float StaggerChance = 0.25f;
 
     List<EnemyAI> EnemyList;
     EnemyAI CurrentEnemy;
@@ -48,6 +49,11 @@ public class PlayerMeleeAttack : MonoBehaviour
             StartCoroutine(HitStop.TimeSlow(HitStopPower, HitStopTime));
             CurrentEnemy.IsAttacked = true; //to avoid multi-hits when reentering collider
             EnemyList.Add(CurrentEnemy);
+            if (UnityEngine.Random.Range(0, 1f) <= StaggerChance)
+            {
+                CurrentEnemy.Stagger();
+                Debug.Log("Staggered");
+            }
         }
     }
 }

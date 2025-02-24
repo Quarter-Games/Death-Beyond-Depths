@@ -130,7 +130,10 @@ public class EnemyAI : Character, IHearing
     public void TakeDamage(int damage)
     {
         stats.TakeDamage(damage);
-        if (stats.IsInvincible) return;
+    }
+
+    public void Stagger()
+    {
         StateMachine.ChangeState(StaggerState);
     }
 
