@@ -13,6 +13,7 @@ public class ChaseState : EnemyState
         NavMeshAgent.isStopped = false;
         NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
         Enemy.Animator.SetBool(CHASE_ANIMATION, true);
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
     }
 
     public override void OnFrameUpdate()
@@ -37,6 +38,15 @@ public class ChaseState : EnemyState
             return;
         }
         NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
+        NavMeshAgent.isStopped = false;
+        if (NavMeshAgent.velocity.x == 0f)
+        {
+            Enemy.Animator.SetBool(CHASE_ANIMATION, false);
+        }
+        else if(!Enemy.Animator.GetBool(CHASE_ANIMATION))
+        {
+            Enemy.Animator.SetBool(CHASE_ANIMATION, true);
+        }
     }
 
     public override void OnExit()

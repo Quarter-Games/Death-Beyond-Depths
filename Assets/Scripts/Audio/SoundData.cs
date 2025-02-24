@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 [CreateAssetMenu(fileName = "SoundData", menuName = "Scriptable Objects/Sound Data")]
 public class SoundData : ScriptableObject
 {
     [SerializeField] float _soundTravelDistance;
-    [SerializeField] AudioClip _soundClip;
+    [SerializeField] AudioResource _soundClip;
 
     public float SoundTravelDistance => _soundTravelDistance;
-    public AudioClip SoundClip => _soundClip;
+    public AudioResource SoundClip => _soundClip;
 }

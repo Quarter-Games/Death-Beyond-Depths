@@ -11,11 +11,6 @@ public class StaggerState : EnemyState
     {
     }
 
-    public override void AnimationTriggerEvent()
-    {
-        base.AnimationTriggerEvent();
-    }
-
     public override void OnEnter()
     {
         base.OnEnter();

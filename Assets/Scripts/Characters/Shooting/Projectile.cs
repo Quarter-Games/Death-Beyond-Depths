@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
     public float Speed;
     public Rigidbody2D rb;
     public RangeAttack Stats;
-    Enemy CachedEnemy;
+    EnemyAI CachedEnemy;
     public void Init(Vector2 direction)
     {
         rb.linearVelocity = direction * Speed;

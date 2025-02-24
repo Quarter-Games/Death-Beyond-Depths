@@ -19,7 +19,7 @@ public class Room : MonoBehaviour
     {
         //BlackSpriteSquare.bounds = GetComponent<Collider2D>().bounds;
         //BlackSpriteSquare.size = GetComponent<Collider2D>().bounds.size;
-        BlackSpriteSquare.enabled = true;
+        //BlackSpriteSquare.enabled = true;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -47,7 +47,7 @@ public class Room : MonoBehaviour
     private void DarkenRoom()
     {
         //TODO add DoTween
-        BlackSpriteSquare.enabled = true;
+        //BlackSpriteSquare.enabled = true;
     }
 
     private void LightenRoom()

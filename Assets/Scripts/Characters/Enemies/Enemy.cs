@@ -13,7 +13,7 @@ public abstract class Enemy : Character
     [SerializeField] float ReviveTimeInSeconds = 10f;
     [SerializeField] PlayerCharacterController Player;
     [SerializeField] EnemyMeleeAttack MeleeAttackObject;
-    [Header("NavAgent Stats")]
+    [Header("NavAgent ShootingStats")]
     [SerializeField] NavMeshAgent NavAgent;
     [SerializeField] float AttackRange;
     [SerializeField] float PatrolSpeed = 0.8f;

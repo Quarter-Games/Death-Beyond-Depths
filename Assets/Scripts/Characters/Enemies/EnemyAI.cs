@@ -8,14 +8,14 @@ public class EnemyAI : Character, IHearing
 {
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
-    [SerializeField] float SoundRadius = 5f;
+    [SerializeField] public float SoundRadius = 5f;
     [SerializeField] NavMeshAgent NavMeshAgent;
     [SerializeField] List<Transform> PatrolPoints;
     [SerializeField] public PlayerCharacterController Player;
     [SerializeField] public float StaggerTime = 0.5f;
     [SerializeField] public float ReviveTime = 10f;
     [SerializeField] public float ChaseTimeWithoutSight = 2f;
-    [Header("Attack Stats")]
+    [Header("Attack ShootingStats")]
     [SerializeField] public CapsuleCollider2D ChargeAttackCollider;
     [SerializeField] public float ChargeAttackRange = 4;
     [SerializeField] public float MeleeAttackRange = 2;
@@ -184,7 +184,7 @@ public class EnemyAI : Character, IHearing
 
     public bool PlayerInSight()
     {
-        if (Player == null || Player.IsHidden)
+        if (Player == null || (!IsAwareOfPlayer && Player.IsHidden))
             return false;
         Vector3 directionToPlayer = (Player.transform.position - transform.position).normalized;
         float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
@@ -211,6 +211,7 @@ public class EnemyAI : Character, IHearing
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, SoundRadius);
+        Gizmos.DrawSphere(LastKnownPlayerPosition, 0.2f);
 
         Vector3 leftBoundary = IsFacingLeft ? Quaternion.Euler(0, 0, Angle / 2) * transform.right * -1 : Quaternion.Euler(0, 0, Angle / 2) * transform.right;
         Vector3 rightBoundary = IsFacingLeft ? Quaternion.Euler(0, 0, -Angle / 2) * transform.right * -1 : Quaternion.Euler(0, 0, -Angle / 2) * transform.right;
@@ -219,7 +220,7 @@ public class EnemyAI : Character, IHearing
         Gizmos.DrawRay(transform.position, leftBoundary * SightRadius);
         Gizmos.DrawRay(transform.position, rightBoundary * SightRadius);
 
-        if (PatrolPoints.Count == 0) return;
+        if (PatrolPoints == null || PatrolPoints.Count == 0) return;
         int i = 0;
         Gizmos.color = Color.yellow;
         for (; i < PatrolPoints.Count - 1;)
@@ -236,7 +237,10 @@ public class EnemyAI : Character, IHearing
         {
             return;
         }
-        Debug.Log("Davy heard that!");
+        if ((Player.IsHidden && !IsAwareOfPlayer))
+        {
+            return;
+        }
         LastKnownPlayerPosition = soundOrigin;
         StateMachine.ChangeState(AlertState);
     }

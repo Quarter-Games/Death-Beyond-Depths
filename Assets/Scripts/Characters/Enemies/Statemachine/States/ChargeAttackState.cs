@@ -7,7 +7,7 @@ public class ChargeAttackState : EnemyState
     private float TimeSinceLastAttack = 0f;
     private bool IsCharging = false;
     private bool ChargeComplete;
-    const string CHARGE_ANIMATION = "IsCharging";
+    const string CHARGE_ANIMATION = "ChargeAttack";
 
     public ChargeAttackState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
@@ -21,7 +21,7 @@ public class ChargeAttackState : EnemyState
         NavMeshAgent.isStopped = true;
         NavMeshAgent.SetDestination(LastKnownPlayerPosition);
         NavMeshAgent.speed = Enemy.ChargeMoveSpeed;
-        Enemy.ChargeAttackCollider?.gameObject.SetActive(true);
+        //Enemy.ChargeAttackCollider?.gameObject.SetActive(true);
     }
 
     public override void OnFrameUpdate()
@@ -57,7 +57,7 @@ public class ChargeAttackState : EnemyState
     {
         IsCharging = true;
         ChargeComplete = false;
-        //Enemy.Animator.SetBool(CHARGE_ANIMATION, true);
+        Enemy.Animator.SetTrigger(CHARGE_ANIMATION);
         NavMeshAgent.isStopped = false;
         NavMeshAgent.SetDestination(LastKnownPlayerPosition);
         Enemy.StartCoroutine(EndCharge());
@@ -66,19 +66,19 @@ public class ChargeAttackState : EnemyState
     private System.Collections.IEnumerator EndCharge()
     {
         // Wait for the animation to end (adjust timing as needed)
-        //yield return new WaitForSeconds(Enemy.Animator.GetCurrentAnimatorStateInfo(0).length);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(Enemy.Animator.GetCurrentAnimatorStateInfo(0).length);
+        //yield return new WaitForSeconds(1);
         IsCharging = false;
         ChargeComplete = true;
         NavMeshAgent.isStopped = true;
         NavMeshAgent.destination = NavMeshAgent.transform.position;
-        //Enemy.Animator.SetBool(CHARGE_ANIMATION, false);
-        Enemy.ChargeAttackCollider?.gameObject.SetActive(false);
+        //Enemy.ChargeAttackCollider?.gameObject.SetActive(false);
     }
 
     public override void OnExit()
     {
         base.OnExit();
+        Enemy.Animator.ResetTrigger(CHARGE_ANIMATION);
         Enemy.ChargeAttackCollider?.gameObject.SetActive(false);
     }
 }

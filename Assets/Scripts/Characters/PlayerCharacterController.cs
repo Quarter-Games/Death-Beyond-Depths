@@ -112,7 +112,7 @@ abstract public class PlayerCharacterController : Character
         {
             SoundDataManager.Instance.EmitSound(transform, IsStanding ? WalkSound.SoundTravelDistance : CrouchWalkSound.SoundTravelDistance);
         }
-        FootPlacement();
+        //FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
     }
     public void FootPlacement()

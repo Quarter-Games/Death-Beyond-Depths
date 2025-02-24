@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D.Animation;
 using UnityEngine.U2D.IK;
+using static UnityEditor.PlayerSettings;
 
 public class CaptainController : PlayerCharacterController
 {
     [Header("Shooting")]
+    public RangeAttack ShootingStats;
     [SerializeField] InputActionReference PointerMovementAction;
     [SerializeField] Transform GunIKTarget;
     [SerializeField] LimbSolver2D GunArmSolver;
@@ -18,6 +21,8 @@ public class CaptainController : PlayerCharacterController
     [SerializeField] InventoryItem ShootingItem;
     [SerializeField] SpriteResolver LeftPalm;
     [SerializeField] Transform ElbowPosition;
+    bool isrightClickPerformed;
+    Vector3 LastIKPosition;
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -51,20 +56,39 @@ public class CaptainController : PlayerCharacterController
         //TODO: Stop Using Camera.main
         var camera = Camera.main;
 
-        var proj = Instantiate(ProjectilePrefab, ProjectileSpawnPosition.position, Quaternion.identity);
+        //var proj = Instantiate(ProjectilePrefab, ProjectileSpawnPosition.position, Quaternion.identity);
         var pos = ProjectileSpawnPosition.position;
 
         var direction = ((Vector2)(pos - ElbowPosition.position)).normalized;
+        //proj.Init(direction);
         var rotation = Quaternion.LookRotation(Vector3.forward, direction);
         rotation *= Quaternion.Euler(0, 0, -90); // Rotate 90 degrees to the right
 
-        proj.Init(direction);
         IsRangeAttacking = true;
         StartCoroutine(WaitForCoolDown(ShootCooldown, false));
         ShootingItem.Amount--;
-
         var trans = Instantiate(OnShootParticles, ProjectileSpawnPosition.position, rotation);
         trans.Play();
+        ShootingRaycast(pos, direction);
+
+    }
+    public void ShootingRaycast(Vector3 pos, Vector3 direction)
+    {
+        List<RaycastHit2D> hits = new();
+        Physics2D.Raycast(pos, direction, new ContactFilter2D().NoFilter(), hits);
+        Debug.Log(hits.Count);
+        foreach (var h in hits)
+        {
+            if (h == default) break;
+            if (h.collider != null)
+            {
+                if (h.collider.TryGetComponent(out EnemyAI damageable))
+                {
+                    damageable.TakeDamage(ShootingStats.Damage);
+                    break;
+                }
+            }
+        }
     }
 
 
@@ -75,7 +99,7 @@ public class CaptainController : PlayerCharacterController
 
     public override void RightMouseHold(InputAction.CallbackContext context)
     {
-        if (context.performed && !IsRaightClickHold) StartAim();
+        if (context.performed && !isrightClickPerformed) StartAim();
         else if (context.canceled || context.performed) EndAim();
     }
     public void EquipGun()
@@ -84,12 +108,14 @@ public class CaptainController : PlayerCharacterController
     }
     public void StartAim()
     {
+        isrightClickPerformed = true;
         Debug.Log("<color=green>Gun is Equiped</color>");
         animator.SetTrigger("Enable Gun");
         LeftPalm.SetCategoryAndLabel("L PALM", "Gun");
     }
     public void EndAim()
     {
+        isrightClickPerformed = false;
         Debug.Log("<color=red>Gun is Unequiped</color>");
         IsRaightClickHold = false;
         animator.SetTrigger("Remove Gun");
@@ -102,11 +128,12 @@ public class CaptainController : PlayerCharacterController
         {
 
             var worldPos = ConvertMousePosToWorldCoordinates(Input.mousePosition);
-
             GunIKTarget.position = worldPos;
-            GunArmSolver.UpdateIK(1);
             SetRotationTo(worldPos - transform.position);
         }
+        GunIKTarget.position = Vector3.Lerp(LastIKPosition, GunIKTarget.position, 0.25f);
+        GunArmSolver.UpdateIK(1);
+        LastIKPosition = GunIKTarget.position;
     }
     protected override void SpecialMove()
     {
