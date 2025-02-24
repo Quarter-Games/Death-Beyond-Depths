@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyAI : Character, IHearing
 {
+    [SerializeField] string CrurrentState => StateMachine.CurrentState.ToString();
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
     [SerializeField] public float SoundRadius = 5f;
