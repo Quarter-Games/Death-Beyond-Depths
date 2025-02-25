@@ -13,6 +13,7 @@ public class ChaseState : EnemyState
         NavMeshAgent.isStopped = false;
         NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
         Enemy.Animator.SetBool(CHASE_ANIMATION, true);
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
     }
 
     public override void OnFrameUpdate()
@@ -26,7 +27,7 @@ public class ChaseState : EnemyState
         }
         // Check if the player is within attack ranges
         float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.LastKnownPlayerPosition);
-        if(distanceToPlayer <= Enemy.MeleeAttackRange)
+        if (distanceToPlayer <= Enemy.MeleeAttackRange)
         {
             StateMachine.ChangeState(Enemy.AttackState);
             return;
@@ -37,6 +38,15 @@ public class ChaseState : EnemyState
             return;
         }
         NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
+        NavMeshAgent.isStopped = false;
+        if (Mathf.Abs(NavMeshAgent.velocity.x) <= 0.1f)
+        {
+            Enemy.Animator.SetBool(CHASE_ANIMATION, false);
+        }
+        else if (!Enemy.Animator.GetBool(CHASE_ANIMATION))
+        {
+            Enemy.Animator.SetBool(CHASE_ANIMATION, true);
+        }
     }
 
     public override void OnExit()

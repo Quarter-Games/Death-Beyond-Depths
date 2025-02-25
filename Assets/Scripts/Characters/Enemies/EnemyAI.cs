@@ -6,9 +6,10 @@ using UnityEngine.AI;
 
 public class EnemyAI : Character, IHearing
 {
+    [SerializeField] string CrurrentState => StateMachine.CurrentState.ToString();
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
-    [SerializeField] float SoundRadius = 5f;
+    [SerializeField] public float SoundRadius = 5f;
     [SerializeField] NavMeshAgent NavMeshAgent;
     [SerializeField] List<Transform> PatrolPoints;
     [SerializeField] public PlayerCharacterController Player;
@@ -130,7 +131,10 @@ public class EnemyAI : Character, IHearing
     public void TakeDamage(int damage)
     {
         stats.TakeDamage(damage);
-        if (stats.IsInvincible) return;
+    }
+
+    public void Stagger()
+    {
         StateMachine.ChangeState(StaggerState);
     }
 
@@ -184,7 +188,7 @@ public class EnemyAI : Character, IHearing
 
     public bool PlayerInSight()
     {
-        if (Player == null || Player.IsHidden)
+        if (Player == null || (!IsAwareOfPlayer && Player.IsHidden))
             return false;
         Vector3 directionToPlayer = (Player.transform.position - transform.position).normalized;
         float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
@@ -211,6 +215,7 @@ public class EnemyAI : Character, IHearing
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, SoundRadius);
+        Gizmos.DrawSphere(LastKnownPlayerPosition, 0.2f);
 
         Vector3 leftBoundary = IsFacingLeft ? Quaternion.Euler(0, 0, Angle / 2) * transform.right * -1 : Quaternion.Euler(0, 0, Angle / 2) * transform.right;
         Vector3 rightBoundary = IsFacingLeft ? Quaternion.Euler(0, 0, -Angle / 2) * transform.right * -1 : Quaternion.Euler(0, 0, -Angle / 2) * transform.right;
@@ -236,7 +241,10 @@ public class EnemyAI : Character, IHearing
         {
             return;
         }
-        Debug.Log("Davy heard that!");
+        if ((Player.IsHidden && !IsAwareOfPlayer))
+        {
+            return;
+        }
         LastKnownPlayerPosition = soundOrigin;
         StateMachine.ChangeState(AlertState);
     }
