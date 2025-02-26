@@ -16,6 +16,7 @@ public class Projectile : MonoBehaviour
         if (collision.TryGetComponent(out CachedEnemy))
         {
             CachedEnemy.TakeDamage(Stats.Damage);
+            CachedEnemy.Stagger();
             Destroy(gameObject);
         }
 
