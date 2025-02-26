@@ -9,6 +9,7 @@ using UnityEngine.U2D.IK;
 
 abstract public class PlayerCharacterController : Character
 {
+    [SerializeField] float AttackInterval = 1f;
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
     [SerializeField] InputActionReference InteractInputAction;
@@ -36,7 +37,7 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] SoundData CrouchWalkSound;
 
     private Coroutine BackStepCoroutine;
-
+    private float AttackIntervalTimer = 0;
     bool IsFacingRight = true;
 
     public bool IsMeleeAttacking = false;
@@ -56,6 +57,7 @@ abstract public class PlayerCharacterController : Character
 
     protected override void OnEnable()
     {
+        AttackIntervalTimer = AttackInterval;
         CrouchInputAction.action.performed += OnCrouchPerformed;
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
@@ -115,6 +117,12 @@ abstract public class PlayerCharacterController : Character
         //FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
     }
+
+    private void Update()
+    {
+        AttackIntervalTimer += Time.deltaTime;
+    }
+
     public void FootPlacement()
     {
         float leftLegHeight = LeftLegTarget.position.y;
@@ -132,10 +140,19 @@ abstract public class PlayerCharacterController : Character
     {
         if (IsRangeAttacking || IsMeleeAttacking)
             return;
+        if (AttackIntervalTimer < AttackInterval) return;
+        animator.SetTrigger("Strike Sword");
+        animator.SetFloat("Attack Chance", UnityEngine.Random.Range(0, 1f));
         StartCoroutine(WaitForCoolDown(MeleeAttackObject.Stats.CooldownTime, true));
         IsMeleeAttacking = true;
-        MeleeAttackObject.gameObject.SetActive(true);
+        //MeleeAttackObject.gameObject.SetActive(true);
     }
+
+    public void StartAttackCooldown()
+    {
+        AttackIntervalTimer = 0;
+    }
+
     protected IEnumerator WaitForCoolDown(float time, bool isMelee)
     {
         var startTimeTime = Time.time;
