@@ -143,14 +143,17 @@ abstract public class PlayerCharacterController : Character
         if (AttackIntervalTimer < AttackInterval) return;
         animator.SetTrigger("Strike Sword");
         animator.SetFloat("Attack Chance", UnityEngine.Random.Range(0, 1f));
-        StartCoroutine(WaitForCoolDown(MeleeAttackObject.Stats.CooldownTime, true));
         IsMeleeAttacking = true;
+        //StartCoroutine(WaitForCoolDown(MeleeAttackObject.Stats.CooldownTime, true));
         //MeleeAttackObject.gameObject.SetActive(true);
     }
 
     public void StartAttackCooldown()
     {
         AttackIntervalTimer = 0;
+        animator.ResetTrigger("Strike Sword");
+        IsMeleeAttacking = false;
+        MeleeAttackObject.ResetEnemyAttackedList();
     }
 
     protected IEnumerator WaitForCoolDown(float time, bool isMelee)

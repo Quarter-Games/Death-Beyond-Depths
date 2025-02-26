@@ -19,25 +19,14 @@ public class PlayerMeleeAttack : MonoBehaviour
     {
         EnemyList = new List<EnemyAI>();
     }
-    private void OnEnable()
-    {
-        StartCoroutine(DestroyAfterSeconds(Stats.AttackTime));
-        //EnemyList = new List<EnemyAI>();
-    }
 
-    private void OnDisable()
+    public void ResetEnemyAttackedList()
     {
         foreach (EnemyAI enemy in EnemyList)
         {
             enemy.IsAttacked = false;
         }
         EnemyList.Clear();
-    }
-
-    private IEnumerator DestroyAfterSeconds(float attackTime)
-    {
-        yield return new WaitForSeconds(attackTime);
-        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
