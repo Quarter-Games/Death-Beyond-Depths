@@ -241,8 +241,8 @@ abstract public class PlayerCharacterController : Character
     private void OnSwordEquip(InputAction.CallbackContext context)
     {
         animator.SetTrigger("Enable Sword");
-        isSwordEquipped = animator.GetBool("IsSwordEquipped");
-        animator.SetBool("IsSwordEquipped", !isSwordEquipped);
+        isSwordEquipped = !animator.GetBool("IsSwordEquipped");
+        animator.SetBool("IsSwordEquipped", isSwordEquipped);
     }
 
     private IEnumerator BackStepAction()
