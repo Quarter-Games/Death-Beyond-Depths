@@ -13,7 +13,7 @@ abstract public class Character : MonoBehaviour
     [SerializeField] public Stats stats;
     private float animSpeed;
 
-    public bool IsAttacked {  get; set; }
+    public bool IsAttacked { get; set; } = false;
 
     public Room CurrentRoom { get; set; }
 

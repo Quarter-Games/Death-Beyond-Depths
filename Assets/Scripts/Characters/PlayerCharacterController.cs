@@ -315,4 +315,21 @@ abstract public class PlayerCharacterController : Character
         Collider.enabled = true;
         EnableInput();
     }
+
+    public void TakeDamage(int damage)
+    {
+        if (IsAttacked) return;
+        IsAttacked = true;
+        stats.TakeDamage(damage);
+        animator.SetTrigger("Get hit");
+        animator.SetInteger("Hit number", UnityEngine.Random.Range(0, 3));
+        Debug.Log(animator.GetInteger("Hit number"));
+        DisableInput();
+    }
+
+    public void OnStoppedGettingHit()
+    {
+        EnableInput();
+        IsAttacked = false;
+    }
 }
