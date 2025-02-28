@@ -16,8 +16,10 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference LeftClickInputAction;
     [SerializeField] InputActionReference RightClickInputAction;
     [SerializeField] InputActionReference BackStepInputAction;
+    [SerializeField] InputActionReference EquipSwordAction;
     [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
+    [SerializeField] ParticleSystem SlashEffect;
     //[SerializeField] private InputActionMap InputActionMap;
     public static bool IsRaightClickHold = false;
 
@@ -39,7 +41,7 @@ abstract public class PlayerCharacterController : Character
     private Coroutine BackStepCoroutine;
     private float AttackIntervalTimer = 0;
     bool IsFacingRight = true;
-
+    bool isSwordEquipped = false;
     public bool IsMeleeAttacking = false;
     public bool IsRangeAttacking = false;
     private bool backStepAnimationComplete = false;
@@ -63,6 +65,7 @@ abstract public class PlayerCharacterController : Character
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.started += Interact;
         BackStepInputAction.action.started += BackStep;
+        EquipSwordAction.action.started += OnSwordEquip;
     }
 
     protected override void OnDisable()
@@ -72,6 +75,7 @@ abstract public class PlayerCharacterController : Character
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
         BackStepInputAction.action.started -= BackStep;
+        EquipSwordAction.action.started -= OnSwordEquip;
     }
 
     protected void SetRotationTo(Vector2 direction)
@@ -138,9 +142,11 @@ abstract public class PlayerCharacterController : Character
 
     private void OnMeleeAttackPerformed(InputAction.CallbackContext context)
     {
+        if (!isSwordEquipped) return;
         if (IsRangeAttacking || IsMeleeAttacking)
             return;
         if (AttackIntervalTimer < AttackInterval) return;
+        SlashEffect.Play();
         animator.SetTrigger("Strike Sword");
         animator.SetFloat("Attack Chance", UnityEngine.Random.Range(0, 1f));
         IsMeleeAttacking = true;
@@ -231,6 +237,14 @@ abstract public class PlayerCharacterController : Character
         if (BackStepCoroutine != null || !IsStanding) return;
         StartCoroutine(BackStepAction());
     }
+
+    private void OnSwordEquip(InputAction.CallbackContext context)
+    {
+        animator.SetTrigger("Enable Sword");
+        isSwordEquipped = animator.GetBool("IsSwordEquipped");
+        animator.SetBool("IsSwordEquipped", !isSwordEquipped);
+    }
+
     private IEnumerator BackStepAction()
     {
         backStepAnimationComplete = false;

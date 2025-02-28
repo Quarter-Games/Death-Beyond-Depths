@@ -12,13 +12,8 @@ public class PlayerMeleeAttack : MonoBehaviour
     [SerializeField] float HitStopTime = 0.01f;
     [SerializeField] float StaggerChance = 0.25f;
 
-    List<EnemyAI> EnemyList;
+    List<EnemyAI> EnemyList = new List<EnemyAI>();
     EnemyAI CurrentEnemy;
-
-    private void Start()
-    {
-        EnemyList = new List<EnemyAI>();
-    }
 
     public void ResetEnemyAttackedList()
     {
@@ -41,7 +36,6 @@ public class PlayerMeleeAttack : MonoBehaviour
             if (UnityEngine.Random.Range(0, 1f) <= StaggerChance)
             {
                 CurrentEnemy.Stagger();
-                Debug.Log("Staggered");
             }
         }
     }
