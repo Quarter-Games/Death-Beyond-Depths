@@ -26,6 +26,7 @@ public class PlayerMeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(!this.enabled) return; //yes, this is actually necessary.
         if(collision.TryGetComponent(out CurrentEnemy) && !CurrentEnemy.IsAttacked)
         {
             if (CurrentEnemy.IsDead) return;

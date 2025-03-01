@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D.IK;
+using static DamageVignetteController;
 
 abstract public class PlayerCharacterController : Character
 {
@@ -143,9 +144,10 @@ abstract public class PlayerCharacterController : Character
     private void OnMeleeAttackPerformed(InputAction.CallbackContext context)
     {
         if (!isSwordEquipped) return;
-        if (IsRangeAttacking || IsMeleeAttacking)
+        if (IsRangeAttacking || IsMeleeAttacking || !IsStanding)
             return;
         if (AttackIntervalTimer < AttackInterval) return;
+        DisableInput();
         SlashEffect.Play();
         animator.SetTrigger("Strike Sword");
         animator.SetFloat("Attack Chance", UnityEngine.Random.Range(0, 1f));
@@ -156,6 +158,7 @@ abstract public class PlayerCharacterController : Character
 
     public void StartAttackCooldown()
     {
+        EnableInput();
         AttackIntervalTimer = 0;
         animator.ResetTrigger("Strike Sword");
         IsMeleeAttacking = false;
@@ -323,8 +326,13 @@ abstract public class PlayerCharacterController : Character
         stats.TakeDamage(damage);
         animator.SetTrigger("Get hit");
         animator.SetInteger("Hit number", UnityEngine.Random.Range(0, 3));
-        Debug.Log(animator.GetInteger("Hit number"));
         DisableInput();
+        IsMeleeAttacking = false;
+        MeleeAttackObject.ResetEnemyAttackedList();
+        float knockbackDirection = IsFacingRight ? -1 : 1;
+        rb.AddForce(new Vector2(5 * knockbackDirection, 3), ForceMode2D.Impulse);
+        SpecialEffects.ScreenDamageEffect(UnityEngine.Random.Range(0.1f, 1));
+        CameraController.Instance.ShakeCamera();
     }
 
     public void OnStoppedGettingHit()
