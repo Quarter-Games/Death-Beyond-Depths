@@ -47,8 +47,10 @@ public class EnemyAI : Character, IHearing
 
     EnemyStatemachine StateMachine;
     private bool IsFacingLeft = false;
+    private bool IsPermenantlyDead = false;
     private Vector3 DefaultScale;
     private int InitialHP;
+    private const string ANIMATOR_BURNED = "Burned";
 
     protected override void OnEnable() { }
 
@@ -89,6 +91,7 @@ public class EnemyAI : Character, IHearing
 
     private void Update()
     {
+        if (IsPermenantlyDead) return;
         StateMachine.CurrentState.OnFrameUpdate();
         if (!IsDead && stats.HP < InitialHP && CanHeal())
         {
@@ -133,7 +136,7 @@ public class EnemyAI : Character, IHearing
     public void TakeDamage(int damage)
     {
         stats.TakeDamage(damage);
-        FlashOnHit.Flash();
+        //FlashOnHit.Flash();
     }
 
     public void Stagger()
@@ -143,6 +146,7 @@ public class EnemyAI : Character, IHearing
 
     private void FixedUpdate()
     {
+        if (IsPermenantlyDead) return;
         StateMachine.CurrentState.OnPhysicsUpdate();
     }
 
@@ -187,6 +191,14 @@ public class EnemyAI : Character, IHearing
             }
             if (!area.IsPlayerHiddenInside) return;
         }
+    }
+
+    [ContextMenu("Burn")]
+    public void Burn()
+    {
+        NavMeshAgent.isStopped = true;
+        Animator.SetTrigger(ANIMATOR_BURNED);
+        IsPermenantlyDead = true;
     }
 
     public bool PlayerInSight()

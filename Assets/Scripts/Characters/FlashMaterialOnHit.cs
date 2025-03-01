@@ -32,7 +32,6 @@ public class FlashMaterialOnHit : MonoBehaviour
     public void Flash(float duration = 0.1f)
     {
         if (FlashCoroutine != null) return;
-        Debug.Log("Flash");
         FlashCoroutine = StartCoroutine(FlashMaterials(duration));
     }
 
