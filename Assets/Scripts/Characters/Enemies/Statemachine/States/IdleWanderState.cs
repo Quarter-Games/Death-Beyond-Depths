@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -60,7 +61,10 @@ public class IdleWanderState : EnemyState
         if (WayPoints.Count == 0) return; // No waypoints to patrol
         if (!ReachedGoal)
         {
-            NavMeshAgent.SetDestination(WayPoints[Counter].position);
+            if (WayPoints[Counter] != null)
+            {
+                NavMeshAgent.SetDestination(WayPoints[Counter].position);
+            }
         }
         Patrol();
     }
