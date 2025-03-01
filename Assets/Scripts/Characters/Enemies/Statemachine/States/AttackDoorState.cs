@@ -27,7 +27,6 @@ public class AttackDoorState : EnemyState
 
     private void AttackDoor()
     {
-        Debug.Log("Attacking the door");
         Enemy.Animator.SetTrigger(ATTACK_ANIMATION);
     }
 

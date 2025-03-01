@@ -4,14 +4,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(FlashMaterialOnHit))]
 public class EnemyAI : Character, IHearing
 {
-    [SerializeField] string CrurrentState => StateMachine.CurrentState.ToString();
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
     [SerializeField] public float SoundRadius = 5f;
     [SerializeField] NavMeshAgent NavMeshAgent;
     [SerializeField] List<Transform> PatrolPoints;
+    [SerializeField] FlashMaterialOnHit FlashOnHit;
     [SerializeField] public PlayerCharacterController Player;
     [SerializeField] public float StaggerTime = 0.5f;
     [SerializeField] public float ReviveTime = 10f;
@@ -42,15 +43,16 @@ public class EnemyAI : Character, IHearing
     public Animator Animator { get; private set; }
     public bool IsDead => stats.HP <= 0;
     public bool IsAwareOfPlayer => StateMachine.CurrentState == ChaseState || StateMachine.CurrentState == ChargeAttackState || StateMachine.CurrentState == AttackState;
+    public bool IsFacingLeftProperty { get => IsFacingLeft; }
 
     EnemyStatemachine StateMachine;
     private bool IsFacingLeft = false;
     private Vector3 DefaultScale;
     private int InitialHP;
 
-    protected override void OnEnable() {}
+    protected override void OnEnable() { }
 
-    protected override void OnDisable(){}
+    protected override void OnDisable() { }
 
     private void Awake()
     {
@@ -131,6 +133,7 @@ public class EnemyAI : Character, IHearing
     public void TakeDamage(int damage)
     {
         stats.TakeDamage(damage);
+        FlashOnHit.Flash();
     }
 
     public void Stagger()
@@ -154,9 +157,9 @@ public class EnemyAI : Character, IHearing
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.TryGetComponent(out EnemyAI otherEnemy))
+        if (collision.gameObject.TryGetComponent(out EnemyAI otherEnemy))
         {
-            if(StateMachine.CurrentState == IdleState && otherEnemy.StateMachine.CurrentState == IdleState)
+            if (StateMachine.CurrentState == IdleState && otherEnemy.StateMachine.CurrentState == IdleState)
             {
                 //TODO reverse directions for both enemies
             }
@@ -167,7 +170,7 @@ public class EnemyAI : Character, IHearing
     {
         if (collision.gameObject.TryGetComponent(out Door door))
         {
-            if(IsAwareOfPlayer) // TODO - check if player is behind the door
+            if (IsAwareOfPlayer) // TODO - check if player is behind the door
             {
                 AttackDoorState.Door = door;
                 StateMachine.ChangeState(AttackDoorState);
@@ -176,7 +179,7 @@ public class EnemyAI : Character, IHearing
         }
         if (collision.gameObject.TryGetComponent(out HiddenArea area))
         {
-            if(StateMachine.CurrentState != AlertState) return;
+            if (StateMachine.CurrentState != AlertState) return;
             if (UnityEngine.Random.Range(0, 100) == 0)
             {
                 area.UnHidePlayer();

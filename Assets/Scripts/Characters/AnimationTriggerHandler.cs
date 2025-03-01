@@ -24,4 +24,9 @@ public class AnimationTriggerHandler : MonoBehaviour
     {
         captainController.StartAttackCooldown();
     }
+
+    public void OnGetHitFinished()
+    {
+        captainController.OnStoppedGettingHit();
+    }
 }
