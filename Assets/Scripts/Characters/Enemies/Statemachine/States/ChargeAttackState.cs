@@ -18,7 +18,7 @@ public class ChargeAttackState : EnemyState
         LastKnownPlayerPosition = Enemy.Player.transform.position;
         AttackPlayer();
         TimeSinceLastAttack = Enemy.ChargeAttackCooldown;
-        NavMeshAgent.isStopped = true;
+        NavMeshAgent.isStopped = false;
         NavMeshAgent.SetDestination(LastKnownPlayerPosition);
         NavMeshAgent.speed = Enemy.ChargeMoveSpeed;
         //Enemy.ChargeAttackCollider?.gameObject.SetActive(true);

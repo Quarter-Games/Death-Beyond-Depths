@@ -92,6 +92,7 @@ public class EnemyAI : Character, IHearing
     private void Update()
     {
         if (IsPermenantlyDead) return;
+        FlipIfNeeded();
         StateMachine.CurrentState.OnFrameUpdate();
         if (!IsDead && stats.HP < InitialHP && CanHeal())
         {
@@ -106,7 +107,6 @@ public class EnemyAI : Character, IHearing
         {
             StateMachine.ChangeState(DeadState);
         }
-        FlipIfNeeded();
     }
 
     private void FlipIfNeeded()
