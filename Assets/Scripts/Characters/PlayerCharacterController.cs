@@ -148,7 +148,7 @@ abstract public class PlayerCharacterController : Character
             return;
         if (AttackIntervalTimer < AttackInterval) return;
         DisableInput();
-        SlashEffect.Play();
+        //SlashEffect.Play();
         animator.SetTrigger("Strike Sword");
         animator.SetFloat("Attack Chance", UnityEngine.Random.Range(0, 1f));
         IsMeleeAttacking = true;

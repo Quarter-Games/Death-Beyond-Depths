@@ -10,6 +10,7 @@ public class EnemyAttack : MonoBehaviour
         if (collision.TryGetComponent(out CachedPlayer))
         {
             CachedPlayer.TakeDamage(AttackStats.Damage);
+
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
