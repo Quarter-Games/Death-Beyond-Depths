@@ -6,17 +6,21 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D.IK;
+using static DamageVignetteController;
 
 abstract public class PlayerCharacterController : Character
 {
+    [SerializeField] float AttackInterval = 1f;
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
     [SerializeField] InputActionReference InteractInputAction;
     [SerializeField] InputActionReference LeftClickInputAction;
     [SerializeField] InputActionReference RightClickInputAction;
     [SerializeField] InputActionReference BackStepInputAction;
+    [SerializeField] InputActionReference EquipSwordAction;
     [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
+    [SerializeField] ParticleSystem SlashEffect;
     //[SerializeField] private InputActionMap InputActionMap;
     public static bool IsRaightClickHold = false;
 
@@ -36,9 +40,9 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] SoundData CrouchWalkSound;
 
     private Coroutine BackStepCoroutine;
-
+    private float AttackIntervalTimer = 0;
     bool IsFacingRight = true;
-
+    bool isSwordEquipped = false;
     public bool IsMeleeAttacking = false;
     public bool IsRangeAttacking = false;
     private bool backStepAnimationComplete = false;
@@ -56,11 +60,13 @@ abstract public class PlayerCharacterController : Character
 
     protected override void OnEnable()
     {
+        AttackIntervalTimer = AttackInterval;
         CrouchInputAction.action.performed += OnCrouchPerformed;
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.started += Interact;
         BackStepInputAction.action.started += BackStep;
+        EquipSwordAction.action.started += OnSwordEquip;
     }
 
     protected override void OnDisable()
@@ -70,6 +76,7 @@ abstract public class PlayerCharacterController : Character
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
         BackStepInputAction.action.started -= BackStep;
+        EquipSwordAction.action.started -= OnSwordEquip;
     }
 
     protected void SetRotationTo(Vector2 direction)
@@ -115,6 +122,12 @@ abstract public class PlayerCharacterController : Character
         //FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
     }
+
+    private void Update()
+    {
+        AttackIntervalTimer += Time.deltaTime;
+    }
+
     public void FootPlacement()
     {
         float leftLegHeight = LeftLegTarget.position.y;
@@ -130,12 +143,28 @@ abstract public class PlayerCharacterController : Character
 
     private void OnMeleeAttackPerformed(InputAction.CallbackContext context)
     {
-        if (IsRangeAttacking || IsMeleeAttacking)
+        if (!isSwordEquipped) return;
+        if (IsRangeAttacking || IsMeleeAttacking || !IsStanding)
             return;
-        StartCoroutine(WaitForCoolDown(MeleeAttackObject.Stats.CooldownTime, true));
+        if (AttackIntervalTimer < AttackInterval) return;
+        DisableInput();
+        //SlashEffect.Play();
+        animator.SetTrigger("Strike Sword");
+        animator.SetFloat("Attack Chance", UnityEngine.Random.Range(0, 1f));
         IsMeleeAttacking = true;
-        MeleeAttackObject.gameObject.SetActive(true);
+        //StartCoroutine(WaitForCoolDown(MeleeAttackObject.Stats.CooldownTime, true));
+        //MeleeAttackObject.gameObject.SetActive(true);
     }
+
+    public void StartAttackCooldown()
+    {
+        EnableInput();
+        AttackIntervalTimer = 0;
+        animator.ResetTrigger("Strike Sword");
+        IsMeleeAttacking = false;
+        MeleeAttackObject.ResetEnemyAttackedList();
+    }
+
     protected IEnumerator WaitForCoolDown(float time, bool isMelee)
     {
         var startTimeTime = Time.time;
@@ -211,6 +240,14 @@ abstract public class PlayerCharacterController : Character
         if (BackStepCoroutine != null || !IsStanding) return;
         StartCoroutine(BackStepAction());
     }
+
+    private void OnSwordEquip(InputAction.CallbackContext context)
+    {
+        animator.SetTrigger("Enable Sword");
+        isSwordEquipped = !animator.GetBool("IsSwordEquipped");
+        animator.SetBool("IsSwordEquipped", isSwordEquipped);
+    }
+
     private IEnumerator BackStepAction()
     {
         backStepAnimationComplete = false;
@@ -280,5 +317,27 @@ abstract public class PlayerCharacterController : Character
         rb.simulated = true;
         Collider.enabled = true;
         EnableInput();
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (IsAttacked) return;
+        IsAttacked = true;
+        stats.TakeDamage(damage);
+        animator.SetTrigger("Get hit");
+        animator.SetInteger("Hit number", UnityEngine.Random.Range(0, 3));
+        DisableInput();
+        IsMeleeAttacking = false;
+        MeleeAttackObject.ResetEnemyAttackedList();
+        float knockbackDirection = IsFacingRight ? -1 : 1;
+        rb.AddForce(new Vector2(5 * knockbackDirection, 3), ForceMode2D.Impulse);
+        SpecialEffects.ScreenDamageEffect(UnityEngine.Random.Range(0.1f, 1));
+        CameraController.Instance.ShakeCamera();
+    }
+
+    public void OnStoppedGettingHit()
+    {
+        EnableInput();
+        IsAttacked = false;
     }
 }

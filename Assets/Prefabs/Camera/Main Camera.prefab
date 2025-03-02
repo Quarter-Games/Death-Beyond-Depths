@@ -184,7 +184,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4352614659773481546}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a232f243463e4a640ae277e6369784c9, type: 3}
   m_Name: 
@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 2322872116161255830}
   - component: {fileID: 2109999423230853788}
   - component: {fileID: 1365976296696936661}
+  - component: {fileID: 766025390967851401}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -289,9 +290,9 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 75
   orthographic: 0
-  orthographic size: 2.588147
+  orthographic size: 3.9375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -373,12 +374,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Boundries:
     serializedVersion: 2
-    x: -19.526232
-    y: -4.3511457
-    width: 45.805992
-    height: 12.507745
+    x: -32.2
+    y: -3.6099567
+    width: 61.6
+    height: 19.647188
   cam: {fileID: 8833490242870257828}
-  XOffset: 0.67
+  XOffset: 0.68
   YOffset: 1
   CameraSpeed: 0.029
   DefaultLayer:
@@ -387,7 +388,7 @@ MonoBehaviour:
   InvisibilityLayer:
     serializedVersion: 2
     m_Bits: 4294967295
-  Size: 4.92
+  Size: 7
   Target: {fileID: 0}
   FinalTargetPosition: {x: 0, y: 0, z: 0}
   TargerLayer:
@@ -398,6 +399,31 @@ MonoBehaviour:
   PlayerLockSeconds: 0.05
   TurnAroundDelaySeconds: 0.1
   TurnAroundSpeed: 0.55
+  Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0025901794
+      value: -0.009857178
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.18218994
+      value: -0.017215729
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Duration: 0.01
   BorderPaddingY: 1
   BorderPaddingX: 1
 --- !u!61 &2109999423230853788
@@ -473,3 +499,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &766025390967851401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8408978567146873663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e667db4513bc0a4c965b5389f1c9b45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenDamageMat: {fileID: 2100000, guid: 67c491157ee390643804b487cd182dc0, type: 2}

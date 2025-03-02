@@ -19,4 +19,14 @@ public class AnimationTriggerHandler : MonoBehaviour
     {
         captainController.BackStepForce();
     }
+
+    public void OnMeleeFinished()
+    {
+        captainController.StartAttackCooldown();
+    }
+
+    public void OnGetHitFinished()
+    {
+        captainController.OnStoppedGettingHit();
+    }
 }

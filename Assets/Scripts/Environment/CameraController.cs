@@ -37,7 +37,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] float PlayerLockSeconds = 0.05f;
     [SerializeField] float TurnAroundDelaySeconds = 0.5f;
     [SerializeField] float TurnAroundSpeed;
-    
+
+    [Header("Camera Shake")]
+    [SerializeField] AnimationCurve Curve;
+    [SerializeField] float Duration = 0.5f;
+
     [Space(10)]
     [SerializeField] private float BorderPaddingY;
     [SerializeField] private float BorderPaddingX;
@@ -48,8 +52,9 @@ public class CameraController : MonoBehaviour
     Collider2D CameraCollider;
     float LockedXPosition;
     float LockedYPosition;
-    
+
     Coroutine TurningCoroutine;
+    Coroutine ShakeCoroutine;
 
     private const string CAMERA_BOUNDARY_TAG = "CameraBoundary";
 
@@ -92,12 +97,13 @@ public class CameraController : MonoBehaviour
 
     public void FollowTarget()
     {
+        if (ShakeCoroutine != null) return;
         Vector3 targetPosition = transform.position;
-        if(IsXLocked)
+        if (IsXLocked)
         {
             targetPosition.x = LockedXPosition;
-        } 
-        if(IsYLocked)
+        }
+        if (IsYLocked)
         {
             targetPosition.y = LockedYPosition;
         }
@@ -113,6 +119,27 @@ public class CameraController : MonoBehaviour
     public void DeactivateInvisibilityLayer()
     {
         cam.cullingMask = DefaultLayer;
+    }
+
+    public void ShakeCamera()
+    {
+        if (ShakeCoroutine != null) return;
+        ShakeCoroutine = StartCoroutine(ShakeCameraCoroutine());
+    }
+
+    private IEnumerator ShakeCameraCoroutine()
+    {
+        Vector3 startPosition = transform.position;
+        float elapsedTime = 0f;
+        while (elapsedTime < Duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float strength = Curve.Evaluate(elapsedTime / Duration);
+            transform.position = startPosition + UnityEngine.Random.insideUnitSphere;
+            yield return null;
+        }
+        transform.position = startPosition;
+        ShakeCoroutine = null;
     }
 
     private void CameraTurnAround(bool isFacingRight)
@@ -139,7 +166,7 @@ public class CameraController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag(CAMERA_BOUNDARY_TAG)) return;
-        if(!IsXLocked &&
+        if (!IsXLocked &&
             (MathF.Abs(collision.bounds.min.x - CameraCollider.bounds.min.x) < BorderPaddingX) ||
             MathF.Abs(collision.bounds.max.x - CameraCollider.bounds.max.x) < BorderPaddingX)
         {
@@ -160,7 +187,7 @@ public class CameraController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!collision.CompareTag(CAMERA_BOUNDARY_TAG)) return;
-        if(IsXLocked && ActiveXBorder == collision)
+        if (IsXLocked && ActiveXBorder == collision)
         {
             IsXLocked = false;
             ActiveXBorder = null;

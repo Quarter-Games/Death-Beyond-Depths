@@ -23,6 +23,7 @@ public class CaptainController : PlayerCharacterController
     [SerializeField] Transform ElbowPosition;
     bool isrightClickPerformed;
     Vector3 LastIKPosition;
+
     protected override void OnEnable()
     {
         base.OnEnable();
