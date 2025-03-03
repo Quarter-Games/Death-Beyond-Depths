@@ -68,7 +68,7 @@ public class IdleWanderState : EnemyState
         }
         if (WayPoints.Count == 0)
         {
-            Debug.Log("<color = blue> no waypoints, enemy is idle</color>",Enemy);
+            Debug.Log("<color=cyan> no waypoints, enemy is idle</color>",Enemy);
             return; // No waypoints to patrol
         }
         if (!ReachedGoal)
