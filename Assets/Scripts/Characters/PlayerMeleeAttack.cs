@@ -12,7 +12,7 @@ public class PlayerMeleeAttack : MonoBehaviour
     [SerializeField] float HitStopTime = 0.01f;
     [SerializeField] float StaggerChance = 0.25f;
 
-    List<EnemyAI> EnemyList = new List<EnemyAI>();
+    static List<EnemyAI> EnemyList = new List<EnemyAI>();
     EnemyAI CurrentEnemy;
 
     public void ResetEnemyAttackedList()
@@ -26,13 +26,15 @@ public class PlayerMeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(!this.enabled) return; //yes, this is actually necessary.
         if(collision.TryGetComponent(out CurrentEnemy) && !CurrentEnemy.IsAttacked)
         {
             if (CurrentEnemy.IsDead) return;
+            EnemyList.Add(CurrentEnemy);
             CurrentEnemy.TakeDamage(Stats.Damage);
             StartCoroutine(HitStop.TimeSlow(HitStopPower, HitStopTime));
             CurrentEnemy.IsAttacked = true; //to avoid multi-hits when reentering collider
-            EnemyList.Add(CurrentEnemy);
+            CameraController.Instance.ShakeCamera();
             if (UnityEngine.Random.Range(0, 1f) <= StaggerChance)
             {
                 CurrentEnemy.Stagger();

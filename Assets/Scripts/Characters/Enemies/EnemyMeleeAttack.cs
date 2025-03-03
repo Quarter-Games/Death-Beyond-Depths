@@ -21,7 +21,7 @@ public class EnemyMeleeAttack : MonoBehaviour
     {
         if (collision.TryGetComponent(out CachedPlayer))
         {
-            CachedPlayer.stats.TakeDamage(AttackStats.Damage);
+            CachedPlayer.TakeDamage(AttackStats.Damage);
         }
     }
 }
