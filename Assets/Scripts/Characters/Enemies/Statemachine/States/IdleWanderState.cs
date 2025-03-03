@@ -58,6 +58,14 @@ public class IdleWanderState : EnemyState
             StateMachine.ChangeState(Enemy.AlertState);
             return;
         }
+        if (Mathf.Abs(NavMeshAgent.velocity.x) <= 0.1f && Enemy.Animator.GetBool(WANDER_ANIMATION))
+        {
+            Enemy.Animator.SetBool(WANDER_ANIMATION, false);
+        }
+        else if (Mathf.Abs(NavMeshAgent.velocity.x) >= 0.1f && !Enemy.Animator.GetBool(WANDER_ANIMATION))
+        {
+            Enemy.Animator.SetBool(WANDER_ANIMATION, true);
+        }
         if (WayPoints.Count == 0) return; // No waypoints to patrol
         if (!ReachedGoal)
         {
