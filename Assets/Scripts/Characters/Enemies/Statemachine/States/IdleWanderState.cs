@@ -66,7 +66,11 @@ public class IdleWanderState : EnemyState
         {
             Enemy.Animator.SetBool(WANDER_ANIMATION, true);
         }
-        if (WayPoints.Count == 0) return; // No waypoints to patrol
+        if (WayPoints.Count == 0)
+        {
+            Debug.Log("<color = blue> no waypoints, enemy is idle</color>",Enemy);
+            return; // No waypoints to patrol
+        }
         if (!ReachedGoal)
         {
             if (WayPoints[Counter] != null)
