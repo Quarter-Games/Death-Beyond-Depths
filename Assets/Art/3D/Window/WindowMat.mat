@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CelShade_CaptainQuarters_Tools
-  m_Shader: {fileID: -6465566751694194690, guid: 20f572a7f4bbc5d4f923dd411c9f429b, type: 3}
-  m_Parent: {fileID: 2100000, guid: cbb5c7fb0ad910e4e8f60eeff875101f, type: 2}
+  m_Name: WindowMat
+  m_Shader: {fileID: -6465566751694194690, guid: f558146e2f0626b44a3285863d3a05ac, type: 3}
+  m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,22 +24,32 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseColor:
-        m_Texture: {fileID: 2800000, guid: 0e6a80acf589c7542b3a881f47e589eb, type: 3}
+    - _SampleTexture2D_673442daf06d4e9a8dbec53739ab00c1_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: ce9f604c7a98b0b479b941e197ddd3b3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Normal:
-        m_Texture: {fileID: 2800000, guid: fc74788d8914e84478c38bf6cd5b2ee5, type: 3}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _Alpha: 0.3
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Tile: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &36254359058238046
+--- !u!114 &6532029627219560492
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
