@@ -26,6 +26,7 @@ public class IdleWanderState : EnemyState
     public override void OnEnter()
     {
         //TODO - enter idle animation state
+        Enemy.Animator.SetBool("DeadAwake", false);
         NavMeshAgent.isStopped = true;
         NavMeshAgent.updatePosition = true;
         NavMeshAgent.ResetPath();
@@ -68,7 +69,7 @@ public class IdleWanderState : EnemyState
         }
         if (WayPoints.Count == 0)
         {
-            Debug.Log("<color=cyan> no waypoints, enemy is idle</color>",Enemy);
+            Debug.Log("<color=cyan> no waypoints, enemy is idle</color>", Enemy);
             return; // No waypoints to patrol
         }
         if (!ReachedGoal)
