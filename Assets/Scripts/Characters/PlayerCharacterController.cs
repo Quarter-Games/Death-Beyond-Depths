@@ -208,12 +208,14 @@ abstract public class PlayerCharacterController : Character
 
     internal void Hide()
     {
+        if (IsHidden) return;
         IsHidden = true;
         SortingGroup.sortingOrder += 1;
     }
 
     internal void StopHiding()
     {
+        if (!IsHidden) return;
         IsHidden = false;
         SortingGroup.sortingOrder -= 1;
     }
