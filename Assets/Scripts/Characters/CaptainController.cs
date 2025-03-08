@@ -73,6 +73,11 @@ public class CaptainController : PlayerCharacterController
         ShootingRaycast(pos, direction);
 
     }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(ProjectileSpawnPosition.position, ProjectileSpawnPosition.position + ((Vector3)(ProjectileSpawnPosition.position - ElbowPosition.position)).normalized);
+    }
     public void ShootingRaycast(Vector3 pos, Vector3 direction)
     {
         List<RaycastHit2D> hits = new();
@@ -86,6 +91,8 @@ public class CaptainController : PlayerCharacterController
                 if (h.collider.TryGetComponent(out EnemyAI damageable))
                 {
                     damageable.TakeDamage(ShootingStats.Damage);
+                    damageable.Stagger();
+                    Debug.LogWarning("Hit Enemy");
                     break;
                 }
             }

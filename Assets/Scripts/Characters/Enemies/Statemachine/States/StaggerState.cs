@@ -35,6 +35,7 @@ public class StaggerState : EnemyState
         if (TimeSpentInStagger >= Enemy.StaggerTime)
         {
             StateMachine.ChangeState(Enemy.AlertState);
+            return;
         }
     }
 

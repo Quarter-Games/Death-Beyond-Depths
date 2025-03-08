@@ -311,9 +311,11 @@ abstract public class PlayerCharacterController : Character
     {
         rb.simulated = false;
         Collider.enabled = false;
-        float time = Vector3.Distance(startPoint.SnippingPoint.position, startPoint.LinkedPoint.SnippingPoint.position) / ClimbingSpeed;
+        float time = Vector2.Distance(startPoint.SnippingPoint.position, startPoint.LinkedPoint.SnippingPoint.position) / ClimbingSpeed;
         DisableInput();
-        transform.DOMove(startPoint.LinkedPoint.SnippingPoint.position, time).SetEase(Ease.Linear).OnComplete(() => StopClimbing());
+        var pos = startPoint.LinkedPoint.SnippingPoint.position;
+        pos = new Vector3(pos.x, pos.y, transform.position.z);
+        transform.DOMove(pos, time).SetEase(Ease.Linear).OnComplete(() => StopClimbing());
     }
     public void StopClimbing()
     {
