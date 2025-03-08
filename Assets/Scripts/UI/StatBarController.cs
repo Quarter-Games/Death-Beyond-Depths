@@ -8,10 +8,12 @@ public class StatBarController : MonoBehaviour
     [SerializeField] PlayerCharacterController Player;
     [SerializeField, Min(0)] float BarSpeed = 0.3f;
     [SerializeField] Ease EaseSetting;
+    [SerializeField] GameObject HUD;
 
     float MaxHp;
     bool isSubscribedToPlayer = false;
     private Tween FillTween;
+    private Tween BeatTween;
 
     private void OnValidate()
     {
@@ -41,7 +43,22 @@ public class StatBarController : MonoBehaviour
             Player.stats.OnHPChanged += UpdateHPBar;
         }
         MaxHp = Player.stats.HP;
-        Image.fillAmount = MaxHp;
+        Image.fillAmount = 1;
+        StartHUDPulse();
+    }
+
+    private void StartHUDPulse()
+    {
+        if (HUD == null) return;
+
+        // Kill any existing tween before starting a new one
+        BeatTween?.Kill();
+
+        // Create a Yoyo loop that makes the HUD scale up and down continuously
+        BeatTween = HUD.transform
+            .DOScale(1.05f, 0.5f)
+            .SetEase(Ease.Flash)
+            .SetLoops(-1, LoopType.Yoyo);
     }
 
     private void UpdateHPBar()

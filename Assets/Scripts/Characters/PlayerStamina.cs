@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class PlayerStamina : MonoBehaviour
     [SerializeField, Min(0)] float _StaminaThreshold;
 
     float _currentStamina;
+
+    public event Action OnStaminaChanged;
 
     public float CurrentStamina
     {
@@ -46,12 +49,14 @@ public class PlayerStamina : MonoBehaviour
         if (_currentStamina < amount) return; //not enough stamina
         CurrentStamina -= amount;
         StaminaThreshold -= amount / 2;
+        OnStaminaChanged?.Invoke();
     }
 
     public void RestoreStaminaToThreshold()
     {
         if (CurrentStamina >= StaminaThreshold) return;
         Mathf.Lerp(CurrentStamina, StaminaThreshold, StaminaRestorationSpeed);
+        OnStaminaChanged?.Invoke();
     }
 
     public void RestoreThreshold(float amount)

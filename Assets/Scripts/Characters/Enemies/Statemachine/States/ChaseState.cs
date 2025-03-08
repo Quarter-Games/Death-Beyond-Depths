@@ -3,17 +3,35 @@ using UnityEngine.AI;
 
 public class ChaseState : EnemyState
 {
+    const string DISCOVER_PLAYER_ANIMATION = "FoundPlayer";
     const string CHASE_ANIMATION = "IsChasing";
 
+    bool IsScreaming = false;
+
     public ChaseState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
+
+    public override void AnimationTriggerEvent()
+    {
+        IsScreaming = false;
+        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
+    }
 
     public override void OnEnter()
     {
         base.OnEnter();
         NavMeshAgent.isStopped = false;
+        if (Random.Range(0, 1) > 0.5f)
+        {
+            IsScreaming = true;
+            Enemy.Animator.SetTrigger(DISCOVER_PLAYER_ANIMATION);
+            NavMeshAgent.SetDestination(Enemy.transform.position);
+        }
+        else
+        {
+            Enemy.Animator.SetBool(CHASE_ANIMATION, true);
+            NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
+        }
         NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
-        Enemy.Animator.SetBool(CHASE_ANIMATION, true);
-        NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
     }
 
     public override void OnFrameUpdate()
