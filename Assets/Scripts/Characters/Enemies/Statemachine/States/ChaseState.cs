@@ -4,6 +4,7 @@ using UnityEngine.AI;
 public class ChaseState : EnemyState
 {
     const string DISCOVER_PLAYER_ANIMATION = "FoundPlayer";
+    const string SCREAM_CHANCE = "ScreamChance";
     const string CHASE_ANIMATION = "IsChasing";
 
     bool IsScreaming = false;
@@ -13,6 +14,7 @@ public class ChaseState : EnemyState
     public override void AnimationTriggerEvent()
     {
         IsScreaming = false;
+        Enemy.Animator.SetBool(CHASE_ANIMATION, true);
         NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
     }
 
@@ -20,7 +22,8 @@ public class ChaseState : EnemyState
     {
         base.OnEnter();
         NavMeshAgent.isStopped = false;
-        if (Random.Range(0, 1) > 0.5f)
+        Enemy.Animator.SetFloat(SCREAM_CHANCE, Random.Range(0, 1f));
+        if (Enemy.Animator.GetFloat(SCREAM_CHANCE) > 0.5f)
         {
             IsScreaming = true;
             Enemy.Animator.SetTrigger(DISCOVER_PLAYER_ANIMATION);
@@ -37,6 +40,7 @@ public class ChaseState : EnemyState
     public override void OnFrameUpdate()
     {
         base.OnFrameUpdate();
+        if (IsScreaming) return;
         bool isPlayerInSight = Enemy.PlayerInSight();
         if (!isPlayerInSight)
         {
@@ -72,6 +76,8 @@ public class ChaseState : EnemyState
         base.OnExit();
         NavMeshAgent.isStopped = true;
         Enemy.Animator.SetBool(CHASE_ANIMATION, false);
+        Enemy.Animator.ResetTrigger(DISCOVER_PLAYER_ANIMATION);
+        IsScreaming = false;
     }
 }
 
