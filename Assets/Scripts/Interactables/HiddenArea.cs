@@ -40,6 +40,7 @@ public class HiddenArea : InteractableObject, IInteractable
     public void UnHidePlayer()
     {
         IsPlayerHiddenInside = false;
+        if (CachedPlayerController == null) return;
         if (CachedPlayerController.IsHidden)
         {
             CachedPlayerController.StopHiding();
