@@ -6,22 +6,32 @@ public class PlayerStamina : MonoBehaviour
     [SerializeField, Min(0)] float MaxStamina = 100f;
     [SerializeField, Min(0)] float MinStamina = 25f;
     [SerializeField, Min(0)] float StaminaRestorationSpeed = 0.5f;
-    [SerializeField, Min(0)] float StaminaThreshold;
+    [SerializeField, Min(0)] float _StaminaThreshold;
 
     float _currentStamina;
 
-    public float CurrentStamina 
+    public float CurrentStamina
     {
-        get 
+        get
         {
-            return Mathf.Clamp(_currentStamina, 0, MaxStamina); 
+            return Mathf.Clamp(_currentStamina, 0, MaxStamina);
         }
         private set { _currentStamina = value; }
+    }
+
+    public float StaminaThreshold
+    {
+        get
+        {
+            return Mathf.Clamp(_StaminaThreshold, MinStamina, MaxStamina);
+        }
+        private set { _StaminaThreshold = value; }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        StaminaThreshold = MaxStamina;
         CurrentStamina = MaxStamina;
     }
 
@@ -29,19 +39,23 @@ public class PlayerStamina : MonoBehaviour
     void Update()
     {
         RestoreStaminaToThreshold();
-
     }
 
-    public void ConsumeStamina(float stamina)
+    public void ConsumeStamina(float amount)
     {
-        if (_currentStamina < stamina) return; //not enough stamina
-        CurrentStamina -= stamina;
-
+        if (_currentStamina < amount) return; //not enough stamina
+        CurrentStamina -= amount;
+        StaminaThreshold -= amount / 2;
     }
 
     public void RestoreStaminaToThreshold()
     {
         if (CurrentStamina >= StaminaThreshold) return;
         Mathf.Lerp(CurrentStamina, StaminaThreshold, StaminaRestorationSpeed);
+    }
+
+    public void RestoreThreshold(float amount)
+    {
+        StaminaThreshold += amount;
     }
 }
