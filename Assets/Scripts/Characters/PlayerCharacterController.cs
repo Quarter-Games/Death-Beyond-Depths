@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.U2D.IK;
 using static DamageVignetteController;
 
@@ -21,7 +22,7 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
     [SerializeField] ParticleSystem SlashEffect;
-    //[SerializeField] private InputActionMap InputActionMap;
+    [SerializeField] SortingGroup SortingGroup;
     public static bool IsRaightClickHold = false;
 
     [Header("Climbing")]
@@ -208,13 +209,13 @@ abstract public class PlayerCharacterController : Character
     internal void Hide()
     {
         IsHidden = true;
-        transform.position += Vector3.back * MIN_FLOAT;
+        SortingGroup.sortingOrder += 1;
     }
 
     internal void StopHiding()
     {
         IsHidden = false;
-        transform.position += Vector3.forward * MIN_FLOAT;
+        SortingGroup.sortingOrder -= 1;
     }
     public virtual void LeftMouseClick(InputAction.CallbackContext context)
     {
