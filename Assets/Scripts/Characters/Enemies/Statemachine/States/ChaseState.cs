@@ -39,11 +39,11 @@ public class ChaseState : EnemyState
         }
         NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
         NavMeshAgent.isStopped = false;
-        if (Mathf.Abs(NavMeshAgent.velocity.x) <= 0.1f)
+        if (Mathf.Abs(NavMeshAgent.velocity.x) <= 0.1f && Enemy.Animator.GetBool(CHASE_ANIMATION))
         {
             Enemy.Animator.SetBool(CHASE_ANIMATION, false);
         }
-        else if (!Enemy.Animator.GetBool(CHASE_ANIMATION))
+        else if (Mathf.Abs(NavMeshAgent.velocity.x) >= 0.1f && !Enemy.Animator.GetBool(CHASE_ANIMATION))
         {
             Enemy.Animator.SetBool(CHASE_ANIMATION, true);
         }

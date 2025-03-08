@@ -41,7 +41,7 @@ public class AlertState : EnemyState
         {
             Enemy.Animator.SetBool(ALERT_ANIMATION, false);
         }
-        else if (!Enemy.Animator.GetBool(ALERT_ANIMATION))
+        else if (Mathf.Abs(NavMeshAgent.velocity.x) >= 0.1f && !Enemy.Animator.GetBool(ALERT_ANIMATION))
         {
             Enemy.Animator.SetBool(ALERT_ANIMATION, true);
         }
