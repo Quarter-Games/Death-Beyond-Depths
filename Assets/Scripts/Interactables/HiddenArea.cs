@@ -22,7 +22,6 @@ public class HiddenArea : InteractableObject, IInteractable
         if (!CachedPlayerController.IsStanding)
         {
             CachedPlayerController.Hide();
-            Debug.Log("hiding player");
         }
         else
         {
