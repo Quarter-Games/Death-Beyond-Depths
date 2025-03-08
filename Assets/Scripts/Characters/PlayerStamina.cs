@@ -1,9 +1,11 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerStamina : MonoBehaviour
 {
     [SerializeField, Min(0)] float MaxStamina = 100f;
     [SerializeField, Min(0)] float MinStamina = 25f;
+    [SerializeField, Min(0)] float StaminaRestorationSpeed = 0.5f;
     [SerializeField, Min(0)] float StaminaThreshold;
 
     float _currentStamina;
@@ -26,6 +28,20 @@ public class PlayerStamina : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        RestoreStaminaToThreshold();
+
+    }
+
+    public void ConsumeStamina(float stamina)
+    {
+        if (_currentStamina < stamina) return; //not enough stamina
+        CurrentStamina -= stamina;
+
+    }
+
+    public void RestoreStaminaToThreshold()
+    {
+        if (CurrentStamina >= StaminaThreshold) return;
+        Mathf.Lerp(CurrentStamina, StaminaThreshold, StaminaRestorationSpeed);
     }
 }
