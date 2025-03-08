@@ -122,12 +122,12 @@ public class EnemyAI : Character, IHearing
 
     private void FlipIfNeeded()
     {
-        if (NavMeshAgent.velocity.x > 0 && IsFacingLeft)
+        if (NavMeshAgent.velocity.x > 0.1f && IsFacingLeft)
         {
             IsFacingLeft = false;
             Flip();
         }
-        else if (NavMeshAgent.velocity.x < 0 && !IsFacingLeft)
+        else if (NavMeshAgent.velocity.x < -0.1f && !IsFacingLeft)
         {
             IsFacingLeft = true;
             Flip();

@@ -56,8 +56,8 @@ public class StatBarController : MonoBehaviour
 
         // Create a Yoyo loop that makes the HUD scale up and down continuously
         BeatTween = HUD.transform
-            .DOScale(1.05f, 0.5f)
-            .SetEase(Ease.Flash)
+            .DOScale(1.01f, 0.15f)
+            .SetEase(Ease.InOutSine)
             .SetLoops(-1, LoopType.Yoyo);
     }
 
