@@ -86,6 +86,7 @@ public class CaptainController : PlayerCharacterController
                 if (h.collider.TryGetComponent(out EnemyAI damageable))
                 {
                     damageable.TakeDamage(ShootingStats.Damage);
+                    damageable.Stagger();
                     break;
                 }
             }
