@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class DeadState : EnemyState
 {
-    private float TimeSpentDead = 0f;
+    public float TimeSpentDead = 0f;
     const string DEATH_ANIMATION = "IsDead";
 
     private bool isDead = false;

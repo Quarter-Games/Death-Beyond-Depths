@@ -7,6 +7,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(FlashMaterialOnHit))]
 public class EnemyAI : Character, IHearing
 {
+    [SerializeField] bool isDeadAwake;
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
     [SerializeField] public float SoundRadius = 5f;
@@ -83,10 +84,20 @@ public class EnemyAI : Character, IHearing
 
     private void Start()
     {
-        StateMachine.Initialize(IdleState);
         DefaultScale = transform.localScale;
         InitialHP = stats.HP;
         Animator = animator;
+        if (isDeadAwake)
+        {
+            StateMachine.Initialize(DeadState);
+            DeadState.TimeSpentDead = ReviveTime;
+            animator.SetBool("DeadAwake",true);
+            this.enabled = false;
+        }
+        else
+        {
+            StateMachine.Initialize(IdleState);
+        }
     }
 
     private void Update()
