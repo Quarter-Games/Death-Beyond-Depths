@@ -43,4 +43,10 @@ public class InteractablesManager : MonoBehaviour
         if(Interactables.Count != 0)
             CurrentInteractableObject.Interact();
     }
+    public bool IsInteractingWithClimable()
+    {
+        if (Interactables.Count == 0 || CurrentInteractableObject is not ClimablePoint)
+            return false;
+        return true;
+    }
 }

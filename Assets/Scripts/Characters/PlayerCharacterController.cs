@@ -23,6 +23,7 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
     [SerializeField] ParticleSystem SlashEffect;
     [SerializeField] SortingGroup SortingGroup;
+    [SerializeField] public PlayerStamina Stamina;
     public static bool IsRaightClickHold = false;
 
     [Header("Climbing")]
@@ -58,6 +59,14 @@ abstract public class PlayerCharacterController : Character
     public bool IsStanding { get; private set; } = true;
     #endregion
     private const float MIN_FLOAT = 0.02f;
+    private const string CLIMB_ANIMATION = "Climb";
+    private const string INTERACT_ANIMATION = "Interact";
+    private const string DONE_CLIMBING_ANIMATION = "Done Climbing";
+
+    private void OnValidate()
+    {
+        TryGetComponent(out Stamina);
+    }
 
     protected override void OnEnable()
     {
@@ -148,7 +157,9 @@ abstract public class PlayerCharacterController : Character
         if (IsRangeAttacking || IsMeleeAttacking || !IsStanding)
             return;
         if (AttackIntervalTimer < AttackInterval) return;
+        Stamina.ConsumeStamina(4);
         DisableInput();
+        InputSystem.actions.Where(a => a == movementInputAction.action).First().Enable();
         //SlashEffect.Play();
         animator.SetTrigger("Strike Sword");
         animator.SetFloat("Attack Chance", UnityEngine.Random.Range(0, 1f));
@@ -180,6 +191,11 @@ abstract public class PlayerCharacterController : Character
             return;
         }
         InteractablesManager.Instance.Interact();
+        if(InteractablesManager.Instance.IsInteractingWithClimable())
+        {
+            return;
+        }
+        animator.SetTrigger(INTERACT_ANIMATION);
     }
 
     public void OnCrouchPerformed(InputAction.CallbackContext value)
@@ -313,6 +329,8 @@ abstract public class PlayerCharacterController : Character
         Collider.enabled = false;
         float time = Vector2.Distance(startPoint.SnippingPoint.position, startPoint.LinkedPoint.SnippingPoint.position) / ClimbingSpeed;
         DisableInput();
+        animator.SetBool(DONE_CLIMBING_ANIMATION, false);
+        animator.SetTrigger(CLIMB_ANIMATION);
         var pos = startPoint.LinkedPoint.SnippingPoint.position;
         pos = new Vector3(pos.x, pos.y, transform.position.z);
         transform.DOMove(pos, time).SetEase(Ease.Linear).OnComplete(() => StopClimbing());
@@ -322,6 +340,7 @@ abstract public class PlayerCharacterController : Character
         rb.simulated = true;
         Collider.enabled = true;
         EnableInput();
+        animator.SetBool(DONE_CLIMBING_ANIMATION, true);
     }
 
     public void TakeDamage(int damage)
