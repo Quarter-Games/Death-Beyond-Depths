@@ -58,6 +58,7 @@ abstract public class PlayerCharacterController : Character
     public bool CanCrouch { get; set; } = true;
     public bool IsStanding { get; private set; } = true;
     #endregion
+    public bool IsFacingLeft { get => !IsFacingRight; }
     private const float MIN_FLOAT = 0.02f;
     private const string CLIMB_ANIMATION = "Climb";
     private const string INTERACT_ANIMATION = "Interact";
@@ -77,6 +78,7 @@ abstract public class PlayerCharacterController : Character
         InteractInputAction.action.started += Interact;
         BackStepInputAction.action.started += BackStep;
         EquipSwordAction.action.started += OnSwordEquip;
+        IsFacingRight = transform.localScale.x < 0;
     }
 
     protected override void OnDisable()

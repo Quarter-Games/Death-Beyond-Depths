@@ -31,7 +31,7 @@ public class AttackState : EnemyState
         float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.Player.transform.position);
         if (distanceToPlayer > Enemy.MeleeAttackRange)
         {
-            StateMachine.ChangeState(Enemy.ChaseState);
+            StateMachine.ChangeState(Enemy.AlertState);
         }
     }
 

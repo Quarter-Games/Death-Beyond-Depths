@@ -10,6 +10,7 @@ public class Door : InteractableObject, IInteractable
     public bool isLocked;
     public bool IsOpen;
     [SerializeField, Min(1)] int HP = 10;
+    [SerializeField] Collider2D CameraBoundary;
 
     public bool IsBroken => HP < 0 || IsOpen;
 
@@ -21,7 +22,11 @@ public class Door : InteractableObject, IInteractable
     public void ChangeState(bool isOpen)
     {
         if (animator != null) animator.SetTrigger(isOpen ? "Open" : "Close");
-        if (DoorCollider != null) DoorCollider.enabled = !isOpen;
+        if (DoorCollider != null)
+        {
+            DoorCollider.enabled = !isOpen;
+            if (CameraBoundary != null && !isLocked) CameraBoundary.enabled = !isOpen;
+        }
         IsOpen = isOpen;
     }
 

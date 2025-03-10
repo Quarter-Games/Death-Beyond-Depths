@@ -183,15 +183,15 @@ public class EnemyAI : Character, IHearing
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Door door))
-        {
-            if (IsAwareOfPlayer) // TODO - check if player is behind the door
-            {
-                AttackDoorState.Door = door;
-                StateMachine.ChangeState(AttackDoorState);
-                return;
-            }
-        }
+        //if (collision.gameObject.TryGetComponent(out Door door))
+        //{
+        //    if (IsAwareOfPlayer) // TODO - check if player is behind the door
+        //    {
+        //        AttackDoorState.Door = door;
+        //        StateMachine.ChangeState(AttackDoorState);
+        //        return;
+        //    }
+        //}
         if (collision.gameObject.TryGetComponent(out HiddenArea area))
         {
             if (StateMachine.CurrentState != AlertState) return;
