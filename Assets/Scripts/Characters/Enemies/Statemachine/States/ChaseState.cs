@@ -67,13 +67,13 @@ public class ChaseState : EnemyState
         }
         // Check if the player is within attack ranges
         float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.LastKnownPlayerPosition);
-        if (distanceToPlayer <= Enemy.MeleeAttackRange)
+        if (distanceToPlayer <= Enemy.MeleeAttackRange && Enemy.IsKnownPlayerPositionCorrect)
         {
             Debug.Log("leaving to melee");
             StateMachine.ChangeState(Enemy.AttackState);
             return;
         }
-        else if (distanceToPlayer <= Enemy.ChargeAttackRange)
+        else if (distanceToPlayer <= Enemy.ChargeAttackRange && Enemy.IsKnownPlayerPositionCorrect)
         {
             Debug.Log("leaving to charge");
             StateMachine.ChangeState(Enemy.ChargeAttackState);
