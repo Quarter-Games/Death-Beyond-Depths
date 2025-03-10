@@ -13,7 +13,9 @@ public class InventoryItem : ScriptableObject
     [SerializeField] int _maxAmount;
     private void OnValidate()
     {
+#if UNITY_EDITOR
         UNIQUE_ID = UnityEditor.AssetDatabase.GetAssetPath(this);
+#endif
     }
     public int Amount
     {

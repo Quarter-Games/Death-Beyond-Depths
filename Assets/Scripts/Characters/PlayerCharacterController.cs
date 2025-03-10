@@ -1,12 +1,10 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
-using UnityEngine.U2D.IK;
 using static DamageVignetteController;
 
 abstract public class PlayerCharacterController : Character

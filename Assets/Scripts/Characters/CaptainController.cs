@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D.Animation;
 using UnityEngine.U2D.IK;
-using static UnityEditor.PlayerSettings;
 
 public class CaptainController : PlayerCharacterController
 {

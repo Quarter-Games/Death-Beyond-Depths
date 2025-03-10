@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 abstract public class Character : MonoBehaviour
