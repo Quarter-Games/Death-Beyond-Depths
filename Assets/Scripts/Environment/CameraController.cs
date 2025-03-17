@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.XR;
 
 public class CameraController : MonoBehaviour
 {
+    [SerializeField] Rigidbody2D CamRB;
     [SerializeField] public Rect Boundries;
     [SerializeField] Camera cam;
     [SerializeField]
@@ -61,6 +62,7 @@ public class CameraController : MonoBehaviour
     private void OnValidate()
     {
         cam.orthographicSize = Size / cam.aspect;
+        CamRB = GetComponent<Rigidbody2D>();
     }
     private void Awake()
     {
@@ -90,7 +92,12 @@ public class CameraController : MonoBehaviour
         CameraCollider = GetComponent<Collider2D>();
     }
 
-    void Update()
+    //void Update()
+    //{
+    //    FollowTarget();
+    //}
+
+    private void FixedUpdate()
     {
         FollowTarget();
     }
@@ -110,7 +117,7 @@ public class CameraController : MonoBehaviour
         var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
         var y = Mathf.Min(Mathf.Max(Target.position.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
         transform.position = Vector3.Lerp(targetPosition, new Vector3(x, y, transform.position.z), CameraSpeed);
-
+        //CamRB.MovePosition(Vector2.Lerp(targetPosition, new Vector2(x, y), Time.fixedDeltaTime * CameraSpeed));
     }
     public void ActivateInvisibilityLayer()
     {

@@ -74,8 +74,8 @@ abstract public class PlayerCharacterController : Character
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.started += Interact;
-        BackStepInputAction.action.started += BackStep;
-        EquipSwordAction.action.started += OnSwordEquip;
+        //BackStepInputAction.action.started += BackStep;
+        //EquipSwordAction.action.started += OnSwordEquip;
         IsFacingRight = transform.localScale.x < 0;
     }
 
@@ -85,8 +85,8 @@ abstract public class PlayerCharacterController : Character
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
-        BackStepInputAction.action.started -= BackStep;
-        EquipSwordAction.action.started -= OnSwordEquip;
+        //BackStepInputAction.action.started -= BackStep;
+       // EquipSwordAction.action.started -= OnSwordEquip;
     }
 
     protected void SetRotationTo(Vector2 direction)
