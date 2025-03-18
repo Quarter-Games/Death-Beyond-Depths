@@ -34,7 +34,7 @@ public class Door : InteractableObject, IInteractable
     {
         if (isLocked)
         {
-            if (KeyToOpen.Amount > 0)
+            if (KeyToOpen?.Amount > 0)
             {
                 isLocked = false;
             }
