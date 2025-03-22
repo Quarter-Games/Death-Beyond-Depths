@@ -23,6 +23,10 @@ public class DeadState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
+        if(Enemy.IsKnownPlayerPositionCorrect)
+        {
+            Enemy.Player.EnemyLostPlayer();
+        }
         NavMeshAgent.isStopped = true;
         NavMeshAgent.destination = NavMeshAgent.transform.position;
         Enemy.stats.IsInvincible = true;

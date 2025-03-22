@@ -41,6 +41,7 @@ abstract public class PlayerCharacterController : Character
 
     private Coroutine BackStepCoroutine;
     private float AttackIntervalTimer = 0;
+    private int NumberOfEnemiesAwareOfPlayer;
     bool IsFacingRight = true;
     bool isSwordEquipped = false;
     public bool IsMeleeAttacking = false;
@@ -86,7 +87,7 @@ abstract public class PlayerCharacterController : Character
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
         //BackStepInputAction.action.started -= BackStep;
-       // EquipSwordAction.action.started -= OnSwordEquip;
+        // EquipSwordAction.action.started -= OnSwordEquip;
     }
 
     protected void SetRotationTo(Vector2 direction)
@@ -191,7 +192,7 @@ abstract public class PlayerCharacterController : Character
             return;
         }
         InteractablesManager.Instance.Interact();
-        if(InteractablesManager.Instance.IsInteractingWithClimable())
+        if (InteractablesManager.Instance.IsInteractingWithClimable())
         {
             return;
         }
@@ -363,5 +364,17 @@ abstract public class PlayerCharacterController : Character
     {
         EnableInput();
         IsAttacked = false;
+    }
+
+    public void SeenByEnemy()
+    {
+        NumberOfEnemiesAwareOfPlayer++;
+    }
+
+    public void EnemyLostPlayer()
+    {
+        NumberOfEnemiesAwareOfPlayer--;
+        if (NumberOfEnemiesAwareOfPlayer < 0)
+            NumberOfEnemiesAwareOfPlayer = 0;
     }
 }
