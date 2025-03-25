@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WindowGlass_M
-  m_Shader: {fileID: -6465566751694194690, guid: 0c6b76bb0136a22408270bc3241b617c, type: 3}
-  m_Parent: {fileID: -876546973899608171, guid: 0c6b76bb0136a22408270bc3241b617c, type: 3}
+  m_Name: CelShader_Doorway
+  m_Shader: {fileID: -6465566751694194690, guid: 20f572a7f4bbc5d4f923dd411c9f429b, type: 3}
+  m_Parent: {fileID: 2100000, guid: cbb5c7fb0ad910e4e8f60eeff875101f, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -25,25 +25,20 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColor:
-        m_Texture: {fileID: 2800000, guid: ce9f604c7a98b0b479b941e197ddd3b3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0fb87c8d4cc97be448a1dd9765a72998, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 28684132378477856, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_a8bfd80b0d4d47158d6a5100f49fb793_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 678184bed0682be43a081ae092b7002e, type: 3}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: c4a0117fde5462348b7ebeb0b4feaa26, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _QueueControl: 0
+    m_Floats: []
     m_Colors:
-    - _Color: {r: 0, g: 0.46286443, b: 0.554717, a: 1}
+    - _Tiling: {r: 6, g: 6, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &7558785023534015194
+--- !u!114 &36254359058238046
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
