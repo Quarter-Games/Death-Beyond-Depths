@@ -116,8 +116,8 @@ public class CameraController : MonoBehaviour
         }
         var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
         var y = Mathf.Min(Mathf.Max(Target.position.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
-        transform.position = Vector3.Lerp(targetPosition, new Vector3(x, y, transform.position.z), CameraSpeed);
-        //CamRB.MovePosition(Vector2.Lerp(targetPosition, new Vector2(x, y), Time.fixedDeltaTime * CameraSpeed));
+        //transform.position = Vector3.Lerp(targetPosition, new Vector3(x, y, transform.position.z), CameraSpeed);
+        CamRB.MovePosition(Vector2.Lerp(targetPosition, new Vector2(x, y), Time.fixedDeltaTime * CameraSpeed));
     }
     public void ActivateInvisibilityLayer()
     {
