@@ -1,11 +1,15 @@
 using UnityEngine.AI;
 using UnityEngine;
+using System;
 
 public class AlertState : EnemyState
 {
     private float AlertDuration = 5f;
     private float TimeSpentInAlert = 0f;
     const string ALERT_ANIMATION = "IsSeeking";
+
+    public static event Action<EnemyAI> OnLosingPlayer;
+
 
     public AlertState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
@@ -35,6 +39,8 @@ public class AlertState : EnemyState
         if (TimeSpentInAlert >= AlertDuration)
         {
             StateMachine.ChangeState(Enemy.IdleState);
+            OnLosingPlayer?.Invoke(Enemy);
+            return;
         }
         NavMeshAgent.isStopped = false;
         if (Mathf.Abs(NavMeshAgent.velocity.x) <= 0.1f && Enemy.Animator.GetBool(ALERT_ANIMATION))

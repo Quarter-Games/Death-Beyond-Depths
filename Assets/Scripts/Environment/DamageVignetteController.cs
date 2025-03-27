@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageVignetteController : MonoBehaviour
@@ -6,11 +7,21 @@ public class DamageVignetteController : MonoBehaviour
     [SerializeField] Material ScreenDamageMat;
     private Coroutine ScreenDamageTask;
 
+    List<EnemyAI> Enemies = new();
+
     public static DamageVignetteController Instance;
+
+    private void OnEnable()
+    {
+        ChaseState.OnSeenPlayer += SeenByEnemy;
+        AlertState.OnLosingPlayer += EnemyLostPlayer;
+    }
 
     private void OnDisable()
     {
         ScreenDamageMat.SetFloat("_Vignette_Radius", 1);
+        ChaseState.OnSeenPlayer -= SeenByEnemy;
+        AlertState.OnLosingPlayer -= EnemyLostPlayer;
     }
 
     private void Awake()
@@ -23,6 +34,7 @@ public class DamageVignetteController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        Enemies = new();
     }
 
     private void Start()
@@ -35,9 +47,9 @@ public class DamageVignetteController : MonoBehaviour
         if (ScreenDamageTask != null)
             StopCoroutine(ScreenDamageTask);
 
-        ScreenDamageTask = StartCoroutine(screenDamage(intensity));
+        ScreenDamageTask = StartCoroutine(ScreenDamage(intensity));
     }
-    private IEnumerator screenDamage(float intensity)
+    private IEnumerator ScreenDamage(float intensity)
     {
         var targetRadius = Remap(intensity, 0, 1, 0.4f, -0.001f);
         var curRadius = 1f;
@@ -64,5 +76,24 @@ public class DamageVignetteController : MonoBehaviour
     public static class SpecialEffects
     {
         public static void ScreenDamageEffect(float intensity) => Instance.ScreenDamageEffect(intensity);
+    }
+
+    public void SeenByEnemy(EnemyAI enemy)
+    {
+        if(Enemies.Contains(enemy)) return;
+        Enemies.Add(enemy);
+        if (Enemies.Count == 1)
+        {
+
+        }
+    }
+
+    public void EnemyLostPlayer(EnemyAI enemy)
+    {
+        Enemies.Remove(enemy);
+        if (Enemies.Count == 0)
+        {
+
+        }
     }
 }

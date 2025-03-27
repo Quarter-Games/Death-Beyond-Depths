@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +12,8 @@ public class ChaseState : EnemyState
     const string SCREAM_CHANCE = "ScreamChance";
     const string CHASE_ANIMATION = "IsChasing";
 
+    public static event Action<EnemyAI> OnSeenPlayer;
+
     public ChaseState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
     public override void AnimationTriggerEvent()
@@ -23,7 +26,7 @@ public class ChaseState : EnemyState
         base.OnEnter();
         TimeSpentInChase = 0;
         NavMeshAgent.isStopped = false;
-        Enemy.Animator.SetFloat(SCREAM_CHANCE, Random.Range(0, 1f));
+        Enemy.Animator.SetFloat(SCREAM_CHANCE, UnityEngine.Random.Range(0, 1f));
         if (Enemy.Animator.GetFloat(SCREAM_CHANCE) > 0.5f)
         {
             IsScreaming = true;
@@ -36,6 +39,7 @@ public class ChaseState : EnemyState
             StartChase();
         }
         NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
+        OnSeenPlayer?.Invoke(Enemy);
     }
 
     private void StartChase()
