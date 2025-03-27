@@ -42,6 +42,12 @@ public class DamageVignetteController : MonoBehaviour
         ScreenDamageMat.SetFloat("_Vignette_Radius", 1);
     }
 
+    [ContextMenu("Vignette")]
+    public void Test()
+    {
+        ScreenDamageEffect(0.5f);
+    }
+
     private void ScreenDamageEffect(float intensity)
     {
         if (ScreenDamageTask != null)
@@ -51,7 +57,7 @@ public class DamageVignetteController : MonoBehaviour
     }
     private IEnumerator ScreenDamage(float intensity)
     {
-        var targetRadius = Remap(intensity, 0, 1, 0.4f, -0.001f);
+        var targetRadius = Remap(intensity, -1, 1, -0.75f, -0.001f);
         var curRadius = 1f;
         for (float t = 0; curRadius != targetRadius; t += Time.deltaTime - 0.01f)
         {
