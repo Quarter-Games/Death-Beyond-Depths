@@ -2276,7 +2276,7 @@ Transform:
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1364846806}
+  m_Father: {fileID: 1364846805}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
 --- !u!23 &905930943
 MeshRenderer:
@@ -3396,7 +3396,7 @@ PrefabInstance:
     - {fileID: 5899681175553911541, guid: b7b5d66a11cce4042bd7af6f30390596, type: 3}
     - {fileID: 6064084428151969513, guid: b7b5d66a11cce4042bd7af6f30390596, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3186893411506263875, guid: b7b5d66a11cce4042bd7af6f30390596, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 2995587019124659294, guid: b7b5d66a11cce4042bd7af6f30390596, type: 3}
       insertIndex: -1
       addedObject: {fileID: 905930942}
     m_AddedComponents: []
@@ -3404,11 +3404,6 @@ PrefabInstance:
 --- !u!4 &1364846805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2995587019124659294, guid: b7b5d66a11cce4042bd7af6f30390596, type: 3}
-  m_PrefabInstance: {fileID: 1364846804}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1364846806 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3186893411506263875, guid: b7b5d66a11cce4042bd7af6f30390596, type: 3}
   m_PrefabInstance: {fileID: 1364846804}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1463607397
@@ -3567,6 +3562,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 1482600583039199505, guid: 8fd84a0f181503044ae6ca3150743706, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e1170ba529d1f7844a468eebe812df11, type: 2}
     - target: {fileID: 2496906015596702948, guid: 8fd84a0f181503044ae6ca3150743706, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.94
