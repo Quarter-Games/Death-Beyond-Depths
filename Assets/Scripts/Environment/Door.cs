@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Door : InteractableObject, IInteractable
 {
+    [Space(15f)]
     [SerializeField] Collider2D DoorCollider;
     [SerializeField] Animator animator;
     [Tooltip("Does it have lock on it")]
