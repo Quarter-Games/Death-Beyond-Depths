@@ -121,7 +121,6 @@ public class CameraController : MonoBehaviour
 
         if (hit.collider != null)
         {
-            Debug.Log("Camera Blocked by: " + hit.collider.gameObject.name);
             targetPosition = CamRB.position;  // Stop movement if blocked
         }
         var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
