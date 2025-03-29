@@ -2,21 +2,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "InventoryItem", menuName = "Scriptable Objects/InventoryItem")]
-public class InventoryItem : ScriptableObject
+public class InventoryItem : ScriptableObject, IDiscardable
 {
     public event System.Action<InventoryItem> AfterAmountChange;
     private static Dictionary<string, int> AmountList = new();
     public string Name;
     [SerializeField] string UNIQUE_ID;
-    public string Description;
+    [Multiline]public string Description;
     [SerializeField] int _startingAmount;
     [SerializeField] int _maxAmount;
+    public List<InventoryItemActionData> Actions;
     private void OnValidate()
     {
 #if UNITY_EDITOR
         UNIQUE_ID = UnityEditor.AssetDatabase.GetAssetPath(this);
 #endif
     }
+
+
     public int Amount
     {
         get
@@ -41,4 +44,30 @@ public class InventoryItem : ScriptableObject
         }
     }
     public Sprite Icon;
+    public void Discard()
+    {
+        var player = InventoryManager.Instance.Player;
+        var pickUp = Instantiate(InventoryManager.Instance.PickUpPrefab, player.transform.position, Quaternion.identity);
+        pickUp.Init(this, Amount);
+        Amount = 0;
+    }
+    virtual public bool IsDiscardable()
+    {
+        return Amount > 0;
+    }
+}
+public interface IDiscardable
+{
+    void Discard();
+    bool IsDiscardable();
+}
+public interface IUsable
+{
+    void Use();
+    bool IsUsable();
+}
+public interface IEquipable
+{
+    void Equip();
+    bool IsEquipable();
 }

@@ -12,6 +12,7 @@ public abstract class InteractableObject : MonoBehaviour
     [SerializeField] TextMeshProUGUI IndicatorKey;
     [SerializeField] CustomTrigger UITrigger;
     [SerializeField] CustomTrigger InteractionTrigger;
+    public TMP_Text InteractableName;
 
     protected PlayerCharacterController CachedPlayerController;
     private Vector3 OriginalScale;
@@ -19,7 +20,7 @@ public abstract class InteractableObject : MonoBehaviour
     private float maxDistance = 5f;
     private CanvasGroup CanvasGroup;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         if (UITrigger != null)
         {
@@ -33,7 +34,7 @@ public abstract class InteractableObject : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         if (UITrigger != null)
         {
@@ -117,7 +118,7 @@ public abstract class InteractableObject : MonoBehaviour
         }
         if (IndicatorKey != null && InteractablesManager.Instance.IsCurrentInteractableObject(this as IInteractable))
         {
-            if ((this as Door).CantBeUnlocked)
+            if ((this is Door door) && door.CantBeUnlocked)
             {
                 IndicatorKey.gameObject.SetActive(false);
                 return;

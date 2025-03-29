@@ -13,6 +13,15 @@ public class ClimablePoint : InteractableObject, IInteractable
             LinkedPoint.LinkedPoint = this;
         }
     }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (CachedPlayerController != null) return;
+
+        if (collision.TryGetComponent<PlayerCharacterController>(out var player))
+        {
+            CachedPlayerController = player;
+        }
+    }
     public void Interact()
     {
         if (CachedPlayerController == null)

@@ -75,7 +75,7 @@ abstract public class PlayerCharacterController : Character
         CrouchInputAction.action.performed += OnCrouchPerformed;
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
-        InteractInputAction.action.started += Interact;
+        InteractInputAction.action.performed += Interact;
         OnPlayerDeath += DisableInput;
         //BackStepInputAction.action.started += BackStep;
         //EquipSwordAction.action.started += OnSwordEquip;
@@ -191,7 +191,7 @@ abstract public class PlayerCharacterController : Character
     }
     private void Interact(InputAction.CallbackContext value)
     {
-        if (!value.started)
+        if (!value.performed)
         {
             return;
         }
