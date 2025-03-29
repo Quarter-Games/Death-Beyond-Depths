@@ -117,6 +117,11 @@ public abstract class InteractableObject : MonoBehaviour
         }
         if (IndicatorKey != null && InteractablesManager.Instance.IsCurrentInteractableObject(this as IInteractable))
         {
+            if ((this as Door).CantBeUnlocked)
+            {
+                IndicatorKey.gameObject.SetActive(false);
+                return;
+            }
             IndicatorKey.gameObject.SetActive(!IndicatorKey.gameObject.activeSelf);
         }
     }
