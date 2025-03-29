@@ -1,13 +1,15 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : InteractableObject, IInteractable
 {
+    public static List<Door> AllDoors = new List<Door>();
     [Space(15f)]
     [SerializeField] Collider2D DoorCollider;
     [SerializeField] Animator animator;
     [Tooltip("Does it have lock on it")]
-    [SerializeField] InventoryItem KeyToOpen;
+    public InventoryItem KeyToOpen;
     public bool isLocked;
     public bool IsOpen;
     [SerializeField, Min(1)] int HP = 10;
@@ -15,7 +17,16 @@ public class Door : InteractableObject, IInteractable
 
     public bool IsBroken => HP < 0 || IsOpen;
     public bool CantBeUnlocked => (isLocked && KeyToOpen?.Amount == 0);
-
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        AllDoors.Add(this);
+    }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        AllDoors.Remove(this);
+    }
     private void Awake()
     {
         if (isLocked) return;
@@ -31,17 +42,20 @@ public class Door : InteractableObject, IInteractable
         }
         IsOpen = isOpen;
     }
-
+    public void Unlock()
+    {
+        if (KeyToOpen?.Amount > 0)
+        {
+            isLocked = false;
+        }
+    }
+    public bool IsInPlayerRange()
+    {
+        return IsWithinPlayerRange;
+    }
     public void Interact()
     {
-        if (isLocked)
-        {
-            if (KeyToOpen?.Amount > 0)
-            {
-                isLocked = false;
-            }
-            else return;
-        }
+        if (isLocked) return;
         ChangeState(!IsOpen);
     }
 

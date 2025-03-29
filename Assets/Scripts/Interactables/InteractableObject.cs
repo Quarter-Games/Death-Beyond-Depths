@@ -16,7 +16,7 @@ public abstract class InteractableObject : MonoBehaviour
 
     protected PlayerCharacterController CachedPlayerController;
     private Vector3 OriginalScale;
-    bool IsWithinPlayerRange;
+    protected bool IsWithinPlayerRange;
     private float maxDistance = 5f;
     private CanvasGroup CanvasGroup;
 
@@ -34,7 +34,7 @@ public abstract class InteractableObject : MonoBehaviour
         }
     }
 
-    protected void OnDisable()
+    protected virtual void OnDisable()
     {
         if (UITrigger != null)
         {

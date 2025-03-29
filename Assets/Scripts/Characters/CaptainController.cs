@@ -115,6 +115,7 @@ public class CaptainController : PlayerCharacterController
     }
     public void StartAim()
     {
+        if (ShootingItem.Amount <= 0) return;
         isrightClickPerformed = true;
         Debug.Log("<color=green>Gun is Equiped</color>");
         animator.SetTrigger("Enable Gun");
@@ -122,6 +123,7 @@ public class CaptainController : PlayerCharacterController
     }
     public void EndAim()
     {
+        if (ShootingItem.Amount <= 0) return;
         isrightClickPerformed = false;
         Debug.Log("<color=red>Gun is Unequiped</color>");
         IsRaightClickHold = false;
@@ -137,10 +139,10 @@ public class CaptainController : PlayerCharacterController
             var worldPos = ConvertMousePosToWorldCoordinates(Input.mousePosition);
             GunIKTarget.position = worldPos;
             SetRotationTo(worldPos - transform.position);
+            GunIKTarget.position = Vector3.Lerp(LastIKPosition, GunIKTarget.position, 0.25f);
+            GunArmSolver.UpdateIK(1);
+            LastIKPosition = GunIKTarget.position;
         }
-        GunIKTarget.position = Vector3.Lerp(LastIKPosition, GunIKTarget.position, 0.25f);
-        GunArmSolver.UpdateIK(1);
-        LastIKPosition = GunIKTarget.position;
     }
     protected override void SpecialMove()
     {
