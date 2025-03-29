@@ -15,7 +15,7 @@ public class DeathScreenHandler : MonoBehaviour
 
     private void OnValidate()
     {
-        if (ScreenCanvasElements != null) gameObject.TryGetComponent(out ScreenCanvasElements);
+        if (ScreenCanvasElements == null) gameObject.TryGetComponent(out ScreenCanvasElements);
     }
 
     private void OnEnable()
