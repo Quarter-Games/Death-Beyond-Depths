@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -75,8 +76,6 @@ public class InventoryManager : MonoBehaviour
         InventoryScreen.SetActive(false);
         Time.timeScale = 1;
     }
-
-
     private void OpenInventory(InputAction.CallbackContext context)
     {
         _selectedItem = null;
@@ -92,14 +91,15 @@ public class InventoryManager : MonoBehaviour
 
     public void StartObserving()
     {
+        var items = _items.Where(x => x.Amount > 0).ToList();
         for (int i = 0; i < Observers.Count; i++)
         {
-            if (i >= _items.Count)
+            if (i >= items.Count)
             {
                 Observers[i].StartObserve(null);
                 continue;
             }
-            Observers[i].StartObserve(_items[i]);
+            Observers[i].StartObserve(items[i]);
         }
     }
     private void OnDisable()
