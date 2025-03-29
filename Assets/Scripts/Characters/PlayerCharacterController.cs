@@ -49,6 +49,7 @@ abstract public class PlayerCharacterController : Character
     private bool backStepAnimationComplete = false;
 
     public static event Action<bool> OnFlip;
+    public static event Action OnPlayerDeath;
 
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
@@ -75,6 +76,7 @@ abstract public class PlayerCharacterController : Character
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.started += Interact;
+        OnPlayerDeath += DisableInput;
         //BackStepInputAction.action.started += BackStep;
         //EquipSwordAction.action.started += OnSwordEquip;
         IsFacingRight = transform.localScale.x < 0;
@@ -86,6 +88,7 @@ abstract public class PlayerCharacterController : Character
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
+        OnPlayerDeath -= DisableInput;
         //BackStepInputAction.action.started -= BackStep;
         // EquipSwordAction.action.started -= OnSwordEquip;
     }
@@ -105,6 +108,7 @@ abstract public class PlayerCharacterController : Character
     }
     private void FixedUpdate()
     {
+        if (stats.HP == 0) return;
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
         var movement = new Vector2();
 
@@ -347,6 +351,7 @@ abstract public class PlayerCharacterController : Character
     public void TakeDamage(int damage)
     {
         if (IsAttacked) return;
+        if (stats.HP == 0) return;
         IsAttacked = true;
         stats.TakeDamage(damage);
         animator.SetTrigger("Get hit");
@@ -358,6 +363,11 @@ abstract public class PlayerCharacterController : Character
         rb.AddForce(new Vector2(5 * knockbackDirection, 3), ForceMode2D.Impulse);
         SpecialEffects.ScreenDamageEffect(UnityEngine.Random.Range(0.1f, 1));
         CameraController.Instance.ShakeCamera();
+        if (stats.HP == 0)
+        {
+            OnPlayerDeath?.Invoke();
+            animator.SetTrigger("Death");
+        }
     }
 
     public void OnStoppedGettingHit()

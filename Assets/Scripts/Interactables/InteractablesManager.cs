@@ -49,4 +49,10 @@ public class InteractablesManager : MonoBehaviour
             return false;
         return true;
     }
+    public bool IsCurrentInteractableObject(IInteractable interactable)
+    {
+        if(Interactables.Count != 0)
+            return CurrentInteractableObject == interactable;
+        return false;
+    }
 }

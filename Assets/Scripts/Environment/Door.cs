@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Door : InteractableObject, IInteractable
 {
+    [Space(15f)]
     [SerializeField] Collider2D DoorCollider;
     [SerializeField] Animator animator;
     [Tooltip("Does it have lock on it")]
@@ -13,6 +14,7 @@ public class Door : InteractableObject, IInteractable
     [SerializeField] Collider2D CameraBoundary;
 
     public bool IsBroken => HP < 0 || IsOpen;
+    public bool CantBeUnlocked => (isLocked && KeyToOpen?.Amount == 0);
 
     private void Awake()
     {

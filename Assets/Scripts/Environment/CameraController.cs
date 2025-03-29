@@ -5,6 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.InputSystem.XR;
+using Unity.VisualScripting;
 
 public class CameraController : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class CameraController : MonoBehaviour
     [Min(0)] float Size = 10;
     public Transform Target;
     [SerializeField] Vector3 FinalTargetPosition;
-    [SerializeField] private LayerMask TargerLayer;
+    [SerializeField] private LayerMask CameraBlockLayer;
     [SerializeField] private float horizontalDistance = 1;
     [SerializeField] private float verticalDistance = 1;
 
@@ -105,7 +106,7 @@ public class CameraController : MonoBehaviour
     public void FollowTarget()
     {
         if (ShakeCoroutine != null) return;
-        Vector3 targetPosition = transform.position;
+        Vector2 targetPosition = transform.position;
         if (IsXLocked)
         {
             targetPosition.x = LockedXPosition;
@@ -114,10 +115,18 @@ public class CameraController : MonoBehaviour
         {
             targetPosition.y = LockedYPosition;
         }
+        Vector2 direction = targetPosition - CamRB.position;
+        float distance = direction.magnitude; 
+        RaycastHit2D hit = Physics2D.Raycast(CamRB.position, direction.normalized, distance, CameraBlockLayer);
+
+        if (hit.collider != null)
+        {
+            targetPosition = CamRB.position;  // Stop movement if blocked
+        }
         var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
         var y = Mathf.Min(Mathf.Max(Target.position.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
-        transform.position = Vector3.Lerp(targetPosition, new Vector3(x, y, transform.position.z), CameraSpeed);
-        //CamRB.MovePosition(Vector2.Lerp(targetPosition, new Vector2(x, y), Time.fixedDeltaTime * CameraSpeed));
+        //transform.position = Vector3.Lerp(targetPosition, new Vector3(x, y, transform.position.z), CameraSpeed);
+        CamRB.MovePosition(Vector2.Lerp(targetPosition, new Vector2(x, y), Time.fixedDeltaTime * CameraSpeed));
     }
     public void ActivateInvisibilityLayer()
     {

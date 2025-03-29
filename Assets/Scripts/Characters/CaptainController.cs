@@ -105,6 +105,7 @@ public class CaptainController : PlayerCharacterController
 
     public override void RightMouseHold(InputAction.CallbackContext context)
     {
+        if (stats.HP == 0) return;
         if (context.performed && !isrightClickPerformed) StartAim();
         else if (context.canceled || context.performed) EndAim();
     }
