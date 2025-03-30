@@ -23,10 +23,10 @@ public class HiddenArea : InteractableObject, IInteractable
         {
             CachedPlayerController.Hide();
         }
-        else
-        {
-            CachedPlayerController.CanCrouch = false;
-        }
+        //else
+        //{
+        //    CachedPlayerController.CanCrouch = false;
+        //}
     }
 
     protected override void OnTriggerExit2D(Collider2D collision)

@@ -102,7 +102,10 @@ public class CameraController : MonoBehaviour
     public void FollowTarget()
     {
         if (ShakeCoroutine != null) return;
+
         Vector2 targetPosition = transform.position;
+
+        // If locked, maintain the locked position
         if (IsXLocked)
         {
             targetPosition.x = LockedXPosition;
@@ -111,19 +114,47 @@ public class CameraController : MonoBehaviour
         {
             targetPosition.y = LockedYPosition;
         }
-        Vector2 direction = targetPosition - CamRB.position;
-        float distance = direction.magnitude; 
-        RaycastHit2D hit = Physics2D.Raycast(CamRB.position, direction.normalized, distance, CameraBlockLayer);
 
-        if (hit.collider != null)
+        Vector2 movementDirection = targetPosition - CamRB.position;
+        float movementDistance = movementDirection.magnitude;
+
+        // Cast the entire collider instead of using a single ray
+        RaycastHit2D[] hits = new RaycastHit2D[1]; // Store hit results
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(CameraBlockLayer);
+        filter.useTriggers = false; // Ignore triggers
+
+        int hitCount = CameraCollider.Cast(movementDirection.normalized, filter, hits, movementDistance);
+
+        if (hitCount > 0)
         {
-            targetPosition = CamRB.position;  // Stop movement if blocked
+            RaycastHit2D hit = hits[0];
+
+            // If the player has moved beyond the blocking object, allow movement
+            if (Vector2.Dot(movementDirection, (Target.position - new Vector3(hit.point.x, hit.point.y, Target.position.z)).normalized) > 0)
+            {
+                targetPosition = Target.position;
+            }
+            else
+            {
+                targetPosition = CamRB.position; // Stop movement if still behind obstacle
+            }
         }
-        var x = Mathf.Min(Mathf.Max(Target.position.x + XOffset * cam.orthographicSize * cam.aspect, Boundries.xMin + (cam.orthographicSize * cam.aspect)), Boundries.xMax - (cam.orthographicSize * cam.aspect));
-        var y = Mathf.Min(Mathf.Max(Target.position.y + YOffset * cam.orthographicSize, Boundries.yMin + (cam.orthographicSize)), Boundries.yMax - (cam.orthographicSize));
-        //transform.position = Vector3.Lerp(targetPosition, new Vector3(x, y, transform.position.z), CameraSpeed);
-        CamRB.MovePosition(Vector2.Lerp(targetPosition, new Vector2(x, y), Time.fixedDeltaTime * CameraSpeed));
+
+        // Calculate clamped position based on boundaries
+        float x = Mathf.Clamp(Target.position.x + XOffset * cam.orthographicSize * cam.aspect,
+                              Boundries.xMin + (cam.orthographicSize * cam.aspect),
+                              Boundries.xMax - (cam.orthographicSize * cam.aspect));
+
+        float y = Mathf.Clamp(Target.position.y + YOffset * cam.orthographicSize,
+                              Boundries.yMin + cam.orthographicSize,
+                              Boundries.yMax - cam.orthographicSize);
+
+        Vector2 finalPosition = Vector2.Lerp(targetPosition, new Vector2(x, y), Time.fixedDeltaTime * CameraSpeed);
+        CamRB.MovePosition(finalPosition);
     }
+
+
     public void ActivateInvisibilityLayer()
     {
         cam.cullingMask = InvisibilityLayer;
