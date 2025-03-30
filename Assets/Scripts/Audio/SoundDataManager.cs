@@ -57,8 +57,9 @@ public class SoundDataManager : MonoBehaviour
             {
                 raycastResults.Add(new RaycastInfo(originPos, rayEndPoint, Color.yellow));
             }
-            foreach (EnemyAI enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
+            foreach (EnemyAI enemy in EnemyAI.Enemies)
             {
+                if (enemy == null) continue;
                 if (Vector2.Distance(rayEndPoint, enemy.transform.position) <= enemy.SoundRadius)
                 {
                     if (affectedEnemies.Contains(enemy)) continue;

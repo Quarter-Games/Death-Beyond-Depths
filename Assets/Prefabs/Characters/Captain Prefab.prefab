@@ -446,6 +446,7 @@ MonoBehaviour:
   MeleeAttackObject: {fileID: 8587976028417093805}
   SlashEffect: {fileID: 8307700944025361729}
   SortingGroup: {fileID: 4018002115913429723}
+  Stamina: {fileID: 0}
   ClimbingSpeed: 5
   BackStepDurationInSeconds: 0.75
   BackStepCooldownInSeconds: 1
@@ -459,6 +460,8 @@ MonoBehaviour:
   IsRangeAttacking: 0
   CrouchSpeedModifier: 0.77893704
   Collider: {fileID: 1450323678512823738}
+  CrouchUp: {fileID: 6418180475301049370, guid: 491e76a4343757d4b98655c1de7577b0, type: 2}
+  CrouchDown: {fileID: 6418180475301049370, guid: 68e22e53493a88340a293e0b6b10ea55, type: 2}
   ShootingStats: {fileID: 11400000, guid: 12c65023296179140a6d6ec6970f0a49, type: 2}
   PointerMovementAction: {fileID: -1654692200621890270, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   GunIKTarget: {fileID: 2248610126287788752}
@@ -753,7 +756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5205310336096123228, guid: 888b1414ace5e624aa99ec3c0280a745, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.013489061
+      value: 0.0134879565
       objectReference: {fileID: 0}
     - target: {fileID: 5247276322352191202, guid: 888b1414ace5e624aa99ec3c0280a745, type: 3}
       propertyPath: m_LocalRotation.w
@@ -841,19 +844,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5801179905361327046, guid: 888b1414ace5e624aa99ec3c0280a745, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9826795
+      value: 0.9826796
       objectReference: {fileID: 0}
     - target: {fileID: 5801179905361327046, guid: 888b1414ace5e624aa99ec3c0280a745, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -1.0565546e-10
+      value: -1.0565538e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5801179905361327046, guid: 888b1414ace5e624aa99ec3c0280a745, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -5.6778176e-11
+      value: -5.6778287e-11
       objectReference: {fileID: 0}
     - target: {fileID: 5801179905361327046, guid: 888b1414ace5e624aa99ec3c0280a745, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.18531375
+      value: -0.18531263
       objectReference: {fileID: 0}
     - target: {fileID: 5841154041345486747, guid: 888b1414ace5e624aa99ec3c0280a745, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1243,6 +1246,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a75d24c21a70a4f9a5d60c5b0e6130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StepClips: {fileID: 6418180475301049370, guid: e5c3a84de432187458511a2311d64ace, type: 2}
+  CrouchClip: {fileID: 6418180475301049370, guid: a7b99140d8ac2b94aa6384d0e29d0629, type: 2}
+  LadderClips: {fileID: 6418180475301049370, guid: 84175d59e8ba9e447bbc4edb13a01b20, type: 2}
+  DeathClip: {fileID: 6418180475301049370, guid: c95b4c63e88b6364f90f5f8e7ca7fb95, type: 2}
   captainController: {fileID: -754375743889678503}
 --- !u!114 &6962860513107504157 stripped
 MonoBehaviour:

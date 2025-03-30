@@ -1,8 +1,10 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using static DamageVignetteController;
@@ -64,6 +66,9 @@ abstract public class PlayerCharacterController : Character
     private const string INTERACT_ANIMATION = "Interact";
     private const string DONE_CLIMBING_ANIMATION = "Done Climbing";
 
+    [Header("Sound Effects")]
+    [SerializeField] AudioResource CrouchUp;
+    [SerializeField] AudioResource CrouchDown;
     private void OnValidate()
     {
         TryGetComponent(out Stamina);
@@ -205,7 +210,7 @@ abstract public class PlayerCharacterController : Character
 
     public void OnCrouchPerformed(InputAction.CallbackContext value)
     {
-        if (!value.performed || !CanCrouch)
+        if (!value.performed)// || !CanCrouch)
         {
             return;
         }
@@ -222,6 +227,14 @@ abstract public class PlayerCharacterController : Character
     }
     private void ToggleCrouching()
     {
+        if (IsStanding)
+        {
+            AudioManager.Instance.PlaySoundEffect(CrouchUp, transform);
+        }
+        else
+        {
+            AudioManager.Instance.PlaySoundEffect(CrouchDown, transform);
+        }
         //Collider.direction = Collider.direction == CapsuleDirection2D.Vertical ? CapsuleDirection2D.Horizontal : CapsuleDirection2D.Vertical;
         TweenCrouchValue();
 

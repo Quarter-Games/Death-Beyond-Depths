@@ -7,6 +7,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(FlashMaterialOnHit))]
 public class EnemyAI : Character, IHearing
 {
+    public static List<EnemyAI> Enemies = new();
     [SerializeField] bool isDeadAwake;
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
@@ -54,9 +55,15 @@ public class EnemyAI : Character, IHearing
     private int InitialHP;
     private const string ANIMATOR_BURNED = "Burned";
 
-    protected override void OnEnable() { }
+    protected override void OnEnable()
+    {
+        Enemies.Add(this);
+    }
 
-    protected override void OnDisable() { }
+    protected override void OnDisable()
+    {
+        Enemies.Remove(this);
+    }
 
     private void Awake()
     {
@@ -92,7 +99,7 @@ public class EnemyAI : Character, IHearing
         {
             StateMachine.Initialize(DeadState);
             DeadState.TimeSpentDead = ReviveTime;
-            animator.SetBool("DeadAwake",true);
+            animator.SetBool("DeadAwake", true);
             this.enabled = false;
         }
         else
