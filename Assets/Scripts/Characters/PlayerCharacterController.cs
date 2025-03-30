@@ -205,7 +205,7 @@ abstract public class PlayerCharacterController : Character
 
     public void OnCrouchPerformed(InputAction.CallbackContext value)
     {
-        if (!value.performed || !CanCrouch)
+        if (!value.performed)// || !CanCrouch)
         {
             return;
         }

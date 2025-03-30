@@ -24,6 +24,7 @@ public class ChaseState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
+        Debug.Log("Entered chase state");
         TimeSpentInChase = 0;
         NavMeshAgent.isStopped = false;
         Enemy.Animator.SetFloat(SCREAM_CHANCE, UnityEngine.Random.Range(0, 1f));
