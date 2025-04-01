@@ -5,6 +5,8 @@ public class ChargeAttackState : EnemyState
 {
     private Vector3 LastKnownPlayerPosition;
     private float TimeSinceLastAttack = 0f;
+    private float TimeInAttackState = 0f;
+    private float TimeToStayAttackState = 1f;
     private bool IsCharging = false;
     private bool ChargeComplete;
     const string CHARGE_ANIMATION = "ChargeAttack";
@@ -18,6 +20,7 @@ public class ChargeAttackState : EnemyState
         LastKnownPlayerPosition = Enemy.Player.transform.position;
         AttackPlayer();
         TimeSinceLastAttack = Enemy.ChargeAttackCooldown;
+        TimeInAttackState = 0f;
         NavMeshAgent.isStopped = false;
         NavMeshAgent.SetDestination(LastKnownPlayerPosition);
         NavMeshAgent.speed = Enemy.ChargeMoveSpeed;
@@ -31,6 +34,7 @@ public class ChargeAttackState : EnemyState
         if (TimeSinceLastAttack >= Enemy.ChargeAttackCooldown)
         {
             TimeSinceLastAttack = 0f;
+            TimeInAttackState = 0;
             AttackPlayer();
             return;
         }
@@ -42,12 +46,14 @@ public class ChargeAttackState : EnemyState
         if (distanceToPlayer <= Enemy.MeleeAttackRange)
         {
             StateMachine.ChangeState(Enemy.AttackState);
+            return;
         }
         else if (distanceToPlayer <= Enemy.ChargeAttackRange)
         {
+            TimeInAttackState += Time.deltaTime;
             return;
         }
-        else
+        else if (TimeInAttackState >= TimeToStayAttackState)
         {
             StateMachine.ChangeState(Enemy.ChaseState);
         }
