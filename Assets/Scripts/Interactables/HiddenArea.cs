@@ -16,7 +16,10 @@ public class HiddenArea : InteractableObject, IInteractable
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        base.OnTriggerEnter2D(collision);
+        if (!collision.TryGetComponent(out CachedPlayerController))
+        {
+            return;
+        }
         if (CachedPlayerController == null) return;
         IsPlayerHiddenInside = true;
         if (!CachedPlayerController.IsStanding)
@@ -31,7 +34,10 @@ public class HiddenArea : InteractableObject, IInteractable
 
     protected override void OnTriggerExit2D(Collider2D collision)
     {
-        base.OnTriggerExit2D(collision);
+        if (!collision.TryGetComponent(out CachedPlayerController))
+        {
+            return;
+        }
         if (CachedPlayerController == null) return;
         UnHidePlayer();
         CachedPlayerController.CanCrouch = true;
