@@ -28,6 +28,7 @@ abstract public class PlayerCharacterController : Character
 
     [Header("Climbing")]
     [SerializeField] float ClimbingSpeed = 1f;
+    [SerializeField] GameObject RunFX;
 
     [Header("Backstep")]
     [SerializeField] float BackStepDurationInSeconds = 0.75f;
@@ -227,6 +228,7 @@ abstract public class PlayerCharacterController : Character
     }
     private void ToggleCrouching()
     {
+        RunFX.SetActive(IsStanding);
         if (IsStanding)
         {
             AudioManager.Instance.PlaySoundEffect(CrouchUp, transform);
