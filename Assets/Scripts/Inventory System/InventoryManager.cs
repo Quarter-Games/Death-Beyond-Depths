@@ -76,7 +76,7 @@ public class InventoryManager : MonoBehaviour
         InventoryScreen.SetActive(false);
         Time.timeScale = 1;
     }
-    private void OpenInventory(InputAction.CallbackContext context)
+    public void OpenInventory(InputAction.CallbackContext context)
     {
         _selectedItem = null;
         InventoryScreen.SetActive(!InventoryScreen.activeSelf);

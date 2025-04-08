@@ -55,7 +55,14 @@ public class Door : InteractableObject, IInteractable
     }
     public void Interact()
     {
-        if (isLocked) return;
+        if (isLocked)
+        {
+            if (KeyToOpen.Amount > 0)
+            {
+                InventoryManager.Instance.OpenInventory(default);
+            }
+            return;
+        }
         ChangeState(!IsOpen);
     }
 
