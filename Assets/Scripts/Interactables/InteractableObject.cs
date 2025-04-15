@@ -1,15 +1,12 @@
 using TMPro;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public abstract class InteractableObject : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] GameObject IndicatorUI;
     [SerializeField] private float MinimumUISize = 0.5f;
-    [SerializeField] TextMeshProUGUI IndicatorKey;
+    //[SerializeField] TextMeshProUGUI IndicatorKey;
     [SerializeField] CustomTrigger UITrigger;
     [SerializeField] CustomTrigger InteractionTrigger;
     public TMP_Text InteractableName;
@@ -58,7 +55,7 @@ public abstract class InteractableObject : MonoBehaviour
                 CanvasGroup.alpha = 0;
             }
             IndicatorUI.SetActive(false);
-            IndicatorKey.gameObject.SetActive(false);
+            //IndicatorKey.gameObject.SetActive(false);
         }
     }
 
@@ -104,10 +101,10 @@ public abstract class InteractableObject : MonoBehaviour
             IndicatorUI.SetActive(false);
             IsWithinPlayerRange = false;
         }
-        if (IndicatorKey != null)
-        {
-            IndicatorKey.gameObject.SetActive(false);
-        }
+        //if (IndicatorKey != null)
+        //{
+        //    IndicatorKey.gameObject.SetActive(false);
+        //}
     }
 
     private void QueueForInteractability(Collider2D collision)
@@ -116,15 +113,15 @@ public abstract class InteractableObject : MonoBehaviour
         {
             return;
         }
-        if (IndicatorKey != null && InteractablesManager.Instance.IsCurrentInteractableObject(this as IInteractable))
-        {
-            if ((this is Door door) && door.CantBeUnlocked)
-            {
-                IndicatorKey.gameObject.SetActive(false);
-                return;
-            }
-            IndicatorKey.gameObject.SetActive(!IndicatorKey.gameObject.activeSelf);
-        }
+        //if (IndicatorKey != null && InteractablesManager.Instance.IsCurrentInteractableObject(this as IInteractable))
+        //{
+        //    if ((this is Door door) && door.CantBeUnlocked)
+        //    {
+        //        IndicatorKey.gameObject.SetActive(false);
+        //        return;
+        //    }
+        //    IndicatorKey.gameObject.SetActive(!IndicatorKey.gameObject.activeSelf);
+        //}
     }
 
     public void InformManagerOfInteractability()
@@ -141,7 +138,7 @@ public abstract class InteractableObject : MonoBehaviour
         IndicatorUI.transform.localScale = OriginalScale * newScale;
         if (CanvasGroup != null)
         {
-            CanvasGroup.alpha = Mathf.Lerp(0, 1, scaleFactor);
+            CanvasGroup.alpha = Mathf.Lerp(0.5f, 1, scaleFactor);
         }
     }
 }
