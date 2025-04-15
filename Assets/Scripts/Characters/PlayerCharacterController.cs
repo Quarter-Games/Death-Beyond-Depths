@@ -52,6 +52,7 @@ abstract public class PlayerCharacterController : Character
     private bool backStepAnimationComplete = false;
 
     public static event Action<bool> OnFlip;
+    public static event Action OnInteract;
     public static event Action OnPlayerDeath;
 
     #region Crouching
@@ -216,6 +217,7 @@ abstract public class PlayerCharacterController : Character
             return;
         }
         animator.SetTrigger(INTERACT_ANIMATION);
+        OnInteract?.Invoke();
     }
 
     public void OnCrouchPerformed(InputAction.CallbackContext value)
@@ -416,5 +418,10 @@ abstract public class PlayerCharacterController : Character
         NumberOfEnemiesAwareOfPlayer--;
         if (NumberOfEnemiesAwareOfPlayer < 0)
             NumberOfEnemiesAwareOfPlayer = 0;
+    }
+
+    public void CreatePlayerText(string text, Color textColor)
+    {
+
     }
 }
