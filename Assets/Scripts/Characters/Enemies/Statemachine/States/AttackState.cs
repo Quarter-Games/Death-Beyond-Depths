@@ -5,7 +5,7 @@ public class AttackState : EnemyState
 {
     private float TimeSinceLastAttack = 0f;
     private float TimeInAttackState = 0f;
-    private float TimeToStayAttackState = 1f;
+    private float TimeToStayAttackState = 0.1f;
     const string ATTACK_ANIMATION = "IsAttacking";
     const string ATTACK_RNG = "AttackRNG";
 
@@ -43,6 +43,11 @@ public class AttackState : EnemyState
             TimeInAttackState += Time.deltaTime;
             if(TimeInAttackState >= TimeToStayAttackState)
             {
+                if(Enemy.PlayerInSight())
+                {
+                    StateMachine.ChangeState(Enemy.ChaseState);
+                    return;
+                }
                 StateMachine.ChangeState(Enemy.AlertState);
             }
         }

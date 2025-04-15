@@ -8,12 +8,14 @@ public class Door : InteractableObject, IInteractable
     [Space(15f)]
     [SerializeField] Collider2D DoorCollider;
     [SerializeField] Animator animator;
+    [SerializeField] GameObject LockedUI;
     [Tooltip("Does it have lock on it")]
     public InventoryItem KeyToOpen;
     public bool isLocked;
     public bool IsOpen;
     [SerializeField, Min(1)] int HP = 10;
     [SerializeField] Collider2D CameraBoundary;
+    GameObject UnlockedUI;
 
     public bool IsBroken => HP < 0 || IsOpen;
     public bool CantBeUnlocked => (isLocked && KeyToOpen?.Amount == 0);
@@ -29,7 +31,13 @@ public class Door : InteractableObject, IInteractable
     }
     private void Awake()
     {
-        if (isLocked) return;
+        UnlockedUI = IndicatorUI;
+        if (isLocked)
+        {
+            IndicatorUI = LockedUI;
+            return;
+        }
+        IndicatorUI = UnlockedUI;
         ChangeState(IsOpen);
     }
     public void ChangeState(bool isOpen)
@@ -46,6 +54,8 @@ public class Door : InteractableObject, IInteractable
     {
         if (KeyToOpen?.Amount > 0)
         {
+            IndicatorUI = UnlockedUI;
+            LockedUI.SetActive(false);
             isLocked = false;
         }
     }

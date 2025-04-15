@@ -29,7 +29,6 @@ public class CameraTriggers : MonoBehaviour
             if(camera == null) continue;
             num++;
         }
-        Debug.Log(num);
         return num;
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class InteractableObject : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] GameObject IndicatorUI;
+    [SerializeField] protected GameObject IndicatorUI;
     [SerializeField] private float MinimumUISize = 0.5f;
     //[SerializeField] TextMeshProUGUI IndicatorKey;
     [SerializeField] CustomTrigger UITrigger;
@@ -132,6 +132,10 @@ public abstract class InteractableObject : MonoBehaviour
     private void Update()
     {
         if (!IsWithinPlayerRange || CachedPlayerController == null || IndicatorUI == null) return;
+        if(!IndicatorUI.activeSelf)
+        {
+            IndicatorUI.SetActive(true);
+        }
         float distance = Vector3.Distance(CachedPlayerController.transform.position, transform.position);
         float scaleFactor = Mathf.Clamp01(1 - (distance / maxDistance));
         float newScale = Mathf.Lerp(MinimumUISize, 1, scaleFactor);

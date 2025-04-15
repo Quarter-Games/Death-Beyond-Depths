@@ -31,6 +31,7 @@ public class ChargeAttackState : EnemyState
     {
         base.OnFrameUpdate();
         TimeSinceLastAttack += Time.deltaTime;
+        TimeInAttackState += Time.deltaTime;
         if (TimeSinceLastAttack >= Enemy.ChargeAttackCooldown)
         {
             TimeSinceLastAttack = 0f;
@@ -38,10 +39,10 @@ public class ChargeAttackState : EnemyState
             AttackPlayer();
             return;
         }
-        if (IsCharging || !ChargeComplete) //in the middle of attack, don't change state
-        {
-            return;
-        }
+        //if (IsCharging || !ChargeComplete) //in the middle of attack, don't change state
+        //{
+        //    return;
+        //}
         float distanceToPlayer = Vector3.Distance(Enemy.transform.position, Enemy.Player.transform.position);
         if (distanceToPlayer <= Enemy.MeleeAttackRange)
         {
