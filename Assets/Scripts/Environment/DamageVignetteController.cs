@@ -71,7 +71,6 @@ public class DamageVignetteController : MonoBehaviour
             ScreenDamageMat.SetFloat("_Vignette_Radius", curRadius);
             yield return null;
         }
-
     }
 
     private float Remap(float value, float fromMin, float fromMax, float toMin, float toMax)
@@ -84,13 +83,25 @@ public class DamageVignetteController : MonoBehaviour
         public static void ScreenDamageEffect(float intensity) => Instance.ScreenDamageEffect(intensity);
     }
 
+    private IEnumerator StartDetectionVignette()
+    {
+        var targetRadius = Remap(0.5f, -0f, 1, -0.35f, -0.001f);
+        var curRadius = 1f;
+        for (float t = 0; curRadius != targetRadius; t += Time.deltaTime - 0.01f)
+        {
+            curRadius = Mathf.Clamp(Mathf.Lerp(1, 0.1f, t), 1, 0.1f);
+            ScreenDamageMat.SetFloat("_Vignette_Radius", 0.35f);
+            yield return null;
+        }
+    }
+
     public void SeenByEnemy(EnemyAI enemy)
     {
         if(Enemies.Contains(enemy)) return;
         Enemies.Add(enemy);
         if (Enemies.Count == 1)
         {
-
+            StartCoroutine(StartDetectionVignette());
         }
     }
 

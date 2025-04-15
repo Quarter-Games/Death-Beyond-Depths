@@ -21,7 +21,7 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] InputActionReference EquipSwordAction;
     [SerializeField] protected InputActionReference CrouchInputAction;
     [SerializeField] PlayerMeleeAttack MeleeAttackObject;
-    [SerializeField] ParticleSystem SlashEffect;
+    [SerializeField] ParticleSystem RunEffect;
     [SerializeField] SortingGroup SortingGroup;
     [SerializeField] public PlayerStamina Stamina;
     public static bool IsRaightClickHold = false;
@@ -78,6 +78,8 @@ abstract public class PlayerCharacterController : Character
     {
         AttackIntervalTimer = AttackInterval;
         CrouchInputAction.action.performed += OnCrouchPerformed;
+        RunInputAction.action.performed += OnRunPerformed;
+        RunInputAction.action.canceled += OnRunPerformed;
         LeftClickInputAction.action.performed += LeftMouseClick;
         RightClickInputAction.action.performed += RightMouseHold;
         InteractInputAction.action.performed += Interact;
@@ -90,6 +92,8 @@ abstract public class PlayerCharacterController : Character
     protected override void OnDisable()
     {
         CrouchInputAction.action.performed -= OnCrouchPerformed;
+        RunInputAction.action.performed -= OnRunPerformed;
+        RunInputAction.action.canceled -= OnRunPerformed; 
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.started -= Interact;
@@ -141,6 +145,11 @@ abstract public class PlayerCharacterController : Character
         }
         //FootPlacement();
         Move(movement, RunInputAction.action.ReadValue<float>() > 0 && IsStanding ? MovementMode.Running : MovementMode.Walking);
+    }
+
+    private void Start()
+    {
+        RunEffect.Stop();
     }
 
     private void Update()
@@ -258,6 +267,12 @@ abstract public class PlayerCharacterController : Character
         OnMeleeAttackPerformed(context);
     }
 
+    private void OnRunPerformed(InputAction.CallbackContext context)
+    {
+        if (IsStanding && context.performed) RunEffect.Play();
+        else RunEffect.Stop();
+    }
+
     protected override void Flip()
     {
         float tempXScale = transform.localScale.x;
@@ -343,8 +358,8 @@ abstract public class PlayerCharacterController : Character
     abstract protected void SpecialMove();
     public void StartClimbing(ClimablePoint startPoint)
     {
-        rb.simulated = false;
-        Collider.enabled = false;
+        //rb.simulated = false;
+        //Collider.enabled = false;
         float time = Vector2.Distance(startPoint.SnippingPoint.position, startPoint.LinkedPoint.SnippingPoint.position) / ClimbingSpeed;
         DisableInput();
         animator.SetBool(DONE_CLIMBING_ANIMATION, false);
@@ -375,7 +390,7 @@ abstract public class PlayerCharacterController : Character
         float knockbackDirection = IsFacingRight ? -1 : 1;
         rb.AddForce(new Vector2(5 * knockbackDirection, 3), ForceMode2D.Impulse);
         SpecialEffects.ScreenDamageEffect(UnityEngine.Random.Range(0.1f, 1));
-        CameraController.Instance.ShakeCamera();
+        //CameraController.Instance.ShakeCamera();
         if (stats.HP == 0)
         {
             OnPlayerDeath?.Invoke();
