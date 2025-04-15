@@ -1,3 +1,5 @@
+using Unity.Cinemachine;
+using UnityEditor;
 using UnityEngine;
 
 public class TextTrigger : MonoBehaviour
@@ -5,6 +7,8 @@ public class TextTrigger : MonoBehaviour
     [SerializeField] TriggerType TriggerType;
     [SerializeField, TextArea] string Text;
     [SerializeField] Color TextColor;
+    public bool OverrideTextDuration = false;
+    [HideInInspector] public float TextDuration = 3f;
 
     PlayerCharacterController Player;
     bool CanBeTriggered = false;
@@ -48,7 +52,35 @@ public class TextTrigger : MonoBehaviour
     private void TriggerText()
     {
         if (!CanBeTriggered) return;
+        if(OverrideTextDuration)
+        {
+            Player.CreatePlayerText(Text, TextColor, TextDuration);
+            return;
+        }
         Player.CreatePlayerText(Text, TextColor);
+    }
+}
+
+[CustomEditor(typeof(TextTrigger))]
+public class TextTriggerEditor : Editor
+{
+    TextTrigger textTrigger;
+    private void OnEnable()
+    {
+        textTrigger = (TextTrigger)target;
+    }
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        if (textTrigger.OverrideTextDuration)
+        {
+            textTrigger.TextDuration = EditorGUILayout.FloatField("Text Duration", textTrigger.TextDuration);
+        }
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(textTrigger);
+        }
     }
 }
 

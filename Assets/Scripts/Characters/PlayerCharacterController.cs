@@ -24,6 +24,7 @@ abstract public class PlayerCharacterController : Character
     [SerializeField] ParticleSystem RunEffect;
     [SerializeField] SortingGroup SortingGroup;
     [SerializeField] public PlayerStamina Stamina;
+    [SerializeField] PlayerTextController TextController;
     public static bool IsRaightClickHold = false;
 
     [Header("Climbing")]
@@ -152,6 +153,7 @@ abstract public class PlayerCharacterController : Character
     private void Start()
     {
         RunEffect.Stop();
+        TextController.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -422,6 +424,13 @@ abstract public class PlayerCharacterController : Character
 
     public void CreatePlayerText(string text, Color textColor)
     {
-
+        TextController.gameObject.SetActive(true);
+        TextController.SetText(text, textColor);
+    }
+    public void CreatePlayerText(string text, Color textColor, float overridenTextDuration)
+    {
+        TextController.gameObject.SetActive(true);
+        TextController.SetTextTimer(overridenTextDuration);
+        TextController.SetText(text, textColor);
     }
 }
