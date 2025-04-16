@@ -1,5 +1,6 @@
 ﻿
 using System.Linq;
+using UnityEngine.Events;
 
 public class KeyItem : InventoryItem, IUsable
 {

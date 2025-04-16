@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Door : InteractableObject, IInteractable
 {
@@ -16,6 +17,7 @@ public class Door : InteractableObject, IInteractable
     [SerializeField, Min(1)] int HP = 10;
     [SerializeField] Collider2D CameraBoundary;
     GameObject UnlockedUI;
+    public UnityEvent OnUnlock;
 
     public bool IsBroken => HP < 0 || IsOpen;
     public bool CantBeUnlocked => (isLocked && KeyToOpen?.Amount == 0);
@@ -57,6 +59,7 @@ public class Door : InteractableObject, IInteractable
             IndicatorUI = UnlockedUI;
             LockedUI.SetActive(false);
             isLocked = false;
+            OnUnlock?.Invoke();
         }
     }
     public bool IsInPlayerRange()
