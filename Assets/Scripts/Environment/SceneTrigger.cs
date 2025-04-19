@@ -4,6 +4,7 @@ using UnityEngine;
 public class SceneTrigger : MonoBehaviour
 {
     [SerializeField] List<InteractableObject> ObjectsToActivate;
+    [SerializeField] List<GameObject> ObjectsToEnable;
     [SerializeField] InventoryItem item;
     [SerializeField] int RequiredAmount;
     private void OnTriggerEnter2D(Collider2D collision)
@@ -20,6 +21,10 @@ public class SceneTrigger : MonoBehaviour
                 {
                     interact.Interact();
                 }
+            }
+            foreach (var obj in ObjectsToEnable)
+            {
+                obj.SetActive(true);
             }
             gameObject.SetActive(false);
         }
