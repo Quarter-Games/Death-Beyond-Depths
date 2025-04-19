@@ -99,7 +99,7 @@ abstract public class PlayerCharacterController : Character
         RunInputAction.action.canceled -= OnRunPerformed; 
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
-        InteractInputAction.action.started -= Interact;
+        InteractInputAction.action.performed -= Interact;
         OnPlayerDeath -= DisableInput;
         //BackStepInputAction.action.started -= BackStep;
         // EquipSwordAction.action.started -= OnSwordEquip;
@@ -291,49 +291,6 @@ abstract public class PlayerCharacterController : Character
         {
             OnFlip?.Invoke(IsFacingRight);
         }
-    }
-
-    private void BackStep(InputAction.CallbackContext context)
-    {
-        if (BackStepCoroutine != null || !IsStanding) return;
-        StartCoroutine(BackStepAction());
-    }
-
-    private void OnSwordEquip(InputAction.CallbackContext context)
-    {
-        animator.SetTrigger("Enable Sword");
-        isSwordEquipped = !animator.GetBool("IsSwordEquipped");
-        animator.SetBool("IsSwordEquipped", isSwordEquipped);
-    }
-
-    private IEnumerator BackStepAction()
-    {
-        backStepAnimationComplete = false;
-        DisableInput();
-        BackStepCoroutine = StartCoroutine(stats.BecomeInvincibleForSeconds(BackStepDurationInSeconds));
-        StartCoroutine(BackStepCooldown());
-        animator.SetTrigger("Backstep");
-        yield return new WaitUntil(() => backStepAnimationComplete);
-        EnableInput();
-    }
-
-    public void BackStepForce()
-    {
-        rb.linearVelocityX = 0f;
-        Vector2 direction = IsFacingRight ? Vector2.left : Vector2.right;
-        rb.AddForce(BackStepSpeed * direction, ForceMode2D.Impulse);
-    }
-
-    //animation callback
-    public void OnBackStepAnimationComplete()
-    {
-        backStepAnimationComplete = true;
-    }
-
-    private IEnumerator BackStepCooldown()
-    {
-        yield return new WaitForSeconds(BackStepCooldownInSeconds);
-        BackStepCoroutine = null;
     }
 
     private static void DisableInput()

@@ -20,10 +20,15 @@ public class PlayerTextController : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerCharacterController.OnFlip -= FlipText;
+        //PlayerCharacterController.OnFlip -= FlipText;
         if (IsFirstDisable) return;
         IsFirstDisable = false;
         TextDuration = DefaultTextDuration;
+    }
+
+    private void OnDestroy()
+    {
+        PlayerCharacterController.OnFlip -= FlipText;
     }
 
     private void FlipText(bool isFacingRight)

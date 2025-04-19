@@ -33,14 +33,6 @@ public class AnimationTriggerHandler : MonoBehaviour
     {
         captainController.EquipGun();
     }
-    public void OnBackStepAnimationEnd()
-    {
-        captainController.OnBackStepAnimationComplete();
-    }
-    public void OnBackStepForceAdd()
-    {
-        captainController.BackStepForce();
-    }
 
     public void OnMeleeFinished()
     {
