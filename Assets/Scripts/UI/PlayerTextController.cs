@@ -15,7 +15,6 @@ public class PlayerTextController : MonoBehaviour
     private void OnEnable()
     {
         TimeTextIsActive = 0f;
-        PlayerCharacterController.OnFlip += FlipText;
     }
 
     private void OnDisable()
@@ -29,6 +28,11 @@ public class PlayerTextController : MonoBehaviour
     private void OnDestroy()
     {
         PlayerCharacterController.OnFlip -= FlipText;
+    }
+
+    private void Awake()
+    {
+        PlayerCharacterController.OnFlip += FlipText;
     }
 
     private void FlipText(bool isFacingRight)
