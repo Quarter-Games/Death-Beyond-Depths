@@ -5,6 +5,8 @@ using Unity.Cinemachine;
 
 public class CameraFollowObject : MonoBehaviour
 {
+    public static CameraFollowObject Instance { get; private set; }
+    public bool isMoving;
     [SerializeField] PlayerCharacterController Player;
     [SerializeField] Collider2D ConfinerBounds;
     [SerializeField] float FlipDuration = 0.5f;
@@ -14,11 +16,21 @@ public class CameraFollowObject : MonoBehaviour
     private void OnEnable()
     {
         PlayerCharacterController.OnFlip += CallTurn;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("Multiple instances of CameraFollowObject detected. Destroying this instance.");
+            Destroy(gameObject);
+        }
     }
 
     private void OnDisable()
     {
         PlayerCharacterController.OnFlip -= CallTurn;
+
     }
 
     private void Update()
@@ -27,6 +39,7 @@ public class CameraFollowObject : MonoBehaviour
         //{
         //    return;
         //}
+        if (!isMoving) return;
         transform.position = Player.transform.position;
     }
 
