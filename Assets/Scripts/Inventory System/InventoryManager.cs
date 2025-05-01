@@ -33,6 +33,10 @@ public class InventoryManager : MonoBehaviour
     }
     private void OnEnable()
     {
+        foreach (var item in _items)
+        {
+            item.Reset();
+        }
         _openInventory.action.performed += OpenInventory;
         _closeInventory.action.performed += CloseInventory;
         _openInventory.action.Enable();

@@ -5,6 +5,7 @@ public class PickUp : InteractableObject, IInteractable
     [SerializeField] InventoryItem item;
     [SerializeField] int AmountToPickUp = 1;
     [SerializeField] SpriteRenderer spriteRenderer;
+
     public void Init(InventoryItem item, int amount)
     {
         this.item = item;
@@ -26,6 +27,7 @@ public class PickUp : InteractableObject, IInteractable
     public void Interact()
     {
         item.Amount += AmountToPickUp;
+        AudioManager.Instance.PlaySoundEffect(OnSuccesfullInteraction, transform);
         Destroy(gameObject);
     }
 

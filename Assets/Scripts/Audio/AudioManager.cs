@@ -18,7 +18,7 @@ public class AudioManager : MonoBehaviour
     private List<AudioSource> AmbienceSources;
     private List<AudioSource> SoundSources;
 
-    public static AudioManager Instance {get; private set;}
+    public static AudioManager Instance { get; private set; }
 
     private void Awake()
     {
@@ -57,7 +57,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayBackGroundMusic(AudioClip clip = null)
     {
-        if(MusicSources == null || (clip == null && MusicSources[0].clip == null)) return;
+        if (MusicSources == null || (clip == null && MusicSources[0].clip == null)) return;
         if (clip != null)
         {
             MusicSources[0].Play();
@@ -70,7 +70,7 @@ public class AudioManager : MonoBehaviour
         {
             if (!source.isPlaying)
             {
-                if(clip != null) source.clip = clip;
+                if (clip != null) source.clip = clip;
                 source.Play();
                 return;
             }
@@ -79,6 +79,12 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySoundEffect(AudioResource resource, Transform origin)
     {
+        // Null check for easier implementaions and failproof
+        if (resource == null)
+        {
+            Debug.LogError("AudioResource is null");
+            return;
+        }
         int sourceCount = SoundSources.Count;
         foreach (AudioSource source in SoundSources)
         {

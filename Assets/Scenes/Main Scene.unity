@@ -2576,6 +2576,8 @@ MonoBehaviour:
   MinimumUISize: 0.5
   UITrigger: {fileID: 0}
   InteractionTrigger: {fileID: 0}
+  OnSuccesfullInteraction: {fileID: 0}
+  OnFailedInteraction: {fileID: 0}
   InteractableName: {fileID: 0}
 --- !u!61 &105343743
 BoxCollider2D:
@@ -3697,19 +3699,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9826797
+      value: 0.9826796
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -1.0565534e-10
+      value: -1.05655415e-10
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -5.6778363e-11
+      value: -5.6778256e-11
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.18531196
+      value: -0.18531308
       objectReference: {fileID: 0}
     - target: {fileID: 2943598243693411804, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_fontAsset
@@ -3777,7 +3779,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4608578976975584371, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.013487684
+      value: 0.013488788
       objectReference: {fileID: 0}
     - target: {fileID: 4923221724521835646, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_Camera
@@ -8012,6 +8014,8 @@ MonoBehaviour:
   MinimumUISize: 0.5
   UITrigger: {fileID: 0}
   InteractionTrigger: {fileID: 0}
+  OnSuccesfullInteraction: {fileID: 0}
+  OnFailedInteraction: {fileID: 0}
   InteractableName: {fileID: 0}
   EnemyToWakeUp: {fileID: 2101493039}
 --- !u!61 &381244648
@@ -25876,6 +25880,8 @@ MonoBehaviour:
   MinimumUISize: 0.5
   UITrigger: {fileID: 0}
   InteractionTrigger: {fileID: 0}
+  OnSuccesfullInteraction: {fileID: 0}
+  OnFailedInteraction: {fileID: 0}
   InteractableName: {fileID: 0}
 --- !u!61 &809486841
 BoxCollider2D:
@@ -26960,6 +26966,8 @@ MonoBehaviour:
   MinimumUISize: 0.5
   UITrigger: {fileID: 1495721231}
   InteractionTrigger: {fileID: 1495721230}
+  OnSuccesfullInteraction: {fileID: 0}
+  OnFailedInteraction: {fileID: 0}
   InteractableName: {fileID: 0}
   DoorCollider: {fileID: 1495721229}
   animator: {fileID: 1495721228}
@@ -31025,11 +31033,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7079107431954098233, guid: b68fb293cc37b4f479d1110ffabf74f7, type: 3}
   m_PrefabInstance: {fileID: 1102824255}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1104141992 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2099843039003413483, guid: 0d3c2f395e539e241bfedff0696f5953, type: 3}
-  m_PrefabInstance: {fileID: 2483606577402335359}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1106050060
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32628,11 +32631,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 618527169905595266, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 316
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 618527169905595266, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 618527169905595266, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -32676,11 +32679,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1041952897640316504, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -316
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1041952897640316504, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1041952897640316504, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -32704,7 +32707,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1695204132464827842, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1695204132464827842, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -32824,11 +32827,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6233573378738491472, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 158
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6233573378738491472, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6233573378738491472, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -32848,11 +32851,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6441737258424443456, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -158
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6441737258424443456, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6441737258424443456, guid: e49c880c4c0e99340a916d44a3f57057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -35932,7 +35935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8533691688635262862, guid: f203312954094504ba4e63f84157e26a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.616325
+      value: -10.682302
       objectReference: {fileID: 0}
     - target: {fileID: 8533691688635262862, guid: f203312954094504ba4e63f84157e26a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -40183,8 +40186,13 @@ MonoBehaviour:
   MinimumUISize: 0.5
   UITrigger: {fileID: 0}
   InteractionTrigger: {fileID: 0}
+  OnSuccesfullInteraction: {fileID: 0}
+  OnFailedInteraction: {fileID: 0}
   InteractableName: {fileID: 0}
-  TargetPosition: {fileID: 1104141992}
+  TargetPosition:
+  - {fileID: 284710432}
+  - {fileID: 1971498853}
+  - {fileID: 752546859}
   MoveDelay: 0.5
   MoveDuration: 4
   StandbyDuration: 1
@@ -47084,6 +47092,11 @@ MonoBehaviour:
   minIntensity: 0.8
   maxIntensity: 1.2
   flickerSpeed: 1
+--- !u!4 &1971498853 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6770505250266998002, guid: c8072dbd994c06b48b762a551386cef1, type: 3}
+  m_PrefabInstance: {fileID: 1800156423}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1978470914
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47427,6 +47440,8 @@ MonoBehaviour:
   MinimumUISize: 0.5
   UITrigger: {fileID: 0}
   InteractionTrigger: {fileID: 0}
+  OnSuccesfullInteraction: {fileID: 0}
+  OnFailedInteraction: {fileID: 0}
   InteractableName: {fileID: 0}
 --- !u!61 &1991604787
 BoxCollider2D:

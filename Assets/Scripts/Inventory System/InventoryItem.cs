@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class InventoryItem : ScriptableObject, IDiscardable
     private static Dictionary<string, int> AmountList = new();
     public string Name;
     [SerializeField] string UNIQUE_ID;
-    [Multiline]public string Description;
+    [Multiline] public string Description;
     [SerializeField] int _startingAmount;
     [SerializeField] int _maxAmount;
     public List<InventoryItemActionData> Actions;
@@ -54,6 +55,11 @@ public class InventoryItem : ScriptableObject, IDiscardable
     virtual public bool IsDiscardable()
     {
         return Amount > 0;
+    }
+
+    internal void Reset()
+    {
+        Amount = _startingAmount;
     }
 }
 public interface IDiscardable

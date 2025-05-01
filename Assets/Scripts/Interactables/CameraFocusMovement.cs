@@ -1,11 +1,12 @@
 ﻿using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 internal class CameraFocusMovement : InteractableObject, IInteractable
 {
-    public Transform TargetPosition;
+    public List<Transform> TargetPosition;
     public float MoveDelay = 0.5f;
     public float MoveDuration = 1f;
     public float StandbyDuration = 1f;
@@ -18,12 +19,14 @@ internal class CameraFocusMovement : InteractableObject, IInteractable
             InputSystem.DisableAllEnabledActions();
             CameraFollowObject.Instance.isMoving = false;
             var startPos = CameraFollowObject.Instance.transform.position;
+            CameraManager.Instance.IgnoreBounderies(true);
             yield return new WaitForSeconds(MoveDelay);
-            CameraFollowObject.Instance.transform.DOMove(TargetPosition.position, MoveDuration)
-                .SetEase(Ease.InOutSine)
-                .OnComplete(() =>
+            int index = 0;
+            MoveToNextPosition();
+            void MoveToNextPosition()
+            {
+                if (index >= TargetPosition.Count)
                 {
-                    CameraManager.Instance.IgnoreBounderies(true);
                     CameraFollowObject.Instance.StartCoroutine(StandBy());
                     IEnumerator StandBy()
                     {
@@ -36,7 +39,16 @@ internal class CameraFocusMovement : InteractableObject, IInteractable
                                 actions.ForEach(x => x.Enable());
                             });
                     }
+                    return;
+                }
+                CameraFollowObject.Instance.transform.DOMove(TargetPosition[index].position, MoveDuration)
+                .SetEase(Ease.InOutSine)
+                .OnComplete(() =>
+                {
+                    index++;
+                    MoveToNextPosition();
                 });
+            }
 
         }
     }
