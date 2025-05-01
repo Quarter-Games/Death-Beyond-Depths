@@ -75,7 +75,7 @@ public class InventoryManager : MonoBehaviour
         ActionsScreen.gameObject.SetActive(false);
         descriptionParent.gameObject.SetActive(false);
     }
-    private void CloseInventory(InputAction.CallbackContext context)
+    public void CloseInventory(InputAction.CallbackContext context)
     {
         InventoryScreen.SetActive(false);
         Time.timeScale = 1;
