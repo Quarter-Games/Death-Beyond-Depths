@@ -93,11 +93,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 673ebc362fbb64c4eb984a77a3fb225e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IndicatorUI: {fileID: 0}
+  MinimumUISize: 0.5
+  UITrigger: {fileID: 0}
+  InteractionTrigger: {fileID: 0}
+  OnSuccesfullInteraction: {fileID: 6418180475301049370, guid: ad456b12e167b5042944ad000bdb49a9, type: 2}
+  OnFailedInteraction: {fileID: 6418180475301049370, guid: 141e620c28e740f45b8155be4136405d, type: 2}
+  InteractableName: {fileID: 0}
   DoorCollider: {fileID: 1570747015518067091}
   animator: {fileID: 696109794641087753}
+  LockedUI: {fileID: 0}
+  KeyToOpen: {fileID: 0}
   isLocked: 0
   IsOpen: 0
   HP: 10
+  CameraBoundary: {fileID: 0}
+  OnUnlock:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!95 &696109794641087753
 Animator:
   serializedVersion: 7

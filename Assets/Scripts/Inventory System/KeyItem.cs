@@ -23,5 +23,6 @@ public class KeyItem : InventoryItem, IUsable
             }
         }
         if (Door.AllDoors.Count(x => x.KeyToOpen == this && x.isLocked) == 0) Amount = 0;
+        InventoryManager.Instance.CloseInventory(default);
     }
 }

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public abstract class InteractableObject : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public abstract class InteractableObject : MonoBehaviour
     //[SerializeField] TextMeshProUGUI IndicatorKey;
     [SerializeField] CustomTrigger UITrigger;
     [SerializeField] CustomTrigger InteractionTrigger;
+    [SerializeField] protected AudioResource OnSuccesfullInteraction;
+    [SerializeField] protected AudioResource OnFailedInteraction;
     public TMP_Text InteractableName;
 
     protected PlayerCharacterController CachedPlayerController;
