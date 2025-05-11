@@ -17,6 +17,7 @@ public class SceneTrigger : MonoBehaviour
         {
             foreach (var obj in ObjectsToActivate)
             {
+                if (obj ==null) continue;
                 if (obj is IInteractable interact)
                 {
                     interact.Interact();
@@ -24,6 +25,7 @@ public class SceneTrigger : MonoBehaviour
             }
             foreach (var obj in ObjectsToEnable)
             {
+                if (obj == null) continue;
                 obj.SetActive(true);
             }
             gameObject.SetActive(false);

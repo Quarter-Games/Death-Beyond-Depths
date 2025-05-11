@@ -7,7 +7,7 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
     [SerializeField] List<CinemachineCamera> VirtualCameras;
-    
+
     CinemachineCamera CurrentCamera;
 
     private void Awake()
@@ -28,6 +28,13 @@ public class CameraManager : MonoBehaviour
             {
                 CurrentCamera = VirtualCameras[i];
             }
+        }
+    }
+    public void IgnoreBounderies(bool isIgnore)
+    {
+        if (CurrentCamera.TryGetComponent(out CinemachineConfiner2D confiner))
+        {
+            confiner.enabled = !isIgnore;
         }
     }
 
@@ -58,7 +65,7 @@ public class CameraManager : MonoBehaviour
             Debug.Log(" To " + CurrentCamera);
             return;
         }
-        else if(cameraFromDown != null && CurrentCamera == cameraFromDown && triggerExitDirection.y <= 0f)
+        else if (cameraFromDown != null && CurrentCamera == cameraFromDown && triggerExitDirection.y <= 0f)
         {
             cameraFromUp.gameObject.SetActive(true);
             cameraFromDown.gameObject.SetActive(false);

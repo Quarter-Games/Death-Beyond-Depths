@@ -14,8 +14,10 @@ public class EnemyStatemachine
     public void ChangeState(EnemyState newState)
     {
         if (IsCurrentStateLocked) return;
+        Debug.Log("Exiting " + CurrentState);
         CurrentState.OnExit();
         CurrentState = newState;
+        Debug.Log("Entering " + CurrentState);
         CurrentState.OnEnter();
         //Debug.Log("Entered " + CurrentState);
     }

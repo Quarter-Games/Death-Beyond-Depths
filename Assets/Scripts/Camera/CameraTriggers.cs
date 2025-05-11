@@ -1,7 +1,9 @@
 using System;
 using Unity.Cinemachine;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -66,6 +68,7 @@ public class CustomInspectorCameras
     [HideInInspector] public List<CinemachineCamera> Cameras;
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(CameraTriggers))]
 public class CameraEditor : Editor
 {
@@ -95,3 +98,4 @@ public class CameraEditor : Editor
         }
     }
 }
+#endif

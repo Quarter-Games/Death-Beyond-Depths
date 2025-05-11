@@ -74,8 +74,13 @@ public class Door : InteractableObject, IInteractable
             {
                 InventoryManager.Instance.OpenInventory(default);
             }
+            else
+            {
+                AudioManager.Instance.PlaySoundEffect(OnFailedInteraction, transform);
+            }
             return;
         }
+        AudioManager.Instance.PlaySoundEffect(OnSuccesfullInteraction, transform);
         ChangeState(!IsOpen);
     }
 

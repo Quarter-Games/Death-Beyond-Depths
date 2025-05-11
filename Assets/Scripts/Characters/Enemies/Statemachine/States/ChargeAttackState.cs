@@ -6,7 +6,7 @@ public class ChargeAttackState : EnemyState
     private Vector3 LastKnownPlayerPosition;
     private float TimeSinceLastAttack = 0f;
     private float TimeInAttackState = 0f;
-    private float TimeToStayAttackState = 1f;
+    private float TimeToStayAttackState = 0.1f;
     private bool IsCharging = false;
     private bool ChargeComplete;
     const string CHARGE_ANIMATION = "ChargeAttack";

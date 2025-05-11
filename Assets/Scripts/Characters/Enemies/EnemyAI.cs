@@ -12,8 +12,8 @@ public class EnemyAI : Character, IHearing
     [Range(0f, 360f), SerializeField] float Angle = 45f;
     [SerializeField] float SightRadius = 5f;
     [SerializeField] public float SoundRadius = 5f;
-    [SerializeField] NavMeshAgent NavMeshAgent;
-    [SerializeField] List<Transform> PatrolPoints;
+    [SerializeField] protected NavMeshAgent NavMeshAgent;
+    [SerializeField] protected List<Transform> PatrolPoints;
     [SerializeField] FlashMaterialOnHit FlashOnHit;
     [SerializeField] public PlayerCharacterController Player;
     [SerializeField] public float StaggerTime = 0.5f;
@@ -34,7 +34,7 @@ public class EnemyAI : Character, IHearing
     [SerializeField] public float ChargeMoveSpeed = 6f;
 
     public Vector3 LastKnownPlayerPosition { get; set; }
-    public IdleWanderState IdleState { get; private set; }
+    public IdleWanderState IdleState { get; protected set; }
     public AlertState AlertState { get; private set; }
     public ChaseState ChaseState { get; private set; }
     public AttackState AttackState { get; private set; }
@@ -42,16 +42,16 @@ public class EnemyAI : Character, IHearing
     public AttackDoorState AttackDoorState { get; private set; }
     public StaggerState StaggerState { get; private set; }
     public DeadState DeadState { get; private set; }
-    public Animator Animator { get; private set; }
+    public Animator Animator { get; protected set; }
     public bool IsDead => stats.HP <= 0;
     public bool IsAwareOfPlayer => StateMachine.CurrentState == ChaseState || StateMachine.CurrentState == ChargeAttackState || StateMachine.CurrentState == AttackState;
     public bool IsFacingLeftProperty { get => IsFacingLeft; }
     public bool IsKnownPlayerPositionCorrect => Mathf.Abs(Player.transform.position.x - LastKnownPlayerPosition.x) <= 0.1f;
 
-    EnemyStatemachine StateMachine;
-    private bool IsFacingLeft = false;
+    protected EnemyStatemachine StateMachine;
+    protected Vector3 DefaultScale;
+    protected bool IsFacingLeft = false;
     private bool IsPermenantlyDead = false;
-    private Vector3 DefaultScale;
     private int InitialHP;
     private const string ANIMATOR_BURNED = "Burned";
 
@@ -245,7 +245,7 @@ public class EnemyAI : Character, IHearing
         StateMachine.CurrentState.AnimationTriggerEvent();
     }
 
-    private void OnDrawGizmosSelected()
+    protected void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, SoundRadius);

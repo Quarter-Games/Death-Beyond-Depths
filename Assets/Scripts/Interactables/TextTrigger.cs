@@ -1,5 +1,7 @@
 using Unity.Cinemachine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public class TextTrigger : MonoBehaviour
@@ -61,6 +63,7 @@ public class TextTrigger : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(TextTrigger))]
 public class TextTriggerEditor : Editor
 {
@@ -83,6 +86,7 @@ public class TextTriggerEditor : Editor
         }
     }
 }
+#endif
 
 enum TriggerType
 {

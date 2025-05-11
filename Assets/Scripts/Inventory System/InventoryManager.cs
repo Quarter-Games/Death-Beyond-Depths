@@ -33,6 +33,10 @@ public class InventoryManager : MonoBehaviour
     }
     private void OnEnable()
     {
+        foreach (var item in _items)
+        {
+            item.Reset();
+        }
         _openInventory.action.performed += OpenInventory;
         _closeInventory.action.performed += CloseInventory;
         _openInventory.action.Enable();
@@ -71,7 +75,7 @@ public class InventoryManager : MonoBehaviour
         ActionsScreen.gameObject.SetActive(false);
         descriptionParent.gameObject.SetActive(false);
     }
-    private void CloseInventory(InputAction.CallbackContext context)
+    public void CloseInventory(InputAction.CallbackContext context)
     {
         InventoryScreen.SetActive(false);
         Time.timeScale = 1;
