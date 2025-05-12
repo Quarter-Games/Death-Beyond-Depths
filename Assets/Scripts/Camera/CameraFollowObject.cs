@@ -33,7 +33,7 @@ public class CameraFollowObject : MonoBehaviour
 
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         //if(!ConfinerBounds.OverlapPoint(Player.transform.position))
         //{

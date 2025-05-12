@@ -45,6 +45,7 @@ abstract public class PlayerCharacterController : Character
 
     private Coroutine BackStepCoroutine;
     private float AttackIntervalTimer = 0;
+    private float MaxHP;
     private int NumberOfEnemiesAwareOfPlayer;
     bool IsFacingRight = true;
     bool isSwordEquipped = false;
@@ -154,6 +155,7 @@ abstract public class PlayerCharacterController : Character
     {
         RunEffect.Stop();
         TextController.gameObject.SetActive(false);
+        MaxHP = stats.HP;
     }
 
     private void Update()
@@ -352,7 +354,9 @@ abstract public class PlayerCharacterController : Character
         MeleeAttackObject.ResetEnemyAttackedList();
         float knockbackDirection = IsFacingRight ? -1 : 1;
         rb.AddForce(new Vector2(5 * knockbackDirection, 3), ForceMode2D.Impulse);
-        SpecialEffects.ScreenDamageEffect(UnityEngine.Random.Range(0.1f, 1));
+        float hpFraction = stats.HP / MaxHP;
+        SpecialEffects.ScreenDamageEffect(hpFraction);
+
         //CameraController.Instance.ShakeCamera();
         if (stats.HP == 0)
         {
