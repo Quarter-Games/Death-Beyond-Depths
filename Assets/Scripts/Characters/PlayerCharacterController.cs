@@ -390,4 +390,11 @@ abstract public class PlayerCharacterController : Character
         TextController.SetTextTimer(overridenTextDuration);
         TextController.SetText(text, textColor);
     }
+
+    [ContextMenu("Test Take Damage")]
+    public void TestTakeDamage()
+    {
+        TakeDamage(1);
+        IsAttacked = false;
+    }
 }
