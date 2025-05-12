@@ -14,6 +14,7 @@ public class DamageVignetteController : MonoBehaviour
 
     List<EnemyAI> Enemies = new();
 
+    private const string VIGNETTE_RADIUS = "_Vignette_Radius";
     public static DamageVignetteController Instance;
 
     private void OnEnable()
@@ -24,7 +25,7 @@ public class DamageVignetteController : MonoBehaviour
 
     private void OnDisable()
     {
-        ScreenDamageMat.SetFloat("_Vignette_Radius", 1);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
         ChaseState.OnSeenPlayer -= SeenByEnemy;
         AlertState.OnLosingPlayer -= EnemyLostPlayer;
     }
@@ -44,7 +45,7 @@ public class DamageVignetteController : MonoBehaviour
 
     private void Start()
     {
-        ScreenDamageMat.SetFloat("_Vignette_Radius", 1);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
     }
 
     [ContextMenu("Vignette")]
@@ -60,6 +61,7 @@ public class DamageVignetteController : MonoBehaviour
 
         ScreenDamageTask = StartCoroutine(ScreenDamage(intensity));
     }
+
     private IEnumerator ScreenDamage(float intensity)
     {
         var targetRadius = Remap(intensity, MinIntensity, MaxIntensity, MinVignetteRadius, MaxVignetteRadius);
@@ -67,19 +69,19 @@ public class DamageVignetteController : MonoBehaviour
         for (float t = 0; Mathf.Abs(curRadius - targetRadius) > 0.001f; t += Time.deltaTime * VignetteSpeed)
         {
             curRadius = Mathf.Lerp(1, targetRadius, t);
-            ScreenDamageMat.SetFloat("_Vignette_Radius", curRadius);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
             yield return null;
         }
         curRadius = targetRadius;
-        ScreenDamageMat.SetFloat("_Vignette_Radius", curRadius);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
         for (float t = 0; Mathf.Abs(curRadius - 1f) > 0.001f; t += Time.deltaTime * VignetteSpeed)
         {
             curRadius = Mathf.Lerp(targetRadius, 1, t);
-            ScreenDamageMat.SetFloat("_Vignette_Radius", curRadius);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
             yield return null;
         }
         curRadius = 1f;
-        ScreenDamageMat.SetFloat("_Vignette_Radius", curRadius);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
     }
 
     private float Remap(float value, float fromMin, float fromMax, float toMin, float toMax)
@@ -99,7 +101,7 @@ public class DamageVignetteController : MonoBehaviour
         for (float t = 0; curRadius != targetRadius; t += Time.deltaTime - 0.01f)
         {
             curRadius = Mathf.Clamp(Mathf.Lerp(1, 0.1f, t), 1, 0.1f);
-            ScreenDamageMat.SetFloat("_Vignette_Radius", 0.35f);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0.35f);
             yield return null;
         }
     }
