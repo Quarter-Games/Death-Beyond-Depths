@@ -38,8 +38,8 @@ public class AlertState : EnemyState
         TimeSpentInAlert += Time.deltaTime;
         if (TimeSpentInAlert >= AlertDuration)
         {
-            StateMachine.ChangeState(Enemy.IdleState);
             OnLosingPlayer?.Invoke(Enemy);
+            StateMachine.ChangeState(Enemy.IdleState);
             return;
         }
         NavMeshAgent.isStopped = false;

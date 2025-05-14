@@ -3753,19 +3753,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9826793
+      value: 0.9826795
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -1.0565547e-10
+      value: -1.0565541e-10
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -5.677812e-11
+      value: -5.677824e-11
       objectReference: {fileID: 0}
     - target: {fileID: 2831042747562587881, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.18531424
+      value: -0.18531315
       objectReference: {fileID: 0}
     - target: {fileID: 2943598243693411804, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_fontAsset
@@ -3837,7 +3837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4608578976975584371, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0134899905
+      value: 0.013488886
       objectReference: {fileID: 0}
     - target: {fileID: 4923221724521835646, guid: 2b0a93196723c2b4dbd4c4fee39f8e80, type: 3}
       propertyPath: m_Camera
@@ -4201,11 +4201,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2551829934888432941, guid: e663a81eea0c8224a88ca297fa3c7b5b, type: 3}
       propertyPath: m_Size.x
-      value: 3.4916353
+      value: 2.5000494
+      objectReference: {fileID: 0}
+    - target: {fileID: 2551829934888432941, guid: e663a81eea0c8224a88ca297fa3c7b5b, type: 3}
+      propertyPath: m_Size.y
+      value: 3.1566067
       objectReference: {fileID: 0}
     - target: {fileID: 2551829934888432941, guid: e663a81eea0c8224a88ca297fa3c7b5b, type: 3}
       propertyPath: m_Offset.x
-      value: 0.01
+      value: -0.485793
+      objectReference: {fileID: 0}
+    - target: {fileID: 2551829934888432941, guid: e663a81eea0c8224a88ca297fa3c7b5b, type: 3}
+      propertyPath: m_Offset.y
+      value: -1.0783033
       objectReference: {fileID: 0}
     - target: {fileID: 6076808431936855961, guid: e663a81eea0c8224a88ca297fa3c7b5b, type: 3}
       propertyPath: m_Name
@@ -17319,6 +17327,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1201513227}
     - target: {fileID: 123810753720176737, guid: 9a585d3c91f3b72438b5bd90f4a608c6, type: 3}
+      propertyPath: MeleeAttackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 123810753720176737, guid: 9a585d3c91f3b72438b5bd90f4a608c6, type: 3}
+      propertyPath: ChargeAttackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 123810753720176737, guid: 9a585d3c91f3b72438b5bd90f4a608c6, type: 3}
       propertyPath: stats.MovementSpeed
       value: 2
       objectReference: {fileID: 0}
@@ -26101,7 +26117,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.08593783, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -26111,7 +26127,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.1718755, y: 1}
   m_EdgeRadius: 0
 --- !u!212 &809486842
 SpriteRenderer:
@@ -36099,6 +36115,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 766025390967851401, guid: f203312954094504ba4e63f84157e26a, type: 3}
+      propertyPath: MaxIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 766025390967851401, guid: f203312954094504ba4e63f84157e26a, type: 3}
+      propertyPath: VignetteStrengthModifier
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2322872116161255830, guid: f203312954094504ba4e63f84157e26a, type: 3}
       propertyPath: Target
       value: 
