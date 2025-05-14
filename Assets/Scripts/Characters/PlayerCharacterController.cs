@@ -60,11 +60,13 @@ abstract public class PlayerCharacterController : Character
     #region Crouching
     [SerializeField, Range(0, 1)] float CrouchSpeedModifier;
     [SerializeField] Collider2D Collider;
-    public bool IsHidden { get; set; } = false;
+    [field: SerializeField] public bool IsHidden { get; set; } = false;
     public bool CanCrouch { get; set; } = true;
     public bool IsStanding { get; private set; } = true;
     #endregion
     public bool IsFacingLeft { get => !IsFacingRight; }
+    public bool CanHide { get; internal set; }
+
     private const float MIN_FLOAT = 0.02f;
     private const string CLIMB_ANIMATION = "Climb";
     private const string INTERACT_ANIMATION = "Interact";
@@ -254,18 +256,26 @@ abstract public class PlayerCharacterController : Character
         }
         //Collider.direction = Collider.direction == CapsuleDirection2D.Vertical ? CapsuleDirection2D.Horizontal : CapsuleDirection2D.Vertical;
         TweenCrouchValue();
-
+        if (CanHide && !IsStanding)
+        {
+            Hide();
+        }
+        else
+        {
+            StopHiding();
+        }
     }
 
     internal void Hide()
     {
-        if (IsHidden) return;
+        if (IsHidden || IsStanding) return;
         IsHidden = true;
         SortingGroup.sortingOrder += 1;
     }
 
     internal void StopHiding()
     {
+        if (CanHide && !IsStanding) return;
         if (!IsHidden) return;
         IsHidden = false;
         SortingGroup.sortingOrder -= 1;
