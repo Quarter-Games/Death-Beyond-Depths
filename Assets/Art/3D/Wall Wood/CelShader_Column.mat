@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Cel_Ladder
+  m_Name: CelShader_Column
   m_Shader: {fileID: -6465566751694194690, guid: 20f572a7f4bbc5d4f923dd411c9f429b, type: 3}
   m_Parent: {fileID: 2100000, guid: cbb5c7fb0ad910e4e8f60eeff875101f, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -25,18 +25,23 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColor:
-        m_Texture: {fileID: 2800000, guid: 0e86ca6504a45d44398649a5f41cd11b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9770fb6ecd529c746873b0169c69c024, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: c4a0117fde5462348b7ebeb0b4feaa26, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Metallic: 1
-    - _Smoothness: 0.296
+    - _Smoothness: 0.8
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 0.206194, g: 0.22674772, b: 0.262, a: 1}
+    - _Tiling: {r: 3, g: 3, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &8287672186553724653
+--- !u!114 &36254359058238046
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
