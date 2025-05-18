@@ -365,7 +365,7 @@ abstract public class PlayerCharacterController : Character
         MeleeAttackObject.ResetEnemyAttackedList();
         float knockbackDirection = IsFacingRight ? -1 : 1;
         rb.AddForce(new Vector2(5 * knockbackDirection, 3), ForceMode2D.Impulse);
-        float hpFraction = stats.HP / MaxHP;
+        float hpFraction = Mathf.Pow(stats.HP / MaxHP, 2);
         SpecialEffects.ScreenDamageEffect(hpFraction);
 
         //CameraController.Instance.ShakeCamera();
@@ -383,6 +383,10 @@ abstract public class PlayerCharacterController : Character
             stats.HP = MaxHP;
         else
             return;
+        float hpFraction = stats.HP / (float)MaxHP;
+        float vignetteStrength = 1f - Mathf.Pow(hpFraction, 2f);
+        SpecialEffects.ScreenDamageEffect(vignetteStrength);
+
         OnHeal?.Invoke();
     }
 

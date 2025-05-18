@@ -54,7 +54,7 @@ public class DamageVignetteController : MonoBehaviour
     {
         if (ScreenDamageTask != null)
             StopCoroutine(ScreenDamageTask);
-        intensity = Mathf.Pow(intensity, 2);
+        //intensity = Mathf.Pow(intensity, 2);
         ScreenDamageTask = StartCoroutine(ScreenDamage(intensity));
     }
 
