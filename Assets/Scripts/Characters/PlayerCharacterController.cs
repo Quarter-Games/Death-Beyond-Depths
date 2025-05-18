@@ -45,7 +45,7 @@ abstract public class PlayerCharacterController : Character
 
     private Coroutine BackStepCoroutine;
     private float AttackIntervalTimer = 0;
-    private float MaxHP;
+    private int MaxHP;
     private int NumberOfEnemiesAwareOfPlayer;
     bool IsFacingRight = true;
     bool isSwordEquipped = false;
@@ -55,6 +55,7 @@ abstract public class PlayerCharacterController : Character
 
     public static event Action<bool> OnFlip;
     public static event Action OnInteract;
+    public static event Action OnHeal;
     public static event Action OnPlayerDeath;
 
     #region Crouching
@@ -373,6 +374,21 @@ abstract public class PlayerCharacterController : Character
             OnPlayerDeath?.Invoke();
             animator.SetTrigger("Death");
         }
+    }
+
+    public void Heal(int amount)
+    {
+        stats.Heal(amount);
+        if (!CanHeal())
+            stats.HP = MaxHP;
+        else
+            return;
+        OnHeal?.Invoke();
+    }
+
+    public bool CanHeal()
+    {
+        return stats.HP < MaxHP;
     }
 
     public void OnStoppedGettingHit()
