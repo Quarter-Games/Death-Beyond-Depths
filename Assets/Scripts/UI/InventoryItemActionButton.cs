@@ -24,6 +24,7 @@ public class InventoryItemActionButton : MonoBehaviour
         text.text = data.ActionName;
         image.sprite = data.Icon;
         button.interactable = _data.IsExecutable(InventoryItem);
+        button.interactable = true;
     }
     public void OnClick()
     {
