@@ -45,7 +45,7 @@ abstract public class PlayerCharacterController : Character
 
     private Coroutine BackStepCoroutine;
     private float AttackIntervalTimer = 0;
-    private int MaxHP;
+    private float MaxHP;
     private int NumberOfEnemiesAwareOfPlayer;
     bool IsFacingRight = true;
     bool isSwordEquipped = false;
@@ -380,7 +380,7 @@ abstract public class PlayerCharacterController : Character
     {
         stats.Heal(amount);
         if (!CanHeal())
-            stats.HP = MaxHP;
+            stats.HP = (int)MaxHP;
         else
             return;
         float hpFraction = stats.HP / (float)MaxHP;
