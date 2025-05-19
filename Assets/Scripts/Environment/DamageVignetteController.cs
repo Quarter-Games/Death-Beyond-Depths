@@ -5,6 +5,9 @@ using UnityEngine;
 public class DamageVignetteController : MonoBehaviour
 {
     [SerializeField] Material ScreenDamageMat;
+    [SerializeField] Color DamageColor;
+    [SerializeField] Color StealthColor;
+    [SerializeField] float StealthMaxIntensity;
     [SerializeField] private float MinVignetteRadius = -0.75f;
     [SerializeField] private float MaxVignetteRadius = -0.001f;
     [SerializeField] private float MinIntensity = -1f;
