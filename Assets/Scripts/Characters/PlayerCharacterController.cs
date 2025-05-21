@@ -271,6 +271,10 @@ abstract public class PlayerCharacterController : Character
     {
         if (IsHidden || IsStanding) return;
         IsHidden = true;
+        if (NumberOfEnemiesAwareOfPlayer <= 0)
+        {
+            SpecialEffects.ScreenStealthEffect(IsHidden);
+        }
         SortingGroup.sortingOrder += 1;
     }
 
@@ -279,6 +283,7 @@ abstract public class PlayerCharacterController : Character
         if (CanHide && !IsStanding) return;
         if (!IsHidden) return;
         IsHidden = false;
+        SpecialEffects.ScreenStealthEffect(IsHidden);
         SortingGroup.sortingOrder -= 1;
     }
     public virtual void LeftMouseClick(InputAction.CallbackContext context)
@@ -403,6 +408,10 @@ abstract public class PlayerCharacterController : Character
 
     public void SeenByEnemy()
     {
+        if(NumberOfEnemiesAwareOfPlayer == 0 && IsHidden)
+        {
+            SpecialEffects.ScreenStealthEffect(false);
+        }
         NumberOfEnemiesAwareOfPlayer++;
     }
 
