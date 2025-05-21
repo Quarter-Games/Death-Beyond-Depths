@@ -20,6 +20,7 @@ public class DamageVignetteController : MonoBehaviour
     List<EnemyAI> Enemies = new();
 
     private const string VIGNETTE_RADIUS = "_Vignette_Radius";
+    private const string VIGNETTE_COLOR = "_Color";
     public static DamageVignetteController Instance;
 
     private void OnEnable()
@@ -91,6 +92,15 @@ public class DamageVignetteController : MonoBehaviour
     public static class SpecialEffects
     {
         public static void ScreenDamageEffect(float intensity) => Instance.ScreenDamageEffect(intensity);
+        public static void ScreenStealthEffect(bool IsPlayerHidden)
+        {
+            if (Instance.ScreenDamageTask != null)
+                Instance.StopCoroutine(Instance.ScreenDamageTask);
+            if(IsPlayerHidden)
+                Instance.ActivateHideVignette();
+            else
+                Instance.DeactivateHideVignette();
+        }
     }
 
     private IEnumerator StartDetectionVignette()
@@ -125,5 +135,17 @@ public class DamageVignetteController : MonoBehaviour
         {
             ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
         }
+    }
+
+    public void ActivateHideVignette()
+    {
+        ScreenDamageMat.SetColor(VIGNETTE_COLOR, StealthColor);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, StealthMaxIntensity);
+    }
+
+    public void DeactivateHideVignette()
+    {
+        ScreenDamageMat.SetColor(VIGNETTE_COLOR, DamageColor);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
     }
 }
