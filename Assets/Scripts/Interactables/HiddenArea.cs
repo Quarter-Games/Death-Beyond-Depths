@@ -22,6 +22,7 @@ public class HiddenArea : InteractableObject, IInteractable
         }
         if (CachedPlayerController == null) return;
         IsPlayerHiddenInside = true;
+        CachedPlayerController.CanHide = true;
         if (!CachedPlayerController.IsStanding)
         {
             CachedPlayerController.Hide();
@@ -39,6 +40,7 @@ public class HiddenArea : InteractableObject, IInteractable
             return;
         }
         if (CachedPlayerController == null) return;
+        CachedPlayerController.CanHide = false;
         UnHidePlayer();
         CachedPlayerController.CanCrouch = true;
     }

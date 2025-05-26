@@ -99,4 +99,9 @@ public class Stats
         Debug.Log("no longer invincible");
         IsInvincible = false;
     }
+
+    internal void Heal(int amount)
+    {
+        HP += amount;
+    }
 }
