@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -100,6 +101,32 @@ public class DamageVignetteController : MonoBehaviour
                 Instance.ActivateHideVignette();
             else
                 Instance.DeactivateHideVignette();
+        }
+        public static void ScreenDamageOverTimeEffect() => Instance.StartCoroutine(Instance.StartDamageOverTimeVignette());
+        public static void StopScreenDamageOverTimeEffect() => Instance.StartCoroutine(Instance.StopDamageOverTimeVignette());
+    }
+
+    private IEnumerator StopDamageOverTimeVignette()
+    {
+        var targetRadius = Remap(1, 1, 1, -1, 1);
+        var curRadius = 1f;
+        for (float t = 0; Mathf.Abs(curRadius - targetRadius) > 0.001f; t += Time.deltaTime * 0.05f)
+        {
+            curRadius = Mathf.Lerp(ScreenDamageMat.GetFloat(VIGNETTE_RADIUS), targetRadius, t);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
+            yield return null;
+        }
+    }
+
+    private IEnumerator StartDamageOverTimeVignette()
+    {
+        var targetRadius = Remap(0.5f, -0f, 1, -0.95f, -0.901f);
+        var curRadius = 1f;
+        for (float t = 0; Mathf.Abs(curRadius - targetRadius) > 0.001f; t += Time.deltaTime * 0.05f)
+        {
+            curRadius = Mathf.Lerp(ScreenDamageMat.GetFloat(VIGNETTE_RADIUS), targetRadius, t);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
+            yield return null;
         }
     }
 
