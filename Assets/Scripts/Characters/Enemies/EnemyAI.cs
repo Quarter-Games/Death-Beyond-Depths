@@ -4,7 +4,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(FlashMaterialOnHit))]
 public class EnemyAI : Character, IHearing
 {
     public static List<EnemyAI> Enemies = new();
