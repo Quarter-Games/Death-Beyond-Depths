@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1890694256937082002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2557509156260861151}
+  - component: {fileID: 8264231729491648432}
+  m_Layer: 0
+  m_Name: Endless Puzzle Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2557509156260861151
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890694256937082002}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -41.09, y: 0.4349947, z: -3.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8264231729491648432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890694256937082002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f4734e9d4b2fe6438b118e71c658252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IndicatorUI: {fileID: 0}
+  MinimumUISize: 0.5
+  UITrigger: {fileID: 0}
+  InteractionTrigger: {fileID: 0}
+  OnSuccesfullInteraction: {fileID: 0}
+  OnFailedInteraction: {fileID: 0}
+  InteractableName: {fileID: 0}
+  _puzzleState: 0
+  RoomPrefab: {fileID: 2424670721473183639, guid: 03097b9627927f5409571014ec4d3193, type: 3}
+  OriginalRoomInstance: {fileID: 0}
+  RoomCopy: {fileID: 0}
+  cameraBoundries: {fileID: 0}
+  CopyBoundries: {fileID: 0}
+  RoomWidth: 40

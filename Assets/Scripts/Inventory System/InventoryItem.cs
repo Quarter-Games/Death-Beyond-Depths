@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "InventoryItem", menuName = "Scriptable Objects/InventoryItem")]
 public class InventoryItem : ScriptableObject, IDiscardable
 {
-    public event System.Action<InventoryItem> AfterAmountChange;
+    public event Action<InventoryItem> AfterAmountChange;
     private static Dictionary<string, int> AmountList = new();
     public string Name;
     [SerializeField] string UNIQUE_ID;

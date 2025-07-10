@@ -6,9 +6,9 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
-    [SerializeField] List<CinemachineCamera> VirtualCameras;
+    public List<CinemachineCamera> VirtualCameras;
 
-    CinemachineCamera CurrentCamera;
+    public CinemachineCamera CurrentCamera;
 
     private void Awake()
     {
