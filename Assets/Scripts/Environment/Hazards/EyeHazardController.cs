@@ -1,15 +1,19 @@
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
 
 public class EyeHazardController : MonoBehaviour
 {
-    [SerializeField] readonly float TimeToOpen = 1f;
-    [SerializeField] readonly float TimeToClose = 1f;
-    [SerializeField] readonly float TimeStaysOpen = 1f;
-    [SerializeField] readonly float TimeStaysClosed = 2f;
-
+    [SerializeField] float TimeToOpen = 1f;
+    [SerializeField] float TimeToClose = 1f;
+    [SerializeField] float TimeStaysOpen = 1f;
+    [SerializeField] float TimeStaysClosed = 2f;
+    
+    [Space(10)]
     [SerializeField] bool IsLightMoving = false;
+    [Space(5)]
     [SerializeField] GameObject LightObject;
+    [SerializeField] GameObject FollowObject;
     [SerializeField] float LightMoveSpeed = 1f;
     [SerializeField] float LightMoveDistance = 1f;
     [SerializeField] float LightStopTime = 1f;
@@ -23,21 +27,6 @@ public class EyeHazardController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        if (IsLightMoving)
-        {
-            // lets us rotate the light horizontally or vertically based on the LightAxis enum
-            if (LightAxis == Direction.Horizontal)
-            {
-                LightObject.transform.rotation =
-                    new Quaternion(LightObject.transform.rotation.x, -90f, LightObject.transform.rotation.z, LightObject.transform.rotation.w);
-                return;
-            }
-            LightObject.transform.rotation =
-                    new Quaternion(LightObject.transform.rotation.x, 0f, LightObject.transform.rotation.z, LightObject.transform.rotation.w);
-        }
-    }
     // Update is called once per frame
     void Update()
     {
@@ -45,6 +34,17 @@ public class EyeHazardController : MonoBehaviour
         {
             return;
         }
+
+        LightObject.transform.LookAt(FollowObject.transform, Vector3.up);
+
+        //if(LightAxis == Direction.Horizontal)
+        //{
+        //    //LightObject.transform.Rotate(Vector3.right * LightMoveSpeed * Time.deltaTime);
+        //}
+        //else
+        //{
+        //    LightObject.transform.Rotate(Vector3.up * LightMoveSpeed * Time.deltaTime);
+        //}
     }
 }
 
@@ -53,6 +53,7 @@ public class EyeHazardControllerEditor : Editor
 {
     SerializedProperty isLightMovingProp;
     SerializedProperty lightObjectProp;
+    SerializedProperty followObjectProp;
     SerializedProperty lightMoveSpeedProp;
     SerializedProperty lightMoveDistanceProp;
     SerializedProperty lightStopTimeProp;
@@ -62,6 +63,7 @@ public class EyeHazardControllerEditor : Editor
     {
         isLightMovingProp = serializedObject.FindProperty("IsLightMoving");
         lightObjectProp = serializedObject.FindProperty("LightObject");
+        followObjectProp = serializedObject.FindProperty("FollowObject");
         lightMoveSpeedProp = serializedObject.FindProperty("LightMoveSpeed");
         lightMoveDistanceProp = serializedObject.FindProperty("LightMoveDistance");
         lightStopTimeProp = serializedObject.FindProperty("LightStopTime");
@@ -73,12 +75,13 @@ public class EyeHazardControllerEditor : Editor
         serializedObject.Update();
 
         // Draw all fields except the movement ones
-        DrawPropertiesExcluding(serializedObject, "LightObject", "LightMoveSpeed", "LightMoveDistance", "LightStopTime", "LightAxis");
+        DrawPropertiesExcluding(serializedObject, "LightObject", "FollowObject", "LightMoveSpeed", "LightMoveDistance", "LightStopTime", "LightAxis");
 
         // Draw movement fields only if IsLightMoving is true
         if (isLightMovingProp.boolValue)
         {
             EditorGUILayout.PropertyField(lightObjectProp);
+            EditorGUILayout.PropertyField(followObjectProp);
             EditorGUILayout.PropertyField(lightMoveSpeedProp);
             EditorGUILayout.PropertyField(lightMoveDistanceProp);
             EditorGUILayout.PropertyField(lightStopTimeProp);
@@ -88,7 +91,6 @@ public class EyeHazardControllerEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
-
 
 enum Direction
 {
