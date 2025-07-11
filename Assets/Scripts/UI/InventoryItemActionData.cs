@@ -47,5 +47,6 @@ public enum InventoryItemActionType
 {
     Use,
     Equip,
-    Discard
+    Discard,
+    Give
 }
