@@ -97,7 +97,7 @@ public class InventoryManager : MonoBehaviour
 
     public void StartObserving()
     {
-        var items = _items.Where(x => x.Amount > 0).ToList();
+        var items = _items.Where(x => x && x.Amount > 0).ToList();
         for (int i = 0; i < Observers.Count; i++)
         {
             if (i >= items.Count)
@@ -117,6 +117,7 @@ public class InventoryManager : MonoBehaviour
         InventoryItemObserver.OnPointerClickEvent -= OnItemClick;
         for (int i = 0; i < _items.Count; i++)
         {
+            if (_items[i] == null) continue;
             _items[i].AfterAmountChange -= ItemChange;
         }
         foreach (var observer in Observers)
