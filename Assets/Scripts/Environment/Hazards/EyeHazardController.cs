@@ -31,19 +31,31 @@ public class EyeHazardController : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        IsEyeOpenClose = false;
+        EyeClose();
+    }
+
     // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
-        if (IsEyeOpenClose)
+        if (!IsEyeOpenClose)
         {
-            HandleEyeState();
+            return;
         }
+        HandleEyeState();
         if (!IsLightMoving)
         {
             return;
         }
         LightObject.transform.LookAt(FollowObject.transform, Vector3.forward);
+    }
+
+    public void EnableEyeHazard()
+    {
+        IsEyeOpenClose = true;
     }
 
     private void HandleEyeState()
