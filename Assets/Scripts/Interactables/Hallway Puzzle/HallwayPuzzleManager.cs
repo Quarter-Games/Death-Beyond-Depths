@@ -43,7 +43,6 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                     //Player is on the right side of the original room
                     RoomCopy.transform.position = new Vector3(RoomCopy.transform.position.x + RoomWidth, RoomCopy.transform.position.y, RoomCopy.transform.position.z);
                     CopyBoundries.transform.position = new Vector3(CopyBoundries.transform.position.x + RoomWidth, CopyBoundries.transform.position.y, CopyBoundries.transform.position.z);
-                    StartCoroutine(ForceCinemachineUpdate());
                 }
             }
             else
@@ -56,9 +55,8 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                     OriginalRoomInstance.transform.position = new Vector3(OriginalRoomInstance.transform.position.x + RoomWidth, OriginalRoomInstance.transform.position.y, OriginalRoomInstance.transform.position.z);
                     cameraBoundries.transform.position = new Vector3(cameraBoundries.transform.position.x + RoomWidth, cameraBoundries.transform.position.y, cameraBoundries.transform.position.z);
                 }
-                StartCoroutine(ForceCinemachineUpdate());
             }
-            _confiner2D.InvalidateBoundingShapeCache();
+            //_confiner2D.InvalidateBoundingShapeCache();
         }
         else
         {
@@ -88,16 +86,18 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 player.transform.position -= delta;
                 followObject.transform.position -= delta;
 
-                _confiner2D.InvalidateBoundingShapeCache();
-
                 vcam.OnTargetObjectWarped(followObject.transform, -delta);
 
-                StartCoroutine(ForceCinemachineUpdate());
-                gameObject.SetActive(false);
+
+                StartCoroutine(waitAndDisabel());
+                IEnumerator waitAndDisabel()
+                {
+                    yield return null;
+                    gameObject.SetActive(false);
+                }
             }
         }
-        StartCoroutine(ForceCinemachineUpdate());
-
+        _confiner2D.InvalidateBoundingShapeCache();
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision) { }
@@ -157,6 +157,7 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         var follow = vcam.Follow;
 
         vcam.OnTargetObjectWarped(follow.transform, Vector3.zero);
+
         yield return new WaitForEndOfFrame();
         _confiner2D.InvalidateBoundingShapeCache();
 
