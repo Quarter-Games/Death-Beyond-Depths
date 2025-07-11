@@ -1,11 +1,14 @@
 using MoreMountains.Feedbacks;
+using System;
 using UnityEngine;
 
 public class ClocheInteractable : InteractableObject, IInteractable
 {
     [SerializeField] MMF_Player MMF_Player;
-    bool IsInteractable = true;
-    
+    public bool IsInteractable = false;
+
+    public static event Action OnClocheInteracted;
+
     public void EnableClocheInteractability()
     {
         IsInteractable = true;
@@ -14,6 +17,7 @@ public class ClocheInteractable : InteractableObject, IInteractable
     public void DisableClocheInteractability()
     {
         IsInteractable = false;
+        IndicatorUI.SetActive(false);
         //??????
     }
 
@@ -31,10 +35,12 @@ public class ClocheInteractable : InteractableObject, IInteractable
 
     public void Interact()
     {
+        if(!IsInteractable) return;
         Debug.Log("Cloche Interacted");
         MMF_Player.PlayFeedbacks();
         IsInteractable = false;
         IndicatorUI.SetActive(false);
+        OnClocheInteracted?.Invoke();
     }
 
     public void UnInteract()
