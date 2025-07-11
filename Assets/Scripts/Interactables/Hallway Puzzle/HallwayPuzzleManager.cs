@@ -96,10 +96,11 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 // Notify Cinemachine about target warp
                 vcam.OnTargetObjectWarped(followObject.transform, -delta);
                 // Let Cinemachine catch up next frame
-                player.StartCoroutine(ForceCinemachineUpdate());
+                StartCoroutine(ForceCinemachineUpdate());
                 gameObject.SetActive(false);
             }
         }
+        StartCoroutine(ForceCinemachineUpdate());
 
     }
 
@@ -155,7 +156,6 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
     private IEnumerator ForceCinemachineUpdate()
     {
         // Wait for rendering & physics to settle
-        yield return new WaitForEndOfFrame();
 
         var camera = CameraManager.Instance;
         var vcam = camera.VirtualCameras[0];
@@ -165,8 +165,21 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         vcam.OnTargetObjectWarped(follow.transform, Vector3.zero);
 
         // OPTIONAL: If confiner's collider might still be out of sync
+        if (cameraBoundries.transform.parent.TryGetComponent<CompositeCollider2D>(out var composite))
+        {
+            composite.GenerateGeometry();
+        }
+        // Invalidate confiner cache
         var confiner = vcam.GetComponent<CinemachineConfiner2D>();
         confiner.InvalidateBoundingShapeCache();
+        yield return new WaitForEndOfFrame();
+
+        // OPTIONAL: re-notify Cinemachine in case previous warp was missed
+
+        //composite.GenerateGeometry();
+        // Invalidate confiner cache
+        confiner.InvalidateBoundingShapeCache();
+
     }
 
     public void UnInteract()
