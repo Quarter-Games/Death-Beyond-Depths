@@ -372,7 +372,7 @@ abstract public class PlayerCharacterController : Character
         animator.SetInteger("Hit number", UnityEngine.Random.Range(0, 3));
         DisableInput();
         IsMeleeAttacking = false;
-        MeleeAttackObject.ResetEnemyAttackedList();
+        MeleeAttackObject?.ResetEnemyAttackedList();
         float knockbackDirection = IsFacingRight ? -1 : 1;
         rb.AddForce(new Vector2(5 * knockbackDirection, 3), ForceMode2D.Impulse);
         float hpFraction = Mathf.Pow(stats.HP / MaxHP, 2);
