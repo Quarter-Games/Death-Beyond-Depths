@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,6 +27,7 @@ public class CaptainController : PlayerCharacterController
     {
         base.OnEnable();
         PointerMovementAction.action.performed += context => UpdateMousePosition(context);
+        CallDisableInput();
     }
     protected override void OnDisable()
     {
