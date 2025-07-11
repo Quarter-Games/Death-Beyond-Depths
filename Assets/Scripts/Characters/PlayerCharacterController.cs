@@ -11,6 +11,7 @@ using static DamageVignetteController;
 
 abstract public class PlayerCharacterController : Character
 {
+    public static bool isInputEnabled = false;
     [SerializeField] float AttackInterval = 1f;
     [SerializeField] InputActionReference movementInputAction;
     [SerializeField] InputActionReference RunInputAction;
@@ -100,7 +101,7 @@ abstract public class PlayerCharacterController : Character
     {
         CrouchInputAction.action.performed -= OnCrouchPerformed;
         RunInputAction.action.performed -= OnRunPerformed;
-        RunInputAction.action.canceled -= OnRunPerformed; 
+        RunInputAction.action.canceled -= OnRunPerformed;
         LeftClickInputAction.action.performed -= LeftMouseClick;
         RightClickInputAction.action.performed -= RightMouseHold;
         InteractInputAction.action.performed -= Interact;
@@ -124,6 +125,7 @@ abstract public class PlayerCharacterController : Character
     }
     private void FixedUpdate()
     {
+        if (!isInputEnabled) return;
         if (stats.HP == 0) return;
         Vector2 movementInput = movementInputAction.action.ReadValue<Vector2>();
         var movement = new Vector2();
@@ -316,8 +318,14 @@ abstract public class PlayerCharacterController : Character
         DisableInput();
     }
 
+    public void CallEnableInput()
+    {
+        EnableInput();
+    }
     private static void DisableInput()
     {
+        isInputEnabled = false;
+        Debug.Log("Disable Input System Actions");
         foreach (var action in InputSystem.actions)
         {
             action.Disable();
@@ -326,6 +334,8 @@ abstract public class PlayerCharacterController : Character
 
     private static void EnableInput()
     {
+        Debug.Log("Enabling Input System Actions");
+        isInputEnabled = true;
         foreach (var action in InputSystem.actions)
         {
             action.Enable();
@@ -413,7 +423,7 @@ abstract public class PlayerCharacterController : Character
 
     public void SeenByEnemy()
     {
-        if(NumberOfEnemiesAwareOfPlayer == 0 && IsHidden)
+        if (NumberOfEnemiesAwareOfPlayer == 0 && IsHidden)
         {
             SpecialEffects.ScreenStealthEffect(false);
         }
@@ -445,4 +455,5 @@ abstract public class PlayerCharacterController : Character
         TakeDamage(1);
         IsAttacked = false;
     }
+
 }

@@ -43,4 +43,8 @@ public class AnimationTriggerHandler : MonoBehaviour
     {
         captainController.OnStoppedGettingHit();
     }
+    public void OnRespawnEnd()
+    {
+        captainController.CallEnableInput();
+    }
 }
