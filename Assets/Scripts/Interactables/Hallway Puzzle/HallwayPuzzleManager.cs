@@ -5,14 +5,17 @@ using UnityEngine;
 
 internal class HallwayPuzzleManager : InteractableObject, IInteractable
 {
-    [SerializeField] private PuzzleState _puzzleState;
     [SerializeField] GameObject RoomPrefab;
     [SerializeField] GameObject OriginalRoomInstance;
-    [SerializeField] GameObject RoomCopy;
+    GameObject RoomCopy;
     [SerializeField] BoxCollider2D cameraBoundries;
-    [SerializeField] BoxCollider2D CopyBoundries;
+    BoxCollider2D CopyBoundries;
     [SerializeField] float RoomWidth;
     private CinemachineConfiner2D _confiner2D;
+    [SerializeField] Cthulhu ctuhluObject;
+    [SerializeField] Cthulhu ctuhluPrefab;
+    [SerializeField] Transform CthuluSpawnPosition;
+    int iteration = 1;
 
     private Vector3 _originalRoomPosition;
     private Vector3 _originalColliderPosition;
@@ -33,16 +36,19 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         if (trigger.isRight)
         {
             Debug.Log("PUZZLE ENTERED");
-            //Copy is on the left
+
             if (RoomCopy.transform.position.x < OriginalRoomInstance.transform.position.x)
             {
                 Debug.Log("PUZZLE ENTERED - Copy is on the left");
                 if (trigger.transform.position.x > OriginalRoomInstance.transform.position.x)
                 {
                     Debug.Log("Player is on the right side of the original room");
-                    //Player is on the right side of the original room
-                    RoomCopy.transform.position = new Vector3(RoomCopy.transform.position.x + RoomWidth, RoomCopy.transform.position.y, RoomCopy.transform.position.z);
-                    CopyBoundries.transform.position = new Vector3(CopyBoundries.transform.position.x + RoomWidth, CopyBoundries.transform.position.y, CopyBoundries.transform.position.z);
+
+                    RoomCopy.transform.position = new Vector3(RoomCopy.transform.position.x + RoomWidth * 2, RoomCopy.transform.position.y, RoomCopy.transform.position.z);
+                    CopyBoundries.transform.position = new Vector3(CopyBoundries.transform.position.x + RoomWidth * 2, CopyBoundries.transform.position.y, CopyBoundries.transform.position.z);
+                    ctuhluObject.transform.position = new Vector3(ctuhluObject.transform.position.x + RoomWidth, ctuhluObject.transform.position.y, ctuhluObject.transform.position.z);
+                    ctuhluObject.Init(iteration);
+                    iteration++;
                 }
             }
             else
@@ -52,8 +58,11 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 {
                     Debug.Log("Player is on the right side of the copy room");
                     //Player is on the right side of the copy room
-                    OriginalRoomInstance.transform.position = new Vector3(OriginalRoomInstance.transform.position.x + RoomWidth, OriginalRoomInstance.transform.position.y, OriginalRoomInstance.transform.position.z);
-                    cameraBoundries.transform.position = new Vector3(cameraBoundries.transform.position.x + RoomWidth, cameraBoundries.transform.position.y, cameraBoundries.transform.position.z);
+                    OriginalRoomInstance.transform.position = new Vector3(OriginalRoomInstance.transform.position.x + RoomWidth * 2, OriginalRoomInstance.transform.position.y, OriginalRoomInstance.transform.position.z);
+                    cameraBoundries.transform.position = new Vector3(cameraBoundries.transform.position.x + RoomWidth * 2, cameraBoundries.transform.position.y, cameraBoundries.transform.position.z);
+                    ctuhluObject.transform.position = new Vector3(ctuhluObject.transform.position.x + RoomWidth, ctuhluObject.transform.position.y, ctuhluObject.transform.position.z);
+                    ctuhluObject.Init(iteration);
+                    iteration++;
                 }
             }
             //_confiner2D.InvalidateBoundingShapeCache();
@@ -104,12 +113,7 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
     protected override void OnTriggerExit2D(Collider2D collision) { }
     public void Interact()
     {
-        switch (_puzzleState)
-        {
-            case PuzzleState.BeforeStart:
-                StartPuzzle();
-                break;
-        }
+        StartPuzzle();
     }
 
     private void StartPuzzle()
@@ -145,6 +149,8 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         // Notify Cinemachine about target warp
         vcam.OnTargetObjectWarped(followObject.transform, delta);
 
+        ctuhluObject = Instantiate(ctuhluPrefab, CthuluSpawnPosition.position, Quaternion.identity);
+        ctuhluObject.Init(0);
         // Let Cinemachine catch up next frame
         StartCoroutine(ForceCinemachineUpdate());
     }
@@ -166,11 +172,5 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
     public void UnInteract()
     {
 
-    }
-    public enum PuzzleState
-    {
-        BeforeStart,
-        PuzzleEntered,
-        PuzzleCompleted
     }
 }
