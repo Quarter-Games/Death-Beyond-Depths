@@ -12,6 +12,7 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
     [SerializeField] BoxCollider2D cameraBoundries;
     [SerializeField] BoxCollider2D CopyBoundries;
     [SerializeField] float RoomWidth;
+    private CinemachineConfiner2D _confiner2D;
 
     private Vector3 _originalRoomPosition;
     private Vector3 _originalColliderPosition;
@@ -57,6 +58,7 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 }
                 StartCoroutine(ForceCinemachineUpdate());
             }
+            _confiner2D.InvalidateBoundingShapeCache();
         }
         else
         {
@@ -82,20 +84,14 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 var camera = CameraManager.Instance;
                 var vcam = camera.VirtualCameras[0];
                 var followObject = vcam.Follow;
-                // Move targets
+
                 player.transform.position -= delta;
                 followObject.transform.position -= delta;
-                // Regenerate collider geometry if needed
-                if (cameraBoundries.TryGetComponent<CompositeCollider2D>(out var composite))
-                {
-                    composite.GenerateGeometry();
-                }
-                // Invalidate confiner cache
-                var confiner = vcam.GetComponent<CinemachineConfiner2D>();
-                confiner.InvalidateBoundingShapeCache();
-                // Notify Cinemachine about target warp
+
+                _confiner2D.InvalidateBoundingShapeCache();
+
                 vcam.OnTargetObjectWarped(followObject.transform, -delta);
-                // Let Cinemachine catch up next frame
+
                 StartCoroutine(ForceCinemachineUpdate());
                 gameObject.SetActive(false);
             }
@@ -143,8 +139,8 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         }
 
         // Invalidate confiner cache
-        var confiner = vcam.GetComponent<CinemachineConfiner2D>();
-        confiner.InvalidateBoundingShapeCache();
+        _confiner2D = vcam.GetComponent<CinemachineConfiner2D>();
+        _confiner2D.InvalidateBoundingShapeCache();
 
         // Notify Cinemachine about target warp
         vcam.OnTargetObjectWarped(followObject.transform, delta);
@@ -155,30 +151,14 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
 
     private IEnumerator ForceCinemachineUpdate()
     {
-        // Wait for rendering & physics to settle
 
         var camera = CameraManager.Instance;
         var vcam = camera.VirtualCameras[0];
         var follow = vcam.Follow;
 
-        // OPTIONAL: re-notify Cinemachine in case previous warp was missed
         vcam.OnTargetObjectWarped(follow.transform, Vector3.zero);
-
-        // OPTIONAL: If confiner's collider might still be out of sync
-        if (cameraBoundries.transform.parent.TryGetComponent<CompositeCollider2D>(out var composite))
-        {
-            composite.GenerateGeometry();
-        }
-        // Invalidate confiner cache
-        var confiner = vcam.GetComponent<CinemachineConfiner2D>();
-        confiner.InvalidateBoundingShapeCache();
         yield return new WaitForEndOfFrame();
-
-        // OPTIONAL: re-notify Cinemachine in case previous warp was missed
-
-        //composite.GenerateGeometry();
-        // Invalidate confiner cache
-        confiner.InvalidateBoundingShapeCache();
+        _confiner2D.InvalidateBoundingShapeCache();
 
     }
 
