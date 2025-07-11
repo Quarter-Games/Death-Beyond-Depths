@@ -45,6 +45,7 @@ public class InventoryManager : MonoBehaviour
         InventoryItemObserver.OnPointerClickEvent += OnItemClick;
         for (int i = 0; i < _items.Count; i++)
         {
+            if (_items[i] == null) continue;
             _items[i].AfterAmountChange += ItemChange;
         }
         StartObserving();
