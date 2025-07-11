@@ -42,7 +42,7 @@ public class Door : InteractableObject, IInteractable
         IndicatorUI = UnlockedUI;
         ChangeState(IsOpen);
     }
-    public void ChangeState(bool isOpen)
+    virtual public void ChangeState(bool isOpen)
     {
         if (animator != null) animator.SetTrigger(isOpen ? "Open" : "Close");
         if (DoorCollider != null)
@@ -66,7 +66,7 @@ public class Door : InteractableObject, IInteractable
     {
         return IsWithinPlayerRange;
     }
-    public void Interact()
+    virtual public void Interact()
     {
         if (isLocked)
         {
@@ -76,7 +76,7 @@ public class Door : InteractableObject, IInteractable
             }
             else
             {
-                AudioManager.Instance.PlaySoundEffect(OnFailedInteraction, transform);
+                LockedFailedToOpen();
             }
             return;
         }
@@ -84,7 +84,12 @@ public class Door : InteractableObject, IInteractable
         ChangeState(!IsOpen);
     }
 
-    public void UnInteract()
+    protected virtual void LockedFailedToOpen()
+    {
+        AudioManager.Instance.PlaySoundEffect(OnFailedInteraction, transform);
+    }
+
+    virtual public void UnInteract()
     {
         if (isLocked) return;
         ChangeState(!IsOpen);
