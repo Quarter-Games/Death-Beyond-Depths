@@ -1,12 +1,13 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Experimental.GlobalIllumination;
 public class EyeDamager : MonoBehaviour
 {
     [SerializeField] readonly float TimeToOpen = 1f;
     [SerializeField] readonly float TimeToClose = 1f;
     [SerializeField] readonly float TimeStaysOpen = 1f;
     [SerializeField] readonly float TimeStaysClosed = 2f;
-
+    SpotLight a;
     EyeState CurrentEyeState = EyeState.Closed;
     bool IsPlayerInTrigger = false;
     float timer = 0;
