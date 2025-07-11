@@ -34,17 +34,18 @@ public class EyeHazardController : MonoBehaviour
     private void Start()
     {
         IsEyeOpenClose = false;
+        IsEyeOpened = false;
         EyeClose();
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
         if (!IsEyeOpenClose)
         {
             return;
         }
+        timer += Time.deltaTime;
         HandleEyeState();
         if (!IsLightMoving)
         {
@@ -56,6 +57,7 @@ public class EyeHazardController : MonoBehaviour
     public void EnableEyeHazard()
     {
         IsEyeOpenClose = true;
+        StartCoroutine(EyeOpen());
     }
 
     private void HandleEyeState()
@@ -81,9 +83,6 @@ public class EyeHazardController : MonoBehaviour
         timer = 0;
         yield return MMFOpenEye.PlayFeedbacksCoroutine(Vector3.one);
         timer = 0;
-        //FollowObject.transform.position = StartingPosition;
-        //LightObject.SetActive(true);
-        //FollowObject.SetActive(true);
         IsEyeOpened = true;
     }
 
@@ -92,9 +91,6 @@ public class EyeHazardController : MonoBehaviour
         timer = 0;
         yield return MMFCloseEye.PlayFeedbacksCoroutine(Vector3.one);
         timer = 0;
-
-        //LightObject.SetActive(false);
-        //FollowObject.SetActive(false);
         IsEyeOpened = false;
     }
 }
