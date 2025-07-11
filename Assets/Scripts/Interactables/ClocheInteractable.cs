@@ -1,8 +1,10 @@
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
-public class ClocheInteractable : InteractableObject
+public class ClocheInteractable : InteractableObject, IInteractable
 {
-    bool IsInteractable = false;
+    [SerializeField] MMF_Player MMF_Player;
+    bool IsInteractable = true;
     
     public void EnableClocheInteractability()
     {
@@ -25,5 +27,18 @@ public class ClocheInteractable : InteractableObject
     {
         if(!IsInteractable) return;
         base.OnTriggerExit2D(collision);
+    }
+
+    public void Interact()
+    {
+        Debug.Log("Cloche Interacted");
+        MMF_Player.PlayFeedbacks();
+        IsInteractable = false;
+        IndicatorUI.SetActive(false);
+    }
+
+    public void UnInteract()
+    {
+        
     }
 }
