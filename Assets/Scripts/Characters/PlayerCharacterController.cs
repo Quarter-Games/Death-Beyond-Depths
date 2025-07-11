@@ -311,6 +311,11 @@ abstract public class PlayerCharacterController : Character
         }
     }
 
+    public void CallDisableInput()
+    {
+        DisableInput();
+    }
+
     private static void DisableInput()
     {
         foreach (var action in InputSystem.actions)
