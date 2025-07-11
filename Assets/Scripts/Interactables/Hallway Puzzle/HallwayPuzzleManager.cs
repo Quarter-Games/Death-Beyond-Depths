@@ -5,13 +5,17 @@ using UnityEngine;
 
 internal class HallwayPuzzleManager : InteractableObject, IInteractable
 {
-    [SerializeField] private PuzzleState _puzzleState;
     [SerializeField] GameObject RoomPrefab;
     [SerializeField] GameObject OriginalRoomInstance;
-    [SerializeField] GameObject RoomCopy;
+    GameObject RoomCopy;
     [SerializeField] BoxCollider2D cameraBoundries;
-    [SerializeField] BoxCollider2D CopyBoundries;
+    BoxCollider2D CopyBoundries;
     [SerializeField] float RoomWidth;
+    private CinemachineConfiner2D _confiner2D;
+    [SerializeField] Cthulhu ctuhluObject;
+    [SerializeField] Cthulhu ctuhluPrefab;
+    [SerializeField] Transform CthuluSpawnPosition;
+    int iteration = 1;
 
     private Vector3 _originalRoomPosition;
     private Vector3 _originalColliderPosition;
@@ -32,17 +36,19 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         if (trigger.isRight)
         {
             Debug.Log("PUZZLE ENTERED");
-            //Copy is on the left
+
             if (RoomCopy.transform.position.x < OriginalRoomInstance.transform.position.x)
             {
                 Debug.Log("PUZZLE ENTERED - Copy is on the left");
                 if (trigger.transform.position.x > OriginalRoomInstance.transform.position.x)
                 {
                     Debug.Log("Player is on the right side of the original room");
-                    //Player is on the right side of the original room
-                    RoomCopy.transform.position = new Vector3(RoomCopy.transform.position.x + RoomWidth, RoomCopy.transform.position.y, RoomCopy.transform.position.z);
-                    CopyBoundries.transform.position = new Vector3(CopyBoundries.transform.position.x + RoomWidth, CopyBoundries.transform.position.y, CopyBoundries.transform.position.z);
-                    StartCoroutine(ForceCinemachineUpdate());
+
+                    RoomCopy.transform.position = new Vector3(RoomCopy.transform.position.x + RoomWidth * 2, RoomCopy.transform.position.y, RoomCopy.transform.position.z);
+                    CopyBoundries.transform.position = new Vector3(CopyBoundries.transform.position.x + RoomWidth * 2, CopyBoundries.transform.position.y, CopyBoundries.transform.position.z);
+                    ctuhluObject.transform.position = new Vector3(ctuhluObject.transform.position.x + RoomWidth, ctuhluObject.transform.position.y, ctuhluObject.transform.position.z);
+                    ctuhluObject.Init(iteration);
+                    iteration++;
                 }
             }
             else
@@ -52,11 +58,14 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 {
                     Debug.Log("Player is on the right side of the copy room");
                     //Player is on the right side of the copy room
-                    OriginalRoomInstance.transform.position = new Vector3(OriginalRoomInstance.transform.position.x + RoomWidth, OriginalRoomInstance.transform.position.y, OriginalRoomInstance.transform.position.z);
-                    cameraBoundries.transform.position = new Vector3(cameraBoundries.transform.position.x + RoomWidth, cameraBoundries.transform.position.y, cameraBoundries.transform.position.z);
+                    OriginalRoomInstance.transform.position = new Vector3(OriginalRoomInstance.transform.position.x + RoomWidth * 2, OriginalRoomInstance.transform.position.y, OriginalRoomInstance.transform.position.z);
+                    cameraBoundries.transform.position = new Vector3(cameraBoundries.transform.position.x + RoomWidth * 2, cameraBoundries.transform.position.y, cameraBoundries.transform.position.z);
+                    ctuhluObject.transform.position = new Vector3(ctuhluObject.transform.position.x + RoomWidth, ctuhluObject.transform.position.y, ctuhluObject.transform.position.z);
+                    ctuhluObject.Init(iteration);
+                    iteration++;
                 }
-                StartCoroutine(ForceCinemachineUpdate());
             }
+            //_confiner2D.InvalidateBoundingShapeCache();
         }
         else
         {
@@ -82,37 +91,29 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 var camera = CameraManager.Instance;
                 var vcam = camera.VirtualCameras[0];
                 var followObject = vcam.Follow;
-                // Move targets
+
                 player.transform.position -= delta;
                 followObject.transform.position -= delta;
-                // Regenerate collider geometry if needed
-                if (cameraBoundries.TryGetComponent<CompositeCollider2D>(out var composite))
-                {
-                    composite.GenerateGeometry();
-                }
-                // Invalidate confiner cache
-                var confiner = vcam.GetComponent<CinemachineConfiner2D>();
-                confiner.InvalidateBoundingShapeCache();
-                // Notify Cinemachine about target warp
+
                 vcam.OnTargetObjectWarped(followObject.transform, -delta);
-                // Let Cinemachine catch up next frame
-                player.StartCoroutine(ForceCinemachineUpdate());
-                gameObject.SetActive(false);
+
+
+                StartCoroutine(waitAndDisabel());
+                IEnumerator waitAndDisabel()
+                {
+                    yield return null;
+                    gameObject.SetActive(false);
+                }
             }
         }
-
+        _confiner2D.InvalidateBoundingShapeCache();
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision) { }
     protected override void OnTriggerExit2D(Collider2D collision) { }
     public void Interact()
     {
-        switch (_puzzleState)
-        {
-            case PuzzleState.BeforeStart:
-                StartPuzzle();
-                break;
-        }
+        StartPuzzle();
     }
 
     private void StartPuzzle()
@@ -142,41 +143,34 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         }
 
         // Invalidate confiner cache
-        var confiner = vcam.GetComponent<CinemachineConfiner2D>();
-        confiner.InvalidateBoundingShapeCache();
+        _confiner2D = vcam.GetComponent<CinemachineConfiner2D>();
+        _confiner2D.InvalidateBoundingShapeCache();
 
         // Notify Cinemachine about target warp
         vcam.OnTargetObjectWarped(followObject.transform, delta);
 
+        ctuhluObject = Instantiate(ctuhluPrefab, CthuluSpawnPosition.position, Quaternion.identity);
+        ctuhluObject.Init(0);
         // Let Cinemachine catch up next frame
         StartCoroutine(ForceCinemachineUpdate());
     }
 
     private IEnumerator ForceCinemachineUpdate()
     {
-        // Wait for rendering & physics to settle
-        yield return new WaitForEndOfFrame();
 
         var camera = CameraManager.Instance;
         var vcam = camera.VirtualCameras[0];
         var follow = vcam.Follow;
 
-        // OPTIONAL: re-notify Cinemachine in case previous warp was missed
         vcam.OnTargetObjectWarped(follow.transform, Vector3.zero);
 
-        // OPTIONAL: If confiner's collider might still be out of sync
-        var confiner = vcam.GetComponent<CinemachineConfiner2D>();
-        confiner.InvalidateBoundingShapeCache();
+        yield return new WaitForEndOfFrame();
+        _confiner2D.InvalidateBoundingShapeCache();
+
     }
 
     public void UnInteract()
     {
 
-    }
-    public enum PuzzleState
-    {
-        BeforeStart,
-        PuzzleEntered,
-        PuzzleCompleted
     }
 }
