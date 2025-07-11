@@ -7,17 +7,17 @@ public class Cthulhu : MonoBehaviour
     [SerializeField] Renderer RightEye;
     [SerializeField] Material DisabledEye;
     [SerializeField] Material EnabledEye;
-    private void Awake()
+    private void Update()
     {
+        transform.LookAt(Camera.main.transform);
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
     }
     public void Init(int iteration)
     {
-        switch (iteration % 3)
-        {
-            case 0: NoColors(); break;
-            case 1: BothEyes(); break;
-            case 2: OneEye(); break;
-        }
+
+        if (iteration == 0) NoColors();
+        else BothEyes();
+        if (iteration < 3) transform.localScale *= 1.5f;
     }
 
     private void OneEye()

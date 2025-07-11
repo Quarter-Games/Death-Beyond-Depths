@@ -99,9 +99,11 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
 
 
                 StartCoroutine(waitAndDisabel());
+                _confiner2D.InvalidateBoundingShapeCache();
                 IEnumerator waitAndDisabel()
                 {
                     yield return null;
+                    _confiner2D.InvalidateBoundingShapeCache();
                     gameObject.SetActive(false);
                 }
             }
