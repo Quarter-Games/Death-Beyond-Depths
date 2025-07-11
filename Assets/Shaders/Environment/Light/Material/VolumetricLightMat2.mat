@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9191507867728993305
+--- !u!114 &-3900554248757405819
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LightningMat 2
-  m_Shader: {fileID: -6465566751694194690, guid: f603abaf13370b3468b73591cd92927d, type: 3}
+  m_Name: VolumetricLightMat2
+  m_Shader: {fileID: -6465566751694194690, guid: 8ecfe3d23a1a2d044b28f05606d39d6f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -51,14 +51,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DistortionAmounth: 0.27
-    - _Hight: 0.6
-    - _NoiseScale: 17.5
+    - _Alpha: 0.595
+    - _FresnelPower: 0.48
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Width: 0.02
+    - _ScrollSpeed: 0
     m_Colors:
-    - _Color: {r: 0.45627448, g: 15.686763, b: 19.34604, a: 0}
-    - _NoiseSpeed: {r: 0.02, g: 0.01, b: 0, a: 0}
+    - _Color: {r: 0.7028302, g: 0.9397988, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
