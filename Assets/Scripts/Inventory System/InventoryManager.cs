@@ -35,6 +35,7 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (var item in _items)
         {
+            if (item == null) continue;
             item.Reset();
         }
         _openInventory.action.performed += OpenInventory;
