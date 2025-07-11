@@ -1,5 +1,7 @@
 using DG.Tweening;
+using MoreMountains.Feedbacks;
 using System;
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,7 +17,8 @@ public class EyeHazardController : MonoBehaviour
     [SerializeField] bool IsLightMoving = false;
     [SerializeField] GameObject LightObject;
     [SerializeField] GameObject FollowObject;
-
+    [SerializeField] MMF_Player MMFOpenEye;
+    [SerializeField] MMF_Player MMFCloseEye;
     bool IsEyeOpened = true;
     Vector3 StartingPosition;
     float timer = 0;
@@ -51,30 +54,35 @@ public class EyeHazardController : MonoBehaviour
             {
                 return;
             }
-            EyeClose();
+            StartCoroutine(EyeClose());
             return;
         }
         if (timer < TimeToOpen)
         {
             return;
         }
-        EyeOpen();
+        StartCoroutine(EyeOpen());
     }
 
-    void EyeOpen()
+    IEnumerator EyeOpen()
     {
-        FollowObject.transform.position = StartingPosition;
-        LightObject.SetActive(true);
-        FollowObject.SetActive(true);
+        timer = 0;
+        yield return MMFOpenEye.PlayFeedbacksCoroutine(Vector3.one);
+        timer = 0;
+        //FollowObject.transform.position = StartingPosition;
+        //LightObject.SetActive(true);
+        //FollowObject.SetActive(true);
         IsEyeOpened = true;
-        timer = 0;
     }
 
-    void EyeClose()
+    IEnumerator EyeClose()
     {
-        LightObject.SetActive(false);
-        FollowObject.SetActive(false);
-        IsEyeOpened = false;
         timer = 0;
+        yield return MMFCloseEye.PlayFeedbacksCoroutine(Vector3.one);
+        timer = 0;
+
+        //LightObject.SetActive(false);
+        //FollowObject.SetActive(false);
+        IsEyeOpened = false;
     }
 }
