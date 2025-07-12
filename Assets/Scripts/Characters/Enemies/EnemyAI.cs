@@ -278,7 +278,7 @@ public class EnemyAI : Character, IHearing
         {
             return;
         }
-        if ((Player.IsHidden && !IsAwareOfPlayer))
+        if ((Player && Player.IsHidden && !IsAwareOfPlayer))
         {
             return;
         }

@@ -8,8 +8,8 @@ public abstract class InteractableObject : MonoBehaviour
     [SerializeField] protected GameObject IndicatorUI;
     [SerializeField] private float MinimumUISize = 0.5f;
     //[SerializeField] TextMeshProUGUI IndicatorKey;
-    [SerializeField] CustomTrigger UITrigger;
-    [SerializeField] CustomTrigger InteractionTrigger;
+    [SerializeField] protected CustomTrigger UITrigger;
+    [SerializeField] protected CustomTrigger InteractionTrigger;
     [SerializeField] protected AudioResource OnSuccesfullInteraction;
     [SerializeField] protected AudioResource OnFailedInteraction;
     public TMP_Text InteractableName;
@@ -71,7 +71,7 @@ public abstract class InteractableObject : MonoBehaviour
         InformManagerOfInteractability();
     }
 
-    private void ActivateInteractionUI(Collider2D collision)
+    virtual protected void ActivateInteractionUI(Collider2D collision)
     {
         if (!collision.TryGetComponent(out CachedPlayerController))
         {
@@ -90,10 +90,10 @@ public abstract class InteractableObject : MonoBehaviour
         {
             return;
         }
-        InformManagerOfInteractability();
+        InformManagerOfNonInteractability();
     }
 
-    private void DeactivateInteractionUI(Collider2D collision)
+    virtual protected void DeactivateInteractionUI(Collider2D collision)
     {
         if (!collision.TryGetComponent(out CachedPlayerController))
         {
@@ -110,7 +110,7 @@ public abstract class InteractableObject : MonoBehaviour
         //}
     }
 
-    private void QueueForInteractability(Collider2D collision)
+    virtual protected void QueueForInteractability(Collider2D collision)
     {
         if (!collision.TryGetComponent(out CachedPlayerController))
         {
@@ -131,7 +131,10 @@ public abstract class InteractableObject : MonoBehaviour
     {
         InteractablesManager.Instance.AddInteractableObject(this as IInteractable);
     }
-
+    public void InformManagerOfNonInteractability()
+    {
+        InteractablesManager.Instance.RemoveInteractableObject(this as IInteractable);
+    }
     private void Update()
     {
         if (!IsWithinPlayerRange || CachedPlayerController == null || IndicatorUI == null) return;
