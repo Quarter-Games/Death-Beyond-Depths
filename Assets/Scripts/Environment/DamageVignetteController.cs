@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DamageVignetteController : MonoBehaviour
@@ -20,7 +21,7 @@ public class DamageVignetteController : MonoBehaviour
 
     List<EnemyAI> Enemies = new();
 
-    private const string VIGNETTE_RADIUS = "_Vignette_Radius";
+    private const string VIGNETTE_RADIUS = "_Amounth";
     private const string VIGNETTE_COLOR = "_Color";
     public static DamageVignetteController Instance;
 
@@ -32,7 +33,7 @@ public class DamageVignetteController : MonoBehaviour
 
     private void OnDisable()
     {
-        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0);
         ChaseState.OnSeenPlayer -= SeenByEnemy;
         AlertState.OnLosingPlayer -= EnemyLostPlayer;
     }
@@ -52,27 +53,42 @@ public class DamageVignetteController : MonoBehaviour
 
     private void Start()
     {
-        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0);
     }
-
     private void ScreenDamageEffect(float intensity)
     {
         if (ScreenDamageTask != null)
             StopCoroutine(ScreenDamageTask);
-        //intensity = Mathf.Pow(intensity, 2);
         ScreenDamageTask = StartCoroutine(ScreenDamage(intensity));
+    }
+    [ContextMenu("Test Screen Damage Effect")]
+    void Test()
+    {
+        ScreenDamageEffect(0.5f);
+        //ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0.33f);
     }
 
     private IEnumerator ScreenDamage(float intensity)
     {
-        var targetRadius = Remap(intensity, MinIntensity, MaxIntensity, MinVignetteRadius, MaxVignetteRadius);
-        var curRadius = 1f;
-        for (float t = 0; Mathf.Abs(curRadius - targetRadius) > 0.001f; t += Time.deltaTime * VignetteSpeed)
+        float current = ScreenDamageMat.GetFloat(VIGNETTE_RADIUS);
+        float t = 0f;
+        while (Mathf.Abs(current - intensity) > 0.01f)
         {
-            curRadius = Mathf.Lerp(ScreenDamageMat.GetFloat(VIGNETTE_RADIUS), targetRadius, t);
-            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
+            t += Time.deltaTime * VignetteSpeed;
+            current = Mathf.Lerp(current, intensity, t);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, current);
             yield return null;
         }
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, intensity);
+        //var targetRadius = Remap(intensity, MinIntensity, MaxIntensity, MinVignetteRadius, MaxVignetteRadius);
+        //var curRadius = 1f;
+        //for (float t = 0; Mathf.Abs(curRadius - targetRadius) > 0.001f; t += Time.deltaTime * VignetteSpeed)
+        //{
+        //    curRadius = Mathf.Lerp(ScreenDamageMat.GetFloat(VIGNETTE_RADIUS), targetRadius, t);
+        //    ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
+        //    yield return null;
+        //}
+
         //curRadius = targetRadius;
         //ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
         //for (float t = 0; Mathf.Abs(curRadius - 1f) > 0.001f; t += Time.deltaTime * VignetteSpeed)
@@ -97,7 +113,7 @@ public class DamageVignetteController : MonoBehaviour
         {
             if (Instance.ScreenDamageTask != null)
                 Instance.StopCoroutine(Instance.ScreenDamageTask);
-            if(IsPlayerHidden)
+            if (IsPlayerHidden)
                 Instance.ActivateHideVignette();
             else
                 Instance.DeactivateHideVignette();
@@ -108,14 +124,16 @@ public class DamageVignetteController : MonoBehaviour
 
     private IEnumerator StopDamageOverTimeVignette()
     {
-        var targetRadius = Remap(1, 1, 1, -1, 1);
-        var curRadius = 1f;
-        for (float t = 0; Mathf.Abs(curRadius - targetRadius) > 0.001f; t += Time.deltaTime * 0.05f)
+        float current = ScreenDamageMat.GetFloat(VIGNETTE_RADIUS);
+        float t = 0f;
+        while (Mathf.Abs(current - 0) > 0.001f)
         {
-            curRadius = Mathf.Lerp(ScreenDamageMat.GetFloat(VIGNETTE_RADIUS), targetRadius, t);
-            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
+            t += Time.deltaTime * VignetteSpeed;
+            current = Mathf.Lerp(current, 0, t);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, current);
             yield return null;
         }
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0);
     }
 
     private IEnumerator StartDamageOverTimeVignette()
@@ -126,6 +144,7 @@ public class DamageVignetteController : MonoBehaviour
         {
             curRadius = Mathf.Lerp(ScreenDamageMat.GetFloat(VIGNETTE_RADIUS), targetRadius, t);
             ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, curRadius);
+            Debug.Log("Damage effect started: " + curRadius);
             yield return null;
         }
     }
@@ -160,19 +179,50 @@ public class DamageVignetteController : MonoBehaviour
         Enemies.Remove(enemy);
         if (Enemies.Count == 0)
         {
-            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0);
         }
     }
 
     public void ActivateHideVignette()
     {
         ScreenDamageMat.SetColor(VIGNETTE_COLOR, StealthColor);
-        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, StealthMaxIntensity);
+        //ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, StealthMaxIntensity);
+        if (ScreenDamageTask != null) StopCoroutine(ScreenDamageTask);
+        ScreenDamageTask = StartCoroutine(FadeInHideVignette(StealthMaxIntensity));
     }
 
     public void DeactivateHideVignette()
     {
+        ScreenDamageMat.SetColor(VIGNETTE_COLOR, StealthColor);
+        if (ScreenDamageTask != null) StopCoroutine(ScreenDamageTask);
+        ScreenDamageTask = StartCoroutine(FadeOutHideVignette());
+    }
+
+    private IEnumerator FadeInHideVignette(float intensity)
+    {
+        float current = ScreenDamageMat.GetFloat(VIGNETTE_RADIUS);
+        float t = 0f;
+        while (Mathf.Abs(current - intensity) > 0.01f)
+        {
+            t += Time.deltaTime * VignetteSpeed;
+            current = Mathf.Lerp(current, intensity, t);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, current);
+            yield return null;
+        }
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, intensity);
+    }
+    private IEnumerator FadeOutHideVignette()
+    {
+        float current = ScreenDamageMat.GetFloat(VIGNETTE_RADIUS);
+        float t = 0f;
+        while (Mathf.Abs(current - 0) > 0.001f)
+        {
+            t += Time.deltaTime * VignetteSpeed * 1.25f;
+            current = Mathf.Lerp(current, 0, t);
+            ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, current);
+            yield return null;
+        }
+        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0);
         ScreenDamageMat.SetColor(VIGNETTE_COLOR, DamageColor);
-        ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 1);
     }
 }
