@@ -45,7 +45,7 @@ public class EnemyAI : Character, IHearing
     public bool IsDead => stats.HP <= 0;
     public bool IsAwareOfPlayer => StateMachine.CurrentState == ChaseState || StateMachine.CurrentState == ChargeAttackState || StateMachine.CurrentState == AttackState;
     public bool IsFacingLeftProperty { get => IsFacingLeft; }
-    public bool IsKnownPlayerPositionCorrect => Mathf.Abs(Player.transform.position.x - LastKnownPlayerPosition.x) <= 0.1f;
+    public bool IsKnownPlayerPositionCorrect => Player & Mathf.Abs(Player.transform.position.x - LastKnownPlayerPosition.x) <= 0.1f;
 
     protected EnemyStatemachine StateMachine;
     protected Vector3 DefaultScale;
