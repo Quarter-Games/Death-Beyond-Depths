@@ -8,7 +8,7 @@ public class Door : InteractableObject, IInteractable
     public static List<Door> AllDoors = new List<Door>();
     [Space(15f)]
     [SerializeField] Collider2D DoorCollider;
-    [SerializeField] Animator animator;
+    [SerializeField] protected Animator animator;
     [SerializeField] GameObject LockedUI;
     [Tooltip("Does it have lock on it")]
     public InventoryItem KeyToOpen;

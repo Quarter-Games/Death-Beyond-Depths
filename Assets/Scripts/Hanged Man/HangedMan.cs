@@ -1,27 +1,68 @@
 ﻿
 using System;
+using System.Collections;
 using UnityEngine;
 
-public class HangedMan : Door
+public class HangedMan : InteractableObject, IInteractable
 {
     [SerializeField] GameObject NoteUI;
-    public override void ChangeState(bool isOpen)
+    [SerializeField] Animator animator;
+    [SerializeField] InventoryItem Salt;
+    [SerializeField] InventoryItem RewardItem;
+    [SerializeField] ClochePuzzleManager puzzleManager;
+    protected override void OnEnable()
     {
-        if (isOpen) return;
-        base.ChangeState(isOpen);
+        animator.SetTrigger("Drop");
+        base.OnEnable();
     }
-    public override void Interact()
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        base.Interact();
+        var state = CurrentState;
+        if (state == HangedManState.BeforeNote) InteractableName.text = "Talk";
+        else if (state == HangedManState.BeforeReward) InteractableName.text = "Give Salt";
+        else if (state == HangedManState.AfterReward) return;
+        base.OnTriggerEnter2D(collision);
     }
-    protected override void LockedFailedToOpen()
+    public void Interact()
     {
-        base.LockedFailedToOpen();
-        ShowNote();
+        var state = CurrentState;
+        if (state == HangedManState.BeforeNote)
+        {
+            NoteUI.SetActive(true);
+            animator.SetTrigger("Give");
+            StartCoroutine(waitToTakeNote());
+        }
+        else if (state == HangedManState.BeforeReward)
+        {
+            Salt.Amount--;
+            puzzleManager.EnableAllCloches();
+        }
     }
+    IEnumerator waitToTakeNote()
+    {
+        yield return new WaitUntil(() => !NoteUI.activeInHierarchy);
+        animator.SetTrigger("Take");
+    }
+    public void UnInteract()
+    {
 
-    private void ShowNote()
-    {
-        NoteUI.SetActive(true);
     }
+    public HangedManState CurrentState
+    {
+        get
+        {
+            if (Salt.Amount == 0 && RewardItem.Amount == 0)
+                return HangedManState.BeforeNote;
+            else if (Salt.Amount > 0 && RewardItem.Amount == 0)
+                return HangedManState.BeforeReward;
+            else
+                return HangedManState.AfterReward;
+        }
+    }
+}
+public enum HangedManState
+{
+    BeforeNote,
+    BeforeReward,
+    AfterReward
 }
