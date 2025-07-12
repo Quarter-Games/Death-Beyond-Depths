@@ -21,7 +21,7 @@ public class ClochePuzzleManager : MonoBehaviour
         ClocheInteractable.OnClocheInteracted -= DisableAllCloches;
     }
 
-    private void DisableAllCloches()
+    public void DisableAllCloches()
     {
         foreach (var cloche in Cloches)
         {
@@ -31,7 +31,7 @@ public class ClochePuzzleManager : MonoBehaviour
         }
     }
 
-    private void EnableAllCloches()
+    public void EnableAllCloches()
     {
         foreach (var cloche in Cloches)
         {
