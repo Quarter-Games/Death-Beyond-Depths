@@ -10,13 +10,12 @@ public class EyeHazardController : MonoBehaviour
     [SerializeField] bool IsEyeOpenClose = true;
     [SerializeField] float TimeToOpen = 1f;
     [SerializeField] float TimeToClose = 1f;
-    [SerializeField] float TimeStaysOpen = 1f;
-    [SerializeField] float TimeStaysClosed = 2f;
 
     [Space(10)]
     [SerializeField] bool IsLightMoving = false;
     [SerializeField] GameObject LightObject;
     [SerializeField] GameObject FollowObject;
+    [SerializeField] GameObject PupilObject;
     [SerializeField] MMF_Player MMFOpenEye;
     [SerializeField] MMF_Player MMFCloseEye;
     bool IsEyeOpened = true;
