@@ -27,15 +27,15 @@ public class DamageVignetteController : MonoBehaviour
 
     private void OnEnable()
     {
-        ChaseState.OnSeenPlayer += SeenByEnemy;
-        AlertState.OnLosingPlayer += EnemyLostPlayer;
+        //ChaseState.OnSeenPlayer += SeenByEnemy;
+        //AlertState.OnLosingPlayer += EnemyLostPlayer;
     }
 
     private void OnDisable()
     {
         ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0);
-        ChaseState.OnSeenPlayer -= SeenByEnemy;
-        AlertState.OnLosingPlayer -= EnemyLostPlayer;
+        //ChaseState.OnSeenPlayer -= SeenByEnemy;
+        //AlertState.OnLosingPlayer -= EnemyLostPlayer;
     }
 
     private void Awake()
