@@ -35,12 +35,19 @@ public class InteractablesManager : MonoBehaviour
             return;
         if (Interactables.Contains(interactable))
         {
-            Interactables.Remove(interactable);
             return;
         }
         Interactables.Add(interactable);
     }
-
+    public void RemoveInteractableObject(IInteractable interactable)
+    {
+        if (interactable == null)
+            return;
+        if (Interactables.Contains(interactable))
+        {
+            Interactables.Remove(interactable);
+        }
+    }
     public void Interact()
     {
         if (Interactables.Count != 0)

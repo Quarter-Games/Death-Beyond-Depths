@@ -21,14 +21,9 @@ public class ClochePuzzleManager : MonoBehaviour
         ClocheInteractable.OnClocheInteracted -= DisableAllCloches;
     }
 
-    public void DisableAllCloches()
+    public void DisableAllCloches(ClocheInteractable cloche)
     {
-        foreach (var cloche in Cloches)
-        {
-            cloche.DisableClocheInteractability();
-            Debug.Log("Cloche disabled: " + cloche.name);
-            Debug.Log(cloche.IsInteractable);
-        }
+        //cloche.DisableClocheInteractability();
     }
 
     public void EnableAllCloches()
