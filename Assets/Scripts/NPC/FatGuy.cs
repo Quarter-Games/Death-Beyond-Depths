@@ -14,15 +14,14 @@ public class FatGuy : InteractableObject, IInteractable
     }
     protected override void DeactivateInteractionUI(Collider2D collision)
     {
-        if (itemToGive.Amount == 0) return;
         base.DeactivateInteractionUI(collision);
     }
     public void Interact()
     {
+        UITrigger.gameObject.SetActive(false);
+        InteractionTrigger.gameObject.SetActive(false);
         itemToGive.Amount--;
         IndicatorUI.SetActive(false);
-        UITrigger.enabled = false;
-        InteractionTrigger.enabled = false;
 
         if (Desintegrate) Desintegrate.PlayFeedbacks();
         if (BlockerCollider) BlockerCollider.enabled = false;
