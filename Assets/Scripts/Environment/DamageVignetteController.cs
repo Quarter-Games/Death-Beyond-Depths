@@ -27,6 +27,7 @@ public class DamageVignetteController : MonoBehaviour
 
     private void OnEnable()
     {
+        ScreenDamageMat.SetColor(VIGNETTE_COLOR, DamageColor);
         //ChaseState.OnSeenPlayer += SeenByEnemy;
         //AlertState.OnLosingPlayer += EnemyLostPlayer;
     }
@@ -34,6 +35,7 @@ public class DamageVignetteController : MonoBehaviour
     private void OnDisable()
     {
         ScreenDamageMat.SetFloat(VIGNETTE_RADIUS, 0);
+        ScreenDamageMat.SetColor(VIGNETTE_COLOR, DamageColor);
         //ChaseState.OnSeenPlayer -= SeenByEnemy;
         //AlertState.OnLosingPlayer -= EnemyLostPlayer;
     }
@@ -70,6 +72,7 @@ public class DamageVignetteController : MonoBehaviour
 
     private IEnumerator ScreenDamage(float intensity)
     {
+        ScreenDamageMat.SetColor(VIGNETTE_COLOR, DamageColor);
         float current = ScreenDamageMat.GetFloat(VIGNETTE_RADIUS);
         float t = 0f;
         while (Mathf.Abs(current - intensity) > 0.01f)

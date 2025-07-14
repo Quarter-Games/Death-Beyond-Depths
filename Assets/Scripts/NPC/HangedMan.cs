@@ -1,4 +1,5 @@
 ﻿
+using MoreMountains.Feedbacks;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class HangedMan : InteractableObject, IInteractable
     [SerializeField] InventoryItem Salt;
     [SerializeField] InventoryItem RewardItem;
     [SerializeField] ClochePuzzleManager puzzleManager;
+    [SerializeField] MMF_Player IdleLoop;
+    [SerializeField] MMF_Player OnMove;
     public bool GotNote;
 
     protected override void ActivateInteractionUI(Collider2D collision)
@@ -55,6 +58,7 @@ public class HangedMan : InteractableObject, IInteractable
             IndicatorUI.SetActive(false);
             NoteUI.SetActive(true);
             animator.SetTrigger("Give");
+            StartCoroutine(PlayMoveSound());
             GotNote = true;
             StartCoroutine(waitToTakeNote());
 
@@ -65,6 +69,7 @@ public class HangedMan : InteractableObject, IInteractable
             InteractionTrigger.gameObject.SetActive(false);
             Salt.Amount--;
             animator.SetTrigger("Salt");
+            StartCoroutine(PlayMoveSound());
             StartCoroutine(waitToGetReward());
             puzzleManager.EnableAllCloches();
         }
@@ -74,12 +79,19 @@ public class HangedMan : InteractableObject, IInteractable
     {
         yield return new WaitUntil(() => RewardItem.Amount != 0);
         animator.SetTrigger("UnSalt");
+        StartCoroutine(PlayMoveSound());
     }
-
+    IEnumerator PlayMoveSound()
+    {
+        IdleLoop.StopFeedbacks();
+        yield return OnMove.PlayFeedbacksCoroutine(Vector3.zero);
+        IdleLoop.PlayFeedbacks();
+    }
     IEnumerator waitToTakeNote()
     {
         yield return new WaitUntil(() => !NoteUI.activeInHierarchy);
         animator.SetTrigger("Take");
+        StartCoroutine(PlayMoveSound());
     }
     public void UnInteract()
     {

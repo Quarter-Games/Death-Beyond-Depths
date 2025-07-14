@@ -36,8 +36,7 @@ public class EyeHazardLight : MonoBehaviour
     {
         if (!IsInitializing)
         {
-            transform.position = StartingPosition;
-            MoveToNextWaypoint();
+            transform.DOMove(StartingPosition,0.15f).OnComplete(()=>MoveToNextWaypoint());
             return;
         }
         IsInitializing = false;
@@ -50,6 +49,7 @@ public class EyeHazardLight : MonoBehaviour
             WaitCoroutine = null;
         }
         DOTween.Kill(transform);
+        transform.position = StartingPosition;
     }
 
     private void Start()

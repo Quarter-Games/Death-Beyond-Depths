@@ -16,6 +16,11 @@ public class FatGuy : InteractableObject, IInteractable
     {
         base.DeactivateInteractionUI(collision);
     }
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (itemToGive.Amount == 0) return;
+        base.OnTriggerEnter2D(collision);
+    }
     public void Interact()
     {
         UITrigger.gameObject.SetActive(false);
