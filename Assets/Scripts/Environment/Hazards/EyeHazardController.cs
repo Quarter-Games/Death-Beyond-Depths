@@ -21,6 +21,8 @@ public class EyeHazardController : MonoBehaviour
     bool IsEyeOpened = true;
     Vector3 StartingPosition;
     float timer = 0;
+    Vector3 RightPupilPosition;
+    Vector3 LeftPupilPosition;
 
     private void OnValidate()
     {
@@ -28,6 +30,12 @@ public class EyeHazardController : MonoBehaviour
         {
             LightObject = gameObject.GetComponentInChildren<Light>().gameObject;
         }
+    }
+
+    private void Awake()
+    {
+        RightPupilPosition = new Vector3(PupilObject.transform.localPosition.x + 1f, PupilObject.transform.localPosition.y, PupilObject.transform.localPosition.z);
+        LeftPupilPosition = new Vector3(PupilObject.transform.localPosition.x - 1f, PupilObject.transform.localPosition.y, PupilObject.transform.localPosition.z);
     }
 
     private void Start()
@@ -51,6 +59,19 @@ public class EyeHazardController : MonoBehaviour
             return;
         }
         LightObject.transform.LookAt(FollowObject.transform, Vector3.forward);
+    }
+
+    private void LateUpdate()
+    {
+        if(!IsEyeOpened || FollowObject == null) return;
+        if(FollowObject.transform.position.x > PupilObject.transform.position.x && PupilObject.transform.position.x != RightPupilPosition.x)
+        {
+            PupilObject.transform.localPosition = RightPupilPosition;
+        }
+        else if(FollowObject.transform.position.x > PupilObject.transform.position.x && PupilObject.transform.position.x != RightPupilPosition.x)
+        {
+            PupilObject.transform.localPosition = LeftPupilPosition;
+        }
     }
 
     public void EnableEyeHazard()
