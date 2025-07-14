@@ -1,4 +1,5 @@
 ﻿
+using MoreMountains.Feedbacks;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -10,6 +11,9 @@ public class HangedMan : InteractableObject, IInteractable
     [SerializeField] InventoryItem Salt;
     [SerializeField] InventoryItem RewardItem;
     [SerializeField] ClochePuzzleManager puzzleManager;
+    [SerializeField] MMF_Player OnInitAnimation;
+    [SerializeField] MMF_Player IdleLoop;
+    [SerializeField] MMF_Player OnMove;
     public bool GotNote;
 
     protected override void ActivateInteractionUI(Collider2D collision)
