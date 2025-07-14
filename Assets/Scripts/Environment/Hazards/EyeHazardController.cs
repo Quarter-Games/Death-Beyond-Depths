@@ -54,7 +54,7 @@ public class EyeHazardController : MonoBehaviour
         }
         timer += Time.deltaTime;
         HandleEyeState();
-        if (!IsLightMoving)
+        if (!IsLightMoving || !FollowObject.activeInHierarchy)
         {
             return;
         }
