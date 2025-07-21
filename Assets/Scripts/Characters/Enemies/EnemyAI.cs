@@ -223,14 +223,20 @@ public class EnemyAI : Character, IHearing
     {
         if (Player == null || (!IsAwareOfPlayer && Player.IsHidden))
             return false;
-        Vector3 directionToPlayer = (Player.transform.position - transform.position).normalized;
-        float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
+
+        // Ignore z-axis for 2D sight checks
+        Vector2 enemyPos2D = new Vector2(transform.position.x, transform.position.y);
+        Vector2 playerPos2D = new Vector2(Player.transform.position.x, Player.transform.position.y);
+
+        Vector2 directionToPlayer = (playerPos2D - enemyPos2D).normalized;
+        float distanceToPlayer = Vector2.Distance(enemyPos2D, playerPos2D);
         if (distanceToPlayer > SightRadius)
         {
             return false;
         }
-        Vector3 facingDirection = IsFacingLeft ? -transform.right : transform.right;
-        float angleToPlayer = Vector3.Angle(facingDirection, directionToPlayer);
+
+        Vector2 facingDirection = IsFacingLeft ? -Vector2.right : Vector2.right;
+        float angleToPlayer = Vector2.Angle(facingDirection, directionToPlayer);
         if (angleToPlayer <= Angle / 2f)
         {
             LastKnownPlayerPosition = Player.transform.position;
@@ -238,6 +244,7 @@ public class EnemyAI : Character, IHearing
         }
         return false;
     }
+
 
     public void TriggerCurrentAnimationEvent()
     {
