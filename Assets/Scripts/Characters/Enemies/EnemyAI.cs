@@ -112,19 +112,19 @@ public class EnemyAI : Character, IHearing
         if (IsPermenantlyDead) return;
         FlipIfNeeded();
         StateMachine.CurrentState.OnFrameUpdate();
-        if (!IsDead && stats.HP < InitialHP && CanHeal())
-        {
-            Heal();
-            return;
-        }
-        else if (StateMachine.CurrentState == DeadState)
-        {
-            return;
-        }
-        else if (IsDead)
-        {
-            StateMachine.ChangeState(DeadState);
-        }
+        //if (!IsDead && stats.HP < InitialHP && CanHeal())
+        //{
+        //    Heal();
+        //    return;
+        //}
+        //else if (StateMachine.CurrentState == DeadState)
+        //{
+        //    return;
+        //}
+        //else if (IsDead)
+        //{
+        //    StateMachine.ChangeState(DeadState);
+        //}
     }
 
     private void FlipIfNeeded()
