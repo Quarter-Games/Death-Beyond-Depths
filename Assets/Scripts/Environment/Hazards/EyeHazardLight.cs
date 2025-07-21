@@ -10,6 +10,7 @@ public class EyeHazardLight : MonoBehaviour
     [SerializeField] List<Transform> Waypoints;
     [SerializeField] float TimeToWaitAtWaypoint = 1.5f;
     [SerializeField, Min(0.001f)] float Speed = 5f;
+    [SerializeField, Min(0.001f)] float TimeUntilPlayerKill = 2f;
 
     private int Counter = 0;
     private bool ReachedGoal = false;
@@ -17,26 +18,38 @@ public class EyeHazardLight : MonoBehaviour
     Vector3 Destination;
     Vector3 StartingPosition;
     float Distance;
-
+    float timer = 0;
+    private bool SeesPlayer = false;
+    PlayerCharacterController CachedPlayer;
     bool IsInitializing = true;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out PlayerCharacterController player))
+        if (collision.gameObject.TryGetComponent(out CachedPlayer))
         {
-            if (player.IsHidden)
+            if (CachedPlayer.IsHidden)
             {
                 return;
             }
-            player.TakeDamage(999999);
+            SeesPlayer = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out CachedPlayer))
+        {
+            SeesPlayer = false;
+            timer = 0;
         }
     }
 
     private void OnEnable()
     {
+        timer = 0;
         if (!IsInitializing)
         {
-            transform.DOMove(StartingPosition,0.15f).OnComplete(()=>MoveToNextWaypoint());
+            transform.DOMove(StartingPosition, 0.15f).OnComplete(() => MoveToNextWaypoint());
             return;
         }
         IsInitializing = false;
@@ -57,6 +70,29 @@ public class EyeHazardLight : MonoBehaviour
         StartingPosition = transform.position;
         MoveToNextWaypoint();
     }
+
+    private void Update()
+    {
+        if (SeesPlayer)
+        {
+            timer += Time.deltaTime;
+            if (timer >= TimeUntilPlayerKill)
+            {
+                SeesPlayer = false;
+                timer = 0;
+                if(CachedPlayer) CachedPlayer.TakeDamage(999999);
+            }
+        }
+        else
+        {
+            timer = 0;
+        }
+        if (ReachedGoal && WaitCoroutine == null)
+        {
+            MoveToNextWaypoint();
+        }
+    }
+
 
     private void MoveToNextWaypoint()
     {
