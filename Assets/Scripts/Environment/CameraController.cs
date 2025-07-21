@@ -63,11 +63,6 @@ public class CameraController : MonoBehaviour
     }
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
         Instance = this;
         cam.orthographicSize = Size / cam.aspect;
     }

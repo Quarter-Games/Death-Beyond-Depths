@@ -16,15 +16,7 @@ public class CameraFollowObject : MonoBehaviour
     private void OnEnable()
     {
         PlayerCharacterController.OnFlip += CallTurn;
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.LogWarning("Multiple instances of CameraFollowObject detected. Destroying this instance.");
-            Destroy(gameObject);
-        }
+        Instance = this;
     }
 
     private void OnDisable()

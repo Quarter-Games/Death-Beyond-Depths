@@ -18,8 +18,9 @@ public class InteractablesManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance)
         {
+            Instance.Interactables.Clear();
             Destroy(this);
             return;
         }

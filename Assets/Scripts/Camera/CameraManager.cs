@@ -12,12 +12,7 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            return;
-        }
-        Destroy(gameObject);
+        Instance = this;
     }
 
     private void Start()
