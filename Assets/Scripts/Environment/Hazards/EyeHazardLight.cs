@@ -11,7 +11,11 @@ public class EyeHazardLight : MonoBehaviour
     [SerializeField] float TimeToWaitAtWaypoint = 1.5f;
     [SerializeField, Min(0.001f)] float Speed = 5f;
     [SerializeField, Min(0.001f)] float TimeUntilPlayerKill = 2f;
-
+    //[SerializeField] Material LightMaterial;
+    [SerializeField] MeshRenderer LightMeshRenderer;
+    [SerializeField] Color OriginalLightColor = Color.red;
+    [SerializeField] Color AlertLightColor = Color.red;
+    
     private int Counter = 0;
     private bool ReachedGoal = false;
     Coroutine WaitCoroutine;
@@ -31,6 +35,7 @@ public class EyeHazardLight : MonoBehaviour
             {
                 return;
             }
+            LightMeshRenderer.material.DOColor(AlertLightColor, TimeUntilPlayerKill / 2);
             SeesPlayer = true;
         }
     }
@@ -39,6 +44,7 @@ public class EyeHazardLight : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out CachedPlayer))
         {
+            LightMeshRenderer.material.DOColor(OriginalLightColor, TimeUntilPlayerKill / 4);
             SeesPlayer = false;
             timer = 0;
         }
@@ -47,6 +53,7 @@ public class EyeHazardLight : MonoBehaviour
     private void OnEnable()
     {
         timer = 0;
+        LightMeshRenderer.material.color = OriginalLightColor;
         if (!IsInitializing)
         {
             transform.DOMove(StartingPosition, 0.15f).OnComplete(() => MoveToNextWaypoint());
@@ -56,6 +63,7 @@ public class EyeHazardLight : MonoBehaviour
     }
     private void OnDisable()
     {
+        LightMeshRenderer.material.color = OriginalLightColor;
         if (WaitCoroutine != null)
         {
             StopCoroutine(WaitCoroutine);
@@ -75,6 +83,12 @@ public class EyeHazardLight : MonoBehaviour
     {
         if (SeesPlayer)
         {
+            DOTween.Pause(transform);
+            if (WaitCoroutine != null)
+            {
+                StopCoroutine(WaitCoroutine);
+                WaitCoroutine = null;
+            }
             timer += Time.deltaTime;
             if (timer >= TimeUntilPlayerKill)
             {
