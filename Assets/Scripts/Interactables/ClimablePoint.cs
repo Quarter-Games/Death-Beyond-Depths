@@ -22,14 +22,15 @@ public class ClimablePoint : InteractableObject, IInteractable
             CachedPlayerController = player;
         }
     }
-    public void Interact()
+    public bool Interact()
     {
         if (CachedPlayerController == null)
         {
             Debug.LogWarning("No Player Controller to interact");
-            return;
+            return false;
         }
         CachedPlayerController.StartClimbing(this);
+        return true;
     }
     public void UnInteract()
     {

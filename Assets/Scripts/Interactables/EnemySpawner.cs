@@ -12,14 +12,15 @@ public class EnemySpawner : InteractableObject, IInteractable
     {
 
     }
-    public void Interact()
+    public bool Interact()
     {
-        if (EnemyPrefabToSpawn==null||SpawnPoint == null)
+        if (EnemyPrefabToSpawn == null || SpawnPoint == null)
         {
             Debug.LogError("EnemyPrefabToSpawn or SpawnPoint is not set.");
-            return;
+            return false;
         }
         Instantiate(EnemyPrefabToSpawn, SpawnPoint.position, SpawnPoint.rotation);
+        return true;
     }
 
     public void UnInteract()

@@ -66,7 +66,7 @@ public class HangedMan : InteractableObject, IInteractable
         else if (state == HangedManState.AfterReward) return;
         base.OnTriggerExit2D(collision);
     }
-    public void Interact()
+    public bool Interact()
     {
         var state = CurrentState;
         if (state == HangedManState.BeforeNote)
@@ -77,6 +77,7 @@ public class HangedMan : InteractableObject, IInteractable
             StartCoroutine(PlayMoveSound());
             GotNote = true;
             StartCoroutine(waitToTakeNote());
+            return true;
 
         }
         else if (state == HangedManState.BeforeReward)
@@ -90,7 +91,9 @@ public class HangedMan : InteractableObject, IInteractable
             puzzleManager.EnableAllCloches();
             TurnOffAllExceptExempt();
             OnSaltGiven?.Invoke();
+            return true;
         }
+        return false;
     }
 
     private IEnumerator waitToGetReward()

@@ -54,9 +54,10 @@ public class BasicInteractableObject : MonoBehaviour, IInteractable
         }
     }
 
-    public void Interact()
+    public bool Interact()
     {
         MMF_Player.PlayFeedbacks();
+        return true;
     }
 
     public void UnInteract()
