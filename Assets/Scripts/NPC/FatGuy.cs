@@ -21,7 +21,7 @@ public class FatGuy : InteractableObject, IInteractable
         if (itemToGive.Amount == 0) return;
         base.OnTriggerEnter2D(collision);
     }
-    public void Interact()
+    public bool Interact()
     {
         UITrigger.gameObject.SetActive(false);
         InteractionTrigger.gameObject.SetActive(false);
@@ -30,6 +30,7 @@ public class FatGuy : InteractableObject, IInteractable
 
         if (Desintegrate) Desintegrate.PlayFeedbacks();
         if (BlockerCollider) BlockerCollider.enabled = false;
+        return true;
     }
 
     public void UnInteract()

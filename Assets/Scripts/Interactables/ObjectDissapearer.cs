@@ -12,14 +12,15 @@ public class ObjectDissapearer : InteractableObject, IInteractable
     {
 
     }
-    public void Interact()
+    public bool Interact()
     {
         if (ObjectToDisappear == null)
         {
             Debug.LogError("ObjectToDisappear is not set.");
-            return;
+            return false;
         }
         ObjectToDisappear.gameObject.SetActive(IsEnabled);
+        return true;
     }
 
     public void UnInteract()

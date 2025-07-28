@@ -1,5 +1,5 @@
 public interface IInteractable
 {
-    public void Interact();
+    public bool Interact();
     public void UnInteract();
 }

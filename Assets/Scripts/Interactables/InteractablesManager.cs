@@ -49,16 +49,17 @@ public class InteractablesManager : MonoBehaviour
             Interactables.Remove(interactable);
         }
     }
-    public void Interact()
+    public bool Interact()
     {
         if (Interactables.Count != 0)
         {
             // Decided to play player interaction SFX from here, cause it is the only place when we can sure, that he is interacting indeed
             AudioManager.Instance.PlaySoundEffect(OnInteraction, (CurrentInteractableObject as MonoBehaviour).transform);
-            CurrentInteractableObject.Interact();
+            return CurrentInteractableObject.Interact();
 
 
         }
+        return false;
     }
     public bool IsInteractingWithClimable()
     {

@@ -4,9 +4,10 @@ public class HiddenArea : InteractableObject, IInteractable
 {
     public bool IsPlayerHiddenInside { get; private set; }
 
-    public void Interact()
+    public bool Interact()
     {
         Debug.Log("Hide");
+        return true;
     }
 
     public void UnInteract()

@@ -10,9 +10,14 @@ public class FeelActivator : InteractableObject, IInteractable
     protected override void OnTriggerExit2D(Collider2D collision)
     {
     }
-    public void Interact()
+    public bool Interact()
     {
-        if (MMF_Player) MMF_Player.PlayFeedbacks();
+        if (MMF_Player)
+        {
+            MMF_Player.PlayFeedbacks();
+            return true;
+        }
+        return false;
     }
 
     public void UnInteract()

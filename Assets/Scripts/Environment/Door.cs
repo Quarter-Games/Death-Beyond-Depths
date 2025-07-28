@@ -66,22 +66,24 @@ public class Door : InteractableObject, IInteractable
     {
         return IsWithinPlayerRange;
     }
-    virtual public void Interact()
+    virtual public bool Interact()
     {
         if (isLocked)
         {
             if (KeyToOpen.Amount > 0)
             {
                 InventoryManager.Instance.OpenInventory(default);
+                return true;
             }
             else
             {
                 LockedFailedToOpen();
             }
-            return;
+            return false;
         }
         AudioManager.Instance.PlaySoundEffect(OnSuccesfullInteraction, transform);
         ChangeState(!IsOpen);
+        return true;
     }
 
     protected virtual void LockedFailedToOpen()
