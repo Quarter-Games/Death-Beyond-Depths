@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class DialogueController : MonoBehaviour
 {
-    [SerializeField] MMF_Player MMF_Player;
+    [SerializeField] MMF_Player MMFPlayer;
 
     private void OnValidate()
     {
-        if (MMF_Player == null)
+        if (MMFPlayer == null)
         {
-            MMF_Player = GetComponent<MMF_Player>();
+            MMFPlayer = GetComponent<MMF_Player>();
         }
     }
 
@@ -18,7 +18,7 @@ public class DialogueController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            MMF_Player.ResumeFeedbacks();
+            MMFPlayer.ResumeFeedbacks();
         }
     }
 }
