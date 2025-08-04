@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static DamageVignetteController;
 
 public class EyeHazardLight : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class EyeHazardLight : MonoBehaviour
     private bool SeesPlayer = false;
     PlayerCharacterController CachedPlayer;
     bool IsInitializing = true;
+    static int EyesSeeingPlayer = 0;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -35,8 +37,13 @@ public class EyeHazardLight : MonoBehaviour
             {
                 return;
             }
+            EyesSeeingPlayer++;
             LightMeshRenderer.material.DOColor(AlertLightColor, TimeUntilPlayerKill / 2);
             SeesPlayer = true;
+            if (EyesSeeingPlayer == 1)
+            {
+                SpecialEffects.ScreenDamageOverTimeEffect();
+            }
         }
     }
 
@@ -44,9 +51,14 @@ public class EyeHazardLight : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out CachedPlayer))
         {
+            EyesSeeingPlayer--;
             LightMeshRenderer.material.DOColor(OriginalLightColor, TimeUntilPlayerKill / 4);
             SeesPlayer = false;
             timer = 0;
+            if (EyesSeeingPlayer == 0)
+            {
+                SpecialEffects.ScreenDamageOverTimeEffect();
+            }
         }
     }
 
