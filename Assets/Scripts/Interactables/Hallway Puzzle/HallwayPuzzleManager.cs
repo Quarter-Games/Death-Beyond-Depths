@@ -113,9 +113,10 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
 
     protected override void OnTriggerEnter2D(Collider2D collision) { }
     protected override void OnTriggerExit2D(Collider2D collision) { }
-    public void Interact()
+    public bool Interact()
     {
         StartPuzzle();
+        return true;
     }
 
     private void StartPuzzle()

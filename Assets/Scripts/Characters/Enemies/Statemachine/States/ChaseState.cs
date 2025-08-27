@@ -27,18 +27,20 @@ public class ChaseState : EnemyState
         Debug.Log("Entered chase state");
         TimeSpentInChase = 0;
         NavMeshAgent.isStopped = false;
-        Enemy.Animator.SetFloat(SCREAM_CHANCE, UnityEngine.Random.Range(0, 1f));
-        if (Enemy.Animator.GetFloat(SCREAM_CHANCE) > 0.5f)
-        {
-            IsScreaming = true;
-            Enemy.Animator.SetTrigger(DISCOVER_PLAYER_ANIMATION);
-            NavMeshAgent.SetDestination(Enemy.transform.position);
-            Debug.Log("found player");
-        }
-        else
-        {
-            StartChase();
-        }
+        //Enemy.Animator.SetFloat(SCREAM_CHANCE, UnityEngine.Random.Range(0, 1f));
+        //if (Enemy.Animator.GetFloat(SCREAM_CHANCE) > 0.5f)
+        //{
+        //    IsScreaming = true;
+        //    Enemy.Animator.SetTrigger(DISCOVER_PLAYER_ANIMATION);
+        //    NavMeshAgent.SetDestination(Enemy.transform.position);
+        //    Debug.Log("found player");
+        //}
+        //else
+        //{
+        //    StartChase();
+        //}
+        StartChase();
+
         NavMeshAgent.speed = Enemy.ChaseMoveSpeed;
         OnSeenPlayer?.Invoke(Enemy);
     }

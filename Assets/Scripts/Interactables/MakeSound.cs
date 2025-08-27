@@ -6,10 +6,11 @@ internal class MakeSound : InteractableObject, IInteractable
 {
     [SerializeField] AudioResource SFX;
     [SerializeField] Transform SpawnPoint;
-    public void Interact()
+    public bool Interact()
     {
 
         AudioManager.Instance.PlaySoundEffect(SFX, SpawnPoint);
+        return true;
     }
 
     public void UnInteract()

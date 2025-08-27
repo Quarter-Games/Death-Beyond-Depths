@@ -15,15 +15,16 @@ internal class ItemSpawner : InteractableObject, IInteractable
     {
 
     }
-    public void Interact()
+    public bool Interact()
     {
         if (PickUpPrefab == null || SpawnPoint == null || ItemToSpawn == null)
         {
             Debug.LogError("PickUpPrefab, SpawnPoint or ItemToSpawn is not set.", this);
-            return;
+            return false;
         }
         PickUp newPickUp = Instantiate(PickUpPrefab, SpawnPoint.position, SpawnPoint.rotation);
         newPickUp.Init(ItemToSpawn, AmountToSpawn);
+        return true;
     }
     public void UnInteract()
     {

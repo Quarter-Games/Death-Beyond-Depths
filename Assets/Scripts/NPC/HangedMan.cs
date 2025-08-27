@@ -2,7 +2,10 @@
 using MoreMountains.Feedbacks;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HangedMan : InteractableObject, IInteractable
 {
@@ -13,17 +16,29 @@ public class HangedMan : InteractableObject, IInteractable
     [SerializeField] ClochePuzzleManager puzzleManager;
     [SerializeField] MMF_Player IdleLoop;
     [SerializeField] MMF_Player OnMove;
+    [SerializeField] Light[] ExemptLights;
     public bool GotNote;
+
+    public UnityEvent OnSaltGiven;
+    public UnityEvent OnPuzzleSolved;
+    private List<Light> AllLights = new();
+
+    void Start()
+    {
+        AllLights.AddRange(FindObjectsByType<Light>(FindObjectsSortMode.None).Where(l => l.gameObject.activeInHierarchy));
+    }
 
     protected override void ActivateInteractionUI(Collider2D collision)
     {
         if (CurrentState == HangedManState.AfterReward || CurrentState == HangedManState.AfterNote) return;
         base.ActivateInteractionUI(collision);
     }
+
     protected override void DeactivateInteractionUI(Collider2D collision)
     {
         base.DeactivateInteractionUI(collision);
     }
+
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         var state = CurrentState;
@@ -39,6 +54,7 @@ public class HangedMan : InteractableObject, IInteractable
         else if (state == HangedManState.AfterReward) return;
         base.OnTriggerEnter2D(collision);
     }
+
     protected override void OnTriggerExit2D(Collider2D collision)
     {
         var state = CurrentState;
@@ -50,7 +66,7 @@ public class HangedMan : InteractableObject, IInteractable
         else if (state == HangedManState.AfterReward) return;
         base.OnTriggerExit2D(collision);
     }
-    public void Interact()
+    public bool Interact()
     {
         var state = CurrentState;
         if (state == HangedManState.BeforeNote)
@@ -61,6 +77,7 @@ public class HangedMan : InteractableObject, IInteractable
             StartCoroutine(PlayMoveSound());
             GotNote = true;
             StartCoroutine(waitToTakeNote());
+            return true;
 
         }
         else if (state == HangedManState.BeforeReward)
@@ -72,31 +89,41 @@ public class HangedMan : InteractableObject, IInteractable
             StartCoroutine(PlayMoveSound());
             StartCoroutine(waitToGetReward());
             puzzleManager.EnableAllCloches();
+            TurnOffAllExceptExempt();
+            OnSaltGiven?.Invoke();
+            return true;
         }
+        return false;
     }
 
     private IEnumerator waitToGetReward()
     {
         yield return new WaitUntil(() => RewardItem.Amount != 0);
+        OnPuzzleSolved?.Invoke();
+        RestoreLights();
         animator.SetTrigger("UnSalt");
         StartCoroutine(PlayMoveSound());
     }
+
     IEnumerator PlayMoveSound()
     {
         IdleLoop.StopFeedbacks();
         yield return OnMove.PlayFeedbacksCoroutine(Vector3.zero);
         IdleLoop.PlayFeedbacks();
     }
+
     IEnumerator waitToTakeNote()
     {
         yield return new WaitUntil(() => !NoteUI.activeInHierarchy);
         animator.SetTrigger("Take");
         StartCoroutine(PlayMoveSound());
     }
+
     public void UnInteract()
     {
 
     }
+
     public HangedManState CurrentState
     {
         get
@@ -105,6 +132,30 @@ public class HangedMan : InteractableObject, IInteractable
             else if (Salt.Amount == 0 && RewardItem.Amount == 0 && GotNote) return HangedManState.AfterNote;
             else if (Salt.Amount > 0 && RewardItem.Amount == 0 && GotNote) return HangedManState.BeforeReward;
             else return HangedManState.AfterReward;
+        }
+    }
+
+    [ContextMenu("light test")]
+    public void TurnOffAllExceptExempt()
+    {
+        foreach (var light in AllLights)
+        {
+            if (light && Array.IndexOf(ExemptLights, light) == -1)
+            {
+                light.enabled = false;
+            }
+        }
+        foreach (var light in ExemptLights)
+        {
+            light.gameObject.SetActive(true);
+        }
+    }
+
+    public void RestoreLights()
+    {
+        foreach (var light in AllLights)
+        {
+            light.enabled = true;
         }
     }
 }

@@ -15,6 +15,7 @@ public class EyeHazardController : MonoBehaviour
     [SerializeField] bool IsLightMoving = false;
     [SerializeField] GameObject LightObject;
     [SerializeField] GameObject FollowObject;
+    [SerializeField] float PupilMoveSpeed = 8f;
     [SerializeField] GameObject PupilObject;
     [SerializeField] MMF_Player MMFOpenEye;
     [SerializeField] MMF_Player MMFCloseEye;
@@ -34,8 +35,8 @@ public class EyeHazardController : MonoBehaviour
 
     private void Awake()
     {
-        RightPupilPosition = new Vector3(PupilObject.transform.localPosition.x + 1f, PupilObject.transform.localPosition.y, PupilObject.transform.localPosition.z);
-        LeftPupilPosition = new Vector3(PupilObject.transform.localPosition.x - 1f, PupilObject.transform.localPosition.y, PupilObject.transform.localPosition.z);
+        RightPupilPosition = new Vector3(PupilObject.transform.localPosition.x + 1.5f, PupilObject.transform.localPosition.y, PupilObject.transform.localPosition.z);
+        LeftPupilPosition = new Vector3(PupilObject.transform.localPosition.x - 1.5f, PupilObject.transform.localPosition.y, PupilObject.transform.localPosition.z);
     }
 
     private void Start()
@@ -63,16 +64,23 @@ public class EyeHazardController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(!IsEyeOpened || FollowObject == null) return;
-        if(FollowObject.transform.position.x > PupilObject.transform.position.x && PupilObject.transform.position.x != RightPupilPosition.x)
+        if (!IsEyeOpened || FollowObject == null) return;
+        Vector3 targetPosition = PupilObject.transform.localPosition;
+        if (FollowObject.transform.position.x > PupilObject.transform.position.x)
         {
-            PupilObject.transform.localPosition = RightPupilPosition;
+            targetPosition = RightPupilPosition;
         }
-        else if(FollowObject.transform.position.x > PupilObject.transform.position.x && PupilObject.transform.position.x != RightPupilPosition.x)
+        else
         {
-            PupilObject.transform.localPosition = LeftPupilPosition;
+            targetPosition = LeftPupilPosition;
         }
+        PupilObject.transform.localPosition = Vector3.Lerp(
+            PupilObject.transform.localPosition,
+            targetPosition,
+            Time.deltaTime * PupilMoveSpeed
+        );
     }
+
 
     public void EnableEyeHazard()
     {

@@ -43,14 +43,15 @@ public class ClocheInteractable : InteractableObject, IInteractable
         base.OnTriggerExit2D(collision);
     }
 
-    public void Interact()
+    public bool Interact()
     {
-        if (!IsInteractable) return;
+        if (!IsInteractable) return false;
         Debug.Log("Cloche Interacted");
         MMF_Player.PlayFeedbacks();
         DisableClocheInteractability();
         OnClocheInteracted?.Invoke(this);
         if (RewardPickUp) RewardPickUp.SetActive(true);
+        return true;
     }
 
     public void UnInteract()

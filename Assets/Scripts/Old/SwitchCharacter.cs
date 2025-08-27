@@ -7,9 +7,10 @@ public class SwitchCharacter : InteractableObject, IInteractable
     [SerializeField] GameObject GirlObject;
 
     [ContextMenu("Switch Characters")]
-    public void Interact()
+    public bool Interact()
     {
         ToggleCharactersActivity();
+        return true;
     }
 
     public void UnInteract()

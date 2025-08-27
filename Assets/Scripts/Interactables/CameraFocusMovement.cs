@@ -10,7 +10,7 @@ internal class CameraFocusMovement : InteractableObject, IInteractable
     public float MoveDelay = 0.5f;
     public float MoveDuration = 1f;
     public float StandbyDuration = 1f;
-    public void Interact()
+    public bool Interact()
     {
         CameraFollowObject.Instance.StartCoroutine(MoveCamera());
         IEnumerator MoveCamera()
@@ -51,6 +51,7 @@ internal class CameraFocusMovement : InteractableObject, IInteractable
             }
 
         }
+        return true;
     }
 
     public void UnInteract()

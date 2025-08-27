@@ -183,6 +183,7 @@ abstract public class PlayerCharacterController : Character
 
     private void OnMeleeAttackPerformed(InputAction.CallbackContext context)
     {
+        return;
         if (!isSwordEquipped) return;
         if (IsRangeAttacking || IsMeleeAttacking || !IsStanding)
             return;
@@ -200,6 +201,7 @@ abstract public class PlayerCharacterController : Character
 
     public void StartAttackCooldown()
     {
+        return;
         EnableInput();
         AttackIntervalTimer = 0;
         animator.ResetTrigger("Strike Sword");
@@ -220,8 +222,12 @@ abstract public class PlayerCharacterController : Character
         {
             return;
         }
-        InteractablesManager.Instance.Interact();
+        bool isInteracted = InteractablesManager.Instance.Interact();
         if (InteractablesManager.Instance.IsInteractingWithClimable())
+        {
+            return;
+        }
+        if (!isInteracted)
         {
             return;
         }

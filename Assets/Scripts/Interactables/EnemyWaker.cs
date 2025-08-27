@@ -11,9 +11,10 @@ public class EnemyWaker : InteractableObject, IInteractable
     {
 
     }
-    public void Interact()
+    public bool Interact()
     {
         EnemyToWakeUp.enabled = true;
+        return true;
     }
 
     public void UnInteract()

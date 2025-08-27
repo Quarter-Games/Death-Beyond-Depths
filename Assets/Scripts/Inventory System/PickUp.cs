@@ -24,11 +24,12 @@ public class PickUp : InteractableObject, IInteractable
         spriteRenderer.sprite = item.Icon;
         base.InteractableName.text = item.Name;
     }
-    public void Interact()
+    public bool Interact()
     {
         item.Amount += AmountToPickUp;
         AudioManager.Instance.PlaySoundEffect(OnSuccesfullInteraction, transform);
         Destroy(gameObject);
+        return true;
     }
 
     public void UnInteract()
