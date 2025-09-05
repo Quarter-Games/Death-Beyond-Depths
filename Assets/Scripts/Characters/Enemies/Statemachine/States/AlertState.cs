@@ -7,9 +7,11 @@ public class AlertState : EnemyState
     private float AlertDuration = 5f;
     private float TimeSpentInAlert = 0f;
     const string ALERT_ANIMATION = "IsSeeking";
+    private float TimeToCheckForPlayer = 0.5f;
+    private float TimerOfPlayerCheck = 0.5f;
+    bool isPlayerInSight;
 
     public static event Action<EnemyAI> OnLosingPlayer;
-
 
     public AlertState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent) : base(stateMachine, enemy, agent) { }
 
@@ -29,7 +31,17 @@ public class AlertState : EnemyState
         base.OnFrameUpdate();
         NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
         // Check if the player is in sight
-        if (Enemy.PlayerInSight())
+        TimerOfPlayerCheck += Time.deltaTime;
+        if (TimerOfPlayerCheck >= TimeToCheckForPlayer)
+        {
+            TimerOfPlayerCheck = 0;
+            isPlayerInSight = Enemy.PlayerInSight();
+            if (isPlayerInSight)
+            {
+                TimerOfPlayerCheck = 0;
+            }
+        }
+        if (isPlayerInSight)
         {
             StateMachine.ChangeState(Enemy.ChaseState);
             return;

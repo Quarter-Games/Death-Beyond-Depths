@@ -6,8 +6,12 @@ public class ChaseState : EnemyState
 {
     private float ChaseDuration = 2f;
     private float TimeSpentInChase = 0f;
-    bool IsScreaming = false;
+    private float TimeToCheckForPlayer = 0.5f;
+    private float TimerOfPlayerCheck = 0.5f;
 
+    bool IsScreaming = false;
+    bool isPlayerInSight;
+    
     const string DISCOVER_PLAYER_ANIMATION = "FoundPlayer";
     const string SCREAM_CHANCE = "ScreamChance";
     const string CHASE_ANIMATION = "IsChasing";
@@ -26,8 +30,10 @@ public class ChaseState : EnemyState
         base.OnEnter();
         Debug.Log("Entered chase state");
         TimeSpentInChase = 0;
+        TimerOfPlayerCheck = 0;
         NavMeshAgent.isStopped = false;
-        //Enemy.Animator.SetFloat(SCREAM_CHANCE, UnityEngine.Random.Range(0, 1f));
+        Enemy.Animator.SetFloat(SCREAM_CHANCE, 0);
+        Enemy.Animator.ResetTrigger(DISCOVER_PLAYER_ANIMATION);
         //if (Enemy.Animator.GetFloat(SCREAM_CHANCE) > 0.5f)
         //{
         //    IsScreaming = true;
@@ -57,7 +63,16 @@ public class ChaseState : EnemyState
         base.OnFrameUpdate();
         if (IsScreaming) return;
         NavMeshAgent.SetDestination(Enemy.LastKnownPlayerPosition);
-        bool isPlayerInSight = Enemy.PlayerInSight();
+        TimerOfPlayerCheck += Time.deltaTime;
+        if (TimerOfPlayerCheck >= TimeToCheckForPlayer)
+        {
+            TimerOfPlayerCheck = 0;
+            isPlayerInSight = Enemy.PlayerInSight();
+            if (isPlayerInSight)
+            {
+                TimerOfPlayerCheck = 0;
+            }
+        }
         if (!isPlayerInSight)
         {
             TimeSpentInChase += Time.deltaTime;
