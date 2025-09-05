@@ -11,7 +11,7 @@ public class CaptainDialogDoorOpener : MonoBehaviour
 
     private void UnlockDoor()
     {
-        door.Unlock();
+        door.Unlock(true);
         door.Interact();
     }
 
