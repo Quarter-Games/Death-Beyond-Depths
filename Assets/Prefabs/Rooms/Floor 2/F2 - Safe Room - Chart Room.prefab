@@ -324,6 +324,7 @@ GameObject:
   - component: {fileID: 7928196961593414367}
   - component: {fileID: 3060201785089376715}
   - component: {fileID: 1148894918009395036}
+  - component: {fileID: 291233935552456030}
   m_Layer: 0
   m_Name: CaptainDoor
   m_TagString: Untagged
@@ -399,6 +400,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &291233935552456030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3571857715507612233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6824b305b6095e4fa68746c7c113e2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door: {fileID: 3060201785089376715}
 --- !u!1 &3605756119594258786
 GameObject:
   m_ObjectHideFlags: 0
@@ -10676,6 +10690,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4195634205955358612, guid: 53483010ed0f2e647ab1339c88562e86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562586938761028461, guid: 53483010ed0f2e647ab1339c88562e86, type: 3}
+      propertyPath: AutoPlayOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562586938761028461, guid: 53483010ed0f2e647ab1339c88562e86, type: 3}
+      propertyPath: AutoPlayOnEnable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5562586938761028461, guid: 53483010ed0f2e647ab1339c88562e86, type: 3}

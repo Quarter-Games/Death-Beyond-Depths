@@ -52,9 +52,9 @@ public class Door : InteractableObject, IInteractable
         }
         IsOpen = isOpen;
     }
-    public void Unlock()
+    public void Unlock(bool isForced = false)
     {
-        if (KeyToOpen?.Amount > 0)
+        if (KeyToOpen?.Amount > 0 || isForced)
         {
             IndicatorUI = UnlockedUI;
             LockedUI.SetActive(false);
