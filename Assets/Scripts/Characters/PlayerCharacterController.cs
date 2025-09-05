@@ -161,6 +161,10 @@ abstract public class PlayerCharacterController : Character
         RunEffect.Stop();
         TextController.gameObject.SetActive(false);
         MaxHP = stats.HP;
+        if (CheckpointManager.Instance != null)
+        {
+            CheckpointManager.Instance.SpawnPlayerAtCheckpoint(this);
+        }
     }
 
     private void Update()
@@ -458,7 +462,7 @@ abstract public class PlayerCharacterController : Character
     [ContextMenu("Test Take Damage")]
     public void TestTakeDamage()
     {
-        TakeDamage(1);
+        TakeDamage(10);
         IsAttacked = false;
     }
 
