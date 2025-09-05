@@ -1,4 +1,6 @@
 ﻿using MoreMountains.Feedbacks;
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class FatGuy : InteractableObject, IInteractable
@@ -6,6 +8,7 @@ public class FatGuy : InteractableObject, IInteractable
     [SerializeField] InventoryItem itemToGive;
     [SerializeField] MMF_Player Desintegrate;
     [SerializeField] Collider2D BlockerCollider;
+    [SerializeField] MMF_Player LoopDialogue;
     protected override void ActivateInteractionUI(Collider2D collision)
     {
         if (itemToGive.Amount == 0) return;
@@ -21,6 +24,24 @@ public class FatGuy : InteractableObject, IInteractable
         if (itemToGive.Amount == 0) return;
         base.OnTriggerEnter2D(collision);
     }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        StartCoroutine(PlayLoop());
+    }
+
+    private IEnumerator PlayLoop()
+    {
+        while (true) 
+        {
+            yield return LoopDialogue.PlayFeedbacksCoroutine(Vector3.one);
+        }
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
     public bool Interact()
     {
         UITrigger.gameObject.SetActive(false);
@@ -28,11 +49,15 @@ public class FatGuy : InteractableObject, IInteractable
         itemToGive.Amount--;
         IndicatorUI.SetActive(false);
 
-        if (Desintegrate) Desintegrate.PlayFeedbacks();
+        if (Desintegrate) StartCoroutine(WaitToDisintegrate());
         if (BlockerCollider) BlockerCollider.enabled = false;
         return true;
     }
-
+    IEnumerator WaitToDisintegrate()
+    {
+        yield return Desintegrate.PlayFeedbacksCoroutine(Vector3.one);
+        gameObject.SetActive(false);
+    }
     public void UnInteract()
     {
 
