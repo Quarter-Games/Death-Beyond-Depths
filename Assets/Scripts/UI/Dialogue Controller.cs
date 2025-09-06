@@ -67,7 +67,7 @@ public class DialogueController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            MMFPlayer.SkipToTheEnd();
+            MMFPlayer.StopFeedbacks();
         }
     }
     [Serializable]
