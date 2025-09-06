@@ -9,6 +9,7 @@ public class FatGuy : InteractableObject, IInteractable
     [SerializeField] MMF_Player Desintegrate;
     [SerializeField] Collider2D BlockerCollider;
     [SerializeField] MMF_Player LoopDialogue;
+
     protected override void ActivateInteractionUI(Collider2D collision)
     {
         if (itemToGive.Amount == 0) return;
