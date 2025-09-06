@@ -12,6 +12,9 @@ public class IdleWanderState : EnemyState
     private bool ReachedGoal = false;
     Coroutine WaitCoroutine;
     const string WANDER_ANIMATION = "IsWalking";
+    private float TimeToCheckForPlayer = 0.5f;
+    private float TimerOfPlayerCheck = 0.5f;
+    bool isPlayerInSight;
 
     public IdleWanderState(EnemyStatemachine stateMachine, EnemyAI enemy, NavMeshAgent agent, List<Transform> WanderPoints = null) : base(stateMachine, enemy, agent)
     {
@@ -54,7 +57,17 @@ public class IdleWanderState : EnemyState
     public override void OnFrameUpdate()
     {
         base.OnFrameUpdate();
-        if (Enemy.PlayerInSight())
+        TimerOfPlayerCheck += Time.deltaTime;
+        if (TimerOfPlayerCheck >= TimeToCheckForPlayer)
+        {
+            TimerOfPlayerCheck = 0;
+            isPlayerInSight = Enemy.PlayerInSight();
+            if (isPlayerInSight)
+            {
+                TimerOfPlayerCheck = 0;
+            }
+        }
+        if (isPlayerInSight)
         {
             StateMachine.ChangeState(Enemy.AlertState);
             return;
