@@ -44,15 +44,28 @@ public class HangedMan : InteractableObject, IInteractable
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         var state = CurrentState;
+
         if (state == HangedManState.BeforeNote)
         {
             InteractableName.text = "Talk";
+            base.OnTriggerEnter2D(collision);
+            IndicatorUI.SetActive(true);
+            IndicatorUI.transform.localScale = Vector3.one * 50;
+            return;
         }
         else if (state == HangedManState.AfterNote)
         {
             InteractableName.text = "Talk Again";
         }
-        else if (state == HangedManState.BeforeReward) InteractableName.text = "Give Salt";
+        else if (state == HangedManState.BeforeReward)
+        {
+            InteractableName.text = "Give Salt";
+            base.OnTriggerEnter2D(collision);
+            IndicatorUI.SetActive(true);
+            IndicatorUI.transform.localScale = Vector3.one * 50;
+            return;
+
+        }
         else if (state == HangedManState.AfterReward) return;
         base.OnTriggerEnter2D(collision);
     }
@@ -60,6 +73,8 @@ public class HangedMan : InteractableObject, IInteractable
     protected override void OnTriggerExit2D(Collider2D collision)
     {
         var state = CurrentState;
+        IndicatorUI.SetActive(false);
+
         if (state == HangedManState.BeforeNote)
         {
             InteractableName.text = "Talk";
@@ -74,17 +89,16 @@ public class HangedMan : InteractableObject, IInteractable
         if (state == HangedManState.BeforeNote)
         {
             IndicatorUI.SetActive(false);
-            NoteUI.SetActive(true);
             animator.SetTrigger("Give");
             StartCoroutine(PlayMoveSound());
             GotNote = true;
             StartCoroutine(waitToTakeNote());
+
             return true;
 
         }
         else if (state == HangedManState.BeforeReward)
         {
-            UITrigger.gameObject.SetActive(false);
             InteractionTrigger.gameObject.SetActive(false);
             Salt.Amount--;
             animator.SetTrigger("Salt");
@@ -93,6 +107,7 @@ public class HangedMan : InteractableObject, IInteractable
             puzzleManager.EnableAllCloches();
             TurnOffAllExceptExempt();
             OnSaltGiven?.Invoke();
+            IndicatorUI.SetActive(false);
             return true;
         }
         return false;
@@ -117,6 +132,8 @@ public class HangedMan : InteractableObject, IInteractable
 
     IEnumerator waitToTakeNote()
     {
+        yield return new WaitForSeconds(2.5f);
+        NoteUI.SetActive(true);
         yield return new WaitUntil(() => !NoteUI.activeInHierarchy);
         animator.SetTrigger("Take");
         StartCoroutine(PlayMoveSound());
