@@ -103,7 +103,7 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
                 IEnumerator waitAndDisabel()
                 {
                     yield return null;
-                    _confiner2D.InvalidateBoundingShapeCache();
+                    yield return ForceCinemachineUpdate();
                     gameObject.SetActive(false);
                 }
             }
@@ -168,6 +168,9 @@ internal class HallwayPuzzleManager : InteractableObject, IInteractable
         vcam.OnTargetObjectWarped(follow.transform, Vector3.zero);
 
         yield return new WaitForEndOfFrame();
+        _confiner2D.InvalidateBoundingShapeCache();
+        vcam.OnTargetObjectWarped(follow.transform, Vector3.zero);
+        yield return new WaitForFixedUpdate();
         _confiner2D.InvalidateBoundingShapeCache();
 
     }
