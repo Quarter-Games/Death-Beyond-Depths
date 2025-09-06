@@ -17,6 +17,8 @@ public class HangedMan : InteractableObject, IInteractable
     [SerializeField] MMF_Player IdleLoop;
     [SerializeField] MMF_Player OnMove;
     [SerializeField] Light[] ExemptLights;
+    [SerializeField] Material DissolveMaterial;
+    [SerializeField] ParticleSystem DissolveParticles;
     public bool GotNote;
 
     public UnityEvent OnSaltGiven;
@@ -101,6 +103,7 @@ public class HangedMan : InteractableObject, IInteractable
         yield return new WaitUntil(() => RewardItem.Amount != 0);
         OnPuzzleSolved?.Invoke();
         RestoreLights();
+        DissolveMaterial.SetFloat("_DissolveAmount", 1);
         animator.SetTrigger("UnSalt");
         StartCoroutine(PlayMoveSound());
     }
