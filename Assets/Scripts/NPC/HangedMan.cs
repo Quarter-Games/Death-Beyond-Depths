@@ -131,7 +131,12 @@ public class HangedMan : InteractableObject, IInteractable
     {
         yield return new WaitForSeconds(2.5f);
         NoteUI.SetActive(true);
-        yield return new WaitUntil(() => !NoteUI.activeInHierarchy);
+        yield return new WaitUntil(() =>
+        {
+            return Input.anyKeyDown && !(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) ||
+            Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow));
+        });
+        NoteUI.SetActive(false);
         animator.SetTrigger("Take");
         StartCoroutine(PlayMoveSound());
     }
@@ -174,7 +179,7 @@ public class HangedMan : InteractableObject, IInteractable
         foreach (var light in AllLights)
         {
             if (light)
-            light.enabled = true;
+                light.enabled = true;
         }
     }
 }
