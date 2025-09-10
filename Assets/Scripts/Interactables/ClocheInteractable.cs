@@ -30,6 +30,7 @@ public class ClocheInteractable : InteractableObject, IInteractable
         InteractionTrigger.gameObject.SetActive(false);
         IsInteractable = false;
         IndicatorUI.SetActive(false);
+        InformManagerOfNonInteractability();
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)

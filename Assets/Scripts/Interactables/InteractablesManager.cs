@@ -46,7 +46,7 @@ public class InteractablesManager : MonoBehaviour
             return;
         if (Interactables.Contains(interactable))
         {
-            Interactables.Remove(interactable);
+            Interactables.RemoveAll(x => x == interactable);
         }
     }
     public bool Interact()
